@@ -17,6 +17,7 @@ export type SidebarSection = "MAIN" | "PERFORMANCE" | "TOOLS";
 export type SidebarIcon =
   | "dashboard"
   | "people"
+  | "group"
   | "payments"
   | "inventory"
   | "description"

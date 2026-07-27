@@ -4,7 +4,8 @@ import DashboardLayout from "@/layouts/DashboardLayout/DashboardLayout";
 import DashboardPage from "@/modules/dashboard/pages/DashboardPage";
 import IncentivesPage from "@/modules/incentives/pages/IncentivePage";
 import MyClientPage from "@/modules/myClients/pages/MyClientPage";
-import TargetPage from "@/modules/targets/pages/TargetPage";
+import ZoneTargets from "@/modules/zoneTargets/index";
+import MyTargets from "@/modules/MyTargets";
 
 const AppRoutes = () => {
   return (
@@ -16,7 +17,8 @@ const AppRoutes = () => {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/incentives" element={<IncentivesPage />} />
           <Route path="/clients" element={<MyClientPage />} />
-          <Route path="/targets" element={<TargetPage />} />
+          <Route path="/my-targets" element={<MyTargets />} />
+          <Route path="/zone-targets" element={<ZoneTargets />} />
         </Route>
       </Routes>
     </BrowserRouter>

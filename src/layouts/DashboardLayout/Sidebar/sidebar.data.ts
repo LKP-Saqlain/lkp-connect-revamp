@@ -27,9 +27,16 @@ export const sidebarMenu: SidebarMenuItem[] = [
 
   {
     id: "targets",
-    title: "Targets",
-    path: "/targets",
+    title: "My Targets",
+    path: "/my-targets",
     icon: "track_changes",
+    section: "PERFORMANCE",
+  },
+  {
+    id: "zone-targets",
+    title: "Zone Targets",
+    path: "/zone-targets",
+    icon: "group",
     section: "PERFORMANCE",
   },
 

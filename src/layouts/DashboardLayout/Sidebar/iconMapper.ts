@@ -5,11 +5,14 @@ import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import InventoryRoundedIcon from "@mui/icons-material/InventoryRounded";
 import TrackChangesRoundedIcon from "@mui/icons-material/TrackChanges";
+import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
 
 export const iconMapper = {
   dashboard: DashboardRoundedIcon,
 
   people: PeopleRoundedIcon,
+
+  group: GroupsRoundedIcon,
 
   payments: PaymentsRoundedIcon,
 
