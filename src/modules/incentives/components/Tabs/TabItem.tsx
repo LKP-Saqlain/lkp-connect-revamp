@@ -3,15 +3,12 @@ import Typography from "@mui/material/Typography";
 
 import { tabsStyles } from "./tabs.styles";
 
-import type {
-  IncentiveTab,
-  TabItem as IncentiveTabItem,
-} from "@/modules/incentives/types/incentive.types";
+import type { TabItem as TabData } from "@/modules/incentives/types/incentive.types";
 
 interface TabItemProps {
-  item: IncentiveTabItem;
+  item: TabData;
   active: boolean;
-  onClick: (tab: IncentiveTab) => void;
+  onClick: (tab: string) => void;
 }
 
 const TabItem = ({ item, active, onClick }: TabItemProps) => {

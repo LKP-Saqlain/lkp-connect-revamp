@@ -1,16 +1,43 @@
 import { useState } from "react";
+import { Box } from "@mui/material";
 
 import PeriodBar from "../components/PeriodBar";
 import IncentiveTabs from "../components/Tabs";
 
-import type { IncentivePeriod, IncentiveTab } from "../types/incentive.types";
-import { Box } from "@mui/material";
 import Overview from "../sections/Overview/Overview";
+import PolicySummary from "../sections/Overview/PolicySummary";
+
+import { INCENTIVE_TABS } from "../constants/tab.data";
+import { POLICY_TABS } from "../constants/policyTabs.data";
+
+import type {
+  IncentivePeriod,
+  IncentiveTab,
+  PolicyTab,
+} from "../types/incentive.types";
+import IncentiveCalculator from "../sections/Overview/IncentiveCalculator";
+import AnnualTarget from "../sections/Overview/AnnualTarget/AnnualTarget";
 
 const IncentivePage = () => {
   const [period, setPeriod] = useState<IncentivePeriod>("fy");
 
   const [tab, setTab] = useState<IncentiveTab>("overview");
+
+  const [policyTab, setPolicyTab] = useState<PolicyTab>("policy-summary");
+
+  const isPolicyPage = period === "sales-policy";
+  const isAnnualTargetPage = period === "annual-target";
+  const tabs = isPolicyPage ? POLICY_TABS : INCENTIVE_TABS;
+
+  const activeTab = isPolicyPage ? policyTab : tab;
+
+  const handleTabChange = (value: string) => {
+    if (isPolicyPage) {
+      setPolicyTab(value as PolicyTab);
+    } else {
+      setTab(value as IncentiveTab);
+    }
+  };
 
   return (
     <>
@@ -20,14 +47,29 @@ const IncentivePage = () => {
         sx={{
           px: 3,
           py: 0,
-          backgroundColor: "#F5F7FB", // same as PeriodBar
+          backgroundColor: "#F5F7FB",
         }}
       >
-        <IncentiveTabs value={tab} onChange={setTab} />
-        <Overview />
-      </Box>
+        {!isAnnualTargetPage && (
+          <IncentiveTabs
+            items={tabs}
+            value={activeTab}
+            onChange={handleTabChange}
+          />
+        )}
 
-      {/* Overview / Client Revenue / etc */}
+        {isPolicyPage ? (
+          policyTab === "policy-summary" ? (
+            <PolicySummary />
+          ) : (
+            <IncentiveCalculator />
+          )
+        ) : isAnnualTargetPage ? (
+          <AnnualTarget />
+        ) : (
+          <Overview period={period} />
+        )}
+      </Box>
     </>
   );
 };

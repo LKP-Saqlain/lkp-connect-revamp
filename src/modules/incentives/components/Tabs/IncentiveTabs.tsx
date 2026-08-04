@@ -3,18 +3,18 @@ import Box from "@mui/material/Box";
 import TabItem from "./TabItem";
 import { tabsStyles } from "./tabs.styles";
 
-import { INCENTIVE_TABS } from "@/modules/incentives/constants/tab.data";
-import type { IncentiveTab } from "@/modules/incentives/types/incentive.types";
+import type { TabItem as TabData } from "@/modules/incentives/types/incentive.types";
 
 interface IncentiveTabsProps {
-  value: IncentiveTab;
-  onChange: (tab: IncentiveTab) => void;
+  items: TabData[];
+  value: string;
+  onChange: (tab: string) => void;
 }
 
-const IncentiveTabs = ({ value, onChange }: IncentiveTabsProps) => {
+const IncentiveTabs = ({ items, value, onChange }: IncentiveTabsProps) => {
   return (
     <Box sx={tabsStyles.root}>
-      {INCENTIVE_TABS.map((tab) => (
+      {items.map((tab) => (
         <TabItem
           key={tab.id}
           item={tab}

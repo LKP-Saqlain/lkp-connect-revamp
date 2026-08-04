@@ -4,6 +4,8 @@ export type IncentivePeriod =
 export type IncentiveTab =
   "overview" | "client-revenue" | "revenue-breakdown" | "client-acquisition";
 
+export type PolicyTab = "policy-summary" | "incentive-calculator";
+
 export interface PeriodItem {
   id: IncentivePeriod;
   label: string;
@@ -13,7 +15,7 @@ export interface PeriodItem {
 }
 
 export interface TabItem {
-  id: IncentiveTab;
+  id: string;
   label: string;
 
   disabled?: boolean;
@@ -36,32 +38,55 @@ export interface MetricCardData {
   color?: string;
 }
 
-export interface ProgressLegendItem {
-  id: string;
-
+export interface RevenueItem {
   label: string;
-
-  color: string;
 
   amount: string;
 
-  percentage?: string;
+  percent: string;
+}
+
+export interface SlabItem {
+  id: string;
+
+  range: string;
+
+  text: string;
+
+  active?: boolean;
+
+  disabled?: boolean;
 }
 
 export interface RevenueProgressData {
-  revenueMultiple: string;
+  multiplier: string;
 
-  progressValue: number;
+  multiplierColor?: string;
 
-  currentLabel: string;
+  subtitle?: string;
 
-  targetLabel: string;
-
-  targetAmount: string;
+  subtitleColor?: string;
 
   mpc: string;
 
-  legends: ProgressLegendItem[];
+  barMax: number;
+
+  progressPercent?: number;
+
+  target: {
+    label: string;
+    value: string;
+  };
+
+  broking: RevenueItem;
+
+  nonBroking: RevenueItem;
+
+  netCredit: RevenueItem;
+
+  slabLabel?: string;
+
+  slabs?: SlabItem[];
 }
 
 export interface DeferredIncentiveRow {
@@ -108,9 +133,74 @@ export interface PeriodChipProps {
   onClick: (id: IncentivePeriod) => void;
 }
 
-export interface MetricCardData {
+export interface RevenueProgressProps {
+  data: RevenueProgressData;
+}
+
+export interface EligibilityRequirement {
   id: string;
-  title: string;
+
+  label: string;
+
+  status: "completed" | "pending" | "failed";
+
   value: string;
-  subtitle?: string;
+}
+
+export interface QualificationItem {
+  title: string;
+  actual: string;
+  required: string;
+  status: "completed" | "failed";
+}
+
+export interface EligibilityChecklistData {
+  title: string;
+
+  banner: {
+    type: "success" | "error";
+
+    title: string;
+
+    description: string;
+  };
+
+  currentSlab?: string;
+  qualifications: QualificationItem[];
+  accounts?: any[];
+  requirements?: EligibilityRequirement[];
+}
+
+export interface PayoutBreakdownRow {
+  id: string;
+
+  label: string;
+
+  value: string;
+
+  bold?: boolean;
+
+  highlight?: boolean;
+
+  color?: string;
+}
+
+export interface PayoutRow {
+  component: string;
+
+  basis: string;
+
+  rate: string;
+
+  amount: string;
+
+  amountColor?: string;
+
+  highlight?: boolean;
+}
+
+export interface PayoutBreakdownData {
+  title: string;
+
+  rows: PayoutRow[];
 }

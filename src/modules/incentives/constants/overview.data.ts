@@ -1,5 +1,8 @@
 import type { OverviewData } from "../types/incentive.types";
 import type { MetricCardData } from "../types/incentive.types";
+import PercentageIcon from "@/assets/images/percentage.svg";
+import TrendingUp from "@/assets/images/trending-up.svg";
+import BankImg from "@/assets/images/building-bank.svg";
 
 export const OVERVIEW_DATA: OverviewData = {
   metrics: [
@@ -7,7 +10,7 @@ export const OVERVIEW_DATA: OverviewData = {
       id: "revenue-multiple",
       title: "Revenue multiple",
       value: "6.3x",
-      icon: "analytics",
+      icon: PercentageIcon,
     },
 
     {
@@ -16,7 +19,7 @@ export const OVERVIEW_DATA: OverviewData = {
       value: "₹22,48,500",
       subtitle: "30% of ₹74,95,000",
       caption: "3.7x CTC",
-      icon: "trending_up",
+      icon: TrendingUp,
     },
 
     {
@@ -25,47 +28,39 @@ export const OVERVIEW_DATA: OverviewData = {
       value: "₹15,01,500",
       subtitle: "70% of ₹21,45,000",
       caption: "2.5x CTC",
-      icon: "account_balance",
+      icon: BankImg,
     },
   ],
 
   progress: {
-    revenueMultiple: "6.3x",
-    progressValue: 100,
-
-    currentLabel: "MPC 3x",
-
-    targetLabel: "3x CTC",
-
-    targetAmount: "₹18,00,000",
+    multiplier: "6.3x",
 
     mpc: "3x",
 
-    legends: [
-      {
-        id: "broking",
-        label: "Broking credit (30%)",
-        color: "#2F80ED",
-        amount: "₹22,48,500",
-        percentage: "125%",
-      },
+    barMax: 3,
 
-      {
-        id: "non-broking",
-        label: "Non-broking credit (70%)",
-        color: "#27AE60",
-        amount: "₹15,01,500",
-        percentage: "83%",
-      },
+    target: {
+      label: "3x CTC",
+      value: "₹18,00,000",
+    },
 
-      {
-        id: "net-credit",
-        label: "Net credit",
-        color: "#111827",
-        amount: "₹37,50,000",
-        percentage: "208%",
-      },
-    ],
+    broking: {
+      label: "Broking credit (30%)",
+      amount: "₹22,48,500",
+      percent: "125%",
+    },
+
+    nonBroking: {
+      label: "Non-broking credit (70%)",
+      amount: "₹15,01,500",
+      percent: "83%",
+    },
+
+    netCredit: {
+      label: "Net credit",
+      amount: "₹37,50,000",
+      percent: "208%",
+    },
   },
 
   deferred: {
@@ -79,7 +74,7 @@ export const OVERVIEW_DATA: OverviewData = {
         period: "Q1 · Apr–Jun",
         amount: "₹53,020",
         status: "Due · pending annual MPC",
-        statusColor: "#5F7F38",
+        statusColor: "#3B6D11",
       },
 
       {
@@ -87,7 +82,7 @@ export const OVERVIEW_DATA: OverviewData = {
         period: "Q2 · Jul–Sep",
         amount: "₹0",
         status: "Not eligible this quarter",
-        statusColor: "#C0392B",
+        statusColor: "#A32D2D",
       },
 
       {
@@ -95,7 +90,7 @@ export const OVERVIEW_DATA: OverviewData = {
         period: "Q3 · Oct–Dec",
         amount: "₹53,800",
         status: "Due · pending annual MPC",
-        statusColor: "#5F7F38",
+        statusColor: "#3B6D11",
       },
 
       {
@@ -103,7 +98,7 @@ export const OVERVIEW_DATA: OverviewData = {
         period: "Q4 · Jan–Mar",
         amount: "₹45,800",
         status: "Due · pending annual MPC",
-        statusColor: "#5F7F38",
+        statusColor: "#3B6D11",
       },
     ],
   },

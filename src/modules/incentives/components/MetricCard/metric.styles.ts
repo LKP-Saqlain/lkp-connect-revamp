@@ -36,7 +36,7 @@ export const metricStyles = {
     display: "flex",
     alignItems: "center", // vertically centers the meta
     justifyContent: "space-between",
-    fontSize: 25,
+    fontSize: 28,
     fontWeight: 500,
     color: "#101828",
     width: "100%",
@@ -52,6 +52,6 @@ export const metricStyles = {
   subtitle: {
     mt: 1,
     fontSize: 12,
-    color: "#98A2B3",
+    color: "#3B6D11",
   },
 } satisfies Record<string, SxProps<Theme>>;
