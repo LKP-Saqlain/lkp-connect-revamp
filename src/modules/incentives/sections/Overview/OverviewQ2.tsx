@@ -39,12 +39,12 @@ const OverviewQ2 = () => {
   useEffect(() => {
     if (!employeeData?.empCode) return;
 
-    dispatch(
-      fetchIncentiveSlabs({
-        empCode: "0040",
-        financialYear: "2026-27",
-      }),
-    );
+    // dispatch(
+    //   fetchIncentiveSlabs({
+    //     empCode: "0040",
+    //     financialYear: "2026-27",
+    //   }),
+    // );
   }, [dispatch, employeeData?.empCode]);
 
   const q2Metrics = Q2_METRICS.map((metric) => {
