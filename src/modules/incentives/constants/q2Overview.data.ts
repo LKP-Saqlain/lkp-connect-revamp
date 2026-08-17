@@ -129,18 +129,6 @@ export const Q2_ELIGIBILITY: EligibilityChecklistData = {
   currentSlab: "Below minimum Slab",
 
   qualifications: [
-    // {
-    //   title: "Revenue Multiple",
-    //   actual: "2.0x",
-    //   required: "3.0x",
-    //   status: "failed",
-    // },
-    // {
-    //   title: "NISM Series VII",
-    //   actual: "Completed",
-    //   required: "Required",
-    //   status: "completed",
-    // },
     {
       title: "Min Revenue",
       actual: "2.0x (₹3,00,000)",
@@ -164,18 +152,19 @@ export const Q2_ELIGIBILITY: EligibilityChecklistData = {
     },
     {
       label: "₹1 Lac margin",
-      required: "7 / 7 accounts",
-      actual: "6 / 7 accounts",
+      required: "5 accounts",
+      actual: "7 accounts",
       eligible: true,
     },
     {
       label: "₹100 brokerage",
-      required: "7 / 7 accounts",
-      actual: "5 / 7 accounts",
+      required: "5 accounts",
+      actual: "7 accounts",
       eligible: false,
     },
   ],
 };
+
 export const Q2_NO_INCENTIVE = {
   title: "No incentive payable for Q2",
 

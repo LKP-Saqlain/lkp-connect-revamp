@@ -1,13 +1,11 @@
 import Box from "@mui/material/Box";
-
 import MetricCard from "./MetricCard";
 import { metricStyles } from "./metric.styles";
-
 import type { MetricCardData } from "../../types/incentive.types";
-
 interface MetricGridProps {
   metrics: MetricCardData[];
   period?: any;
+
 }
 
 const MetricGrid = ({ metrics, period }: MetricGridProps) => {

@@ -7,9 +7,11 @@ import OverviewQ4 from "./OverviewQ4";
 
 interface Props {
   period: IncentivePeriod;
+  teamMemberDetails?: any;
+  employeeIncentive?: any;
 }
 
-const Overview = ({ period }: Props) => {
+const Overview = ({ period, teamMemberDetails, employeeIncentive }: Props) => {
   switch (period) {
     case "q1":
       return <OverviewQ1 period={period} />;

@@ -159,16 +159,21 @@ export interface EligibilityChecklistData {
 
   banner: {
     type: "success" | "error";
-
     title: string;
-
     description: string;
   };
 
   currentSlab?: string;
   qualifications: QualificationItem[];
-  accounts?: any[];
+  accounts: EligibilityAccount[];
   requirements?: EligibilityRequirement[];
+}
+
+export interface EligibilityAccount {
+  label: string;
+  required: string;
+  actual: string;
+  eligible: boolean;
 }
 
 export interface PayoutBreakdownRow {
@@ -203,4 +208,83 @@ export interface PayoutBreakdownData {
   title: string;
 
   rows: PayoutRow[];
+}
+
+export interface EmployeeIncentiveData {
+  empCode: string;
+  employeeType: string;
+  policyId: number;
+
+  empCTC: number;
+  empQuarterCTC: number;
+
+  brokingRevenue: number;
+  nonBrokingRevenue: number;
+  totalRevenue: number;
+
+  revenueMultiple: number;
+  brokRevMultiple: number;
+  reqBrokRevMultiple: number | null;
+
+  nonBrokRevMultiple: number;
+  reqNonBrokRevMultiple: number | null;
+
+  cadEligibleAccounts: number;
+  totalNewAccounts: number;
+  requiredAccounts: number;
+  accountStatus: boolean;
+
+  actualMarginCount: number;
+  reqMarginCount: number;
+  marginStatus: boolean;
+
+  actualBrokCount: number;
+  reqBrokCount: number;
+  brokStatus: boolean;
+
+  selfMultiple: number;
+  reqSelfMultiple: number;
+
+  mpc: number | null;
+
+  teamCTC: number;
+  teamQuarterCTC: number;
+  teamBrokingRevenue: number;
+  teamNonBrokingRevenue: number;
+  teamRevenue: number;
+
+  teamRevMultiple: number;
+  reqTeamRevMultiple: number;
+
+  teamBrokRevMultiple: number;
+  reqTeamBrokRevMultiple: number;
+
+  teamNonBrokRevMultiple: number;
+  reqTeamNonBrokRevMultiple: number;
+
+  teamMembers: number;
+
+  revenueMixStatus: boolean;
+  newClientStatus: boolean;
+  teamStatus: boolean;
+
+  nismStatus: boolean | null;
+  slabId: number | null;
+
+  brokingPercent: number;
+  nonBrokingPercent: number;
+  boosterPercent: number;
+
+  brokingIncentive: number;
+  nonBrokingIncentive: number;
+  boosterAmount: number;
+  newAccountsIncentive: number;
+  finalIncentive: number;
+
+  eligibleMembers: number;
+  totalMembers: number;
+
+  boosterEligible: boolean;
+  teamBonus: number;
+  perAccountRate: number;
 }

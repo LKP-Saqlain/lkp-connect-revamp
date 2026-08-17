@@ -64,7 +64,7 @@ const RevenueChart = () => {
         colors: ["#475467"],
       },
 
-      formatter(_, opts) {
+      formatter(_, opts: any) {
         const total = MONTHLY_REVENUE[opts.dataPointIndex].total;
 
         return `₹${(total / 100000).toFixed(1)}L`;

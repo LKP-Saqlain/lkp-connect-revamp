@@ -30,15 +30,15 @@ const MetricCard = ({ metric }: MetricCardProps) => {
 
       <Typography sx={metricStyles.value}>
         <Typography
-          sx={[
-            metricStyles.value,
-            metric.title === "Revenue multiple" && {
+          sx={{
+            ...metricStyles.value,
+            ...(metric.title === "Revenue multiple" && {
               color: "#185FA5",
-            },
-            metric.color && {
+            }),
+            ...(metric.color && {
               color: metric.color,
-            },
-          ]}
+            }),
+          }}
         >
           {metric.value}
         </Typography>
