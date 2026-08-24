@@ -15,6 +15,7 @@ interface Props {
   nonBroking: string;
   brokingItems: RevenueItem[];
   nonBrokingItems: RevenueItem[];
+  totalCredit?: any;
 }
 
 const ClientRevenueExpanded = ({
@@ -27,7 +28,7 @@ const ClientRevenueExpanded = ({
     <Box
       sx={{
         px: 3,
-        py: 3,
+        py: 1.5,
         background: "#F7F9FC",
         borderTop: "1px solid #EAECF0",
       }}
@@ -51,7 +52,7 @@ const ClientRevenueExpanded = ({
 
       {/* Bottom Credit Summary */}
 
-      <Box sx={{ mt: 3 }}>
+      <Box>
         <RevenueSplit broking={broking} nonBroking={nonBroking} />
       </Box>
     </Box>

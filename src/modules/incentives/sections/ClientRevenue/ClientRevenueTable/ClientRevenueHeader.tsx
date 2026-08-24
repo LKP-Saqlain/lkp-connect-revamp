@@ -3,12 +3,28 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import CircleIcon from "@mui/icons-material/Circle";
 import SearchBar from "./SearchBar";
 import { clientRevenueTableStyles as styles } from "./clientRevenueTable.styles";
+import SortableHeader from "@/modules/incentives/components/SortableHeader";
 
 interface Props {
   showPercentage: boolean;
 }
 
-const ClientRevenueHeader = ({ showPercentage }: Props) => {
+type SortKey = "client" | "broking" | "nonBroking" | "totalRevenue";
+
+type SortDirection = "asc" | "desc" | null;
+
+interface SortState {
+  key: SortKey | null;
+  direction: SortDirection;
+}
+
+interface Props {
+  showPercentage: boolean;
+  sort: SortState;
+  onSort: (key: SortKey) => void;
+}
+
+const ClientRevenueHeader = ({ showPercentage, sort, onSort }: Props) => {
   return (
     <>
       <Box sx={styles.header}>
@@ -60,17 +76,35 @@ const ClientRevenueHeader = ({ showPercentage }: Props) => {
             : "2.2fr 1.3fr 1.8fr 1.8fr 1.8fr .8fr",
         }}
       >
-        <Typography sx={styles.headerCell}>Client</Typography>
+        <SortableHeader
+          label="Client"
+          sortKey="client"
+          sort={sort}
+          onSort={onSort}
+        />
 
         <Typography sx={styles.headerCell}>Client code</Typography>
 
-        <Typography sx={styles.headerCell}>Broking revenue (credit)</Typography>
+        <SortableHeader
+          label="Broking revenue (credit)"
+          sortKey="broking"
+          sort={sort}
+          onSort={onSort}
+        />
 
-        <Typography sx={styles.headerCell}>
-          Non-broking revenue (credit)
-        </Typography>
+        <SortableHeader
+          label="Non-broking revenue (credit)"
+          sortKey="nonBroking"
+          sort={sort}
+          onSort={onSort}
+        />
 
-        <Typography sx={styles.headerCell}>Total revenue (credit)</Typography>
+        <SortableHeader
+          label="Total revenue (credit)"
+          sortKey="totalRevenue"
+          sort={sort}
+          onSort={onSort}
+        />
 
         {showPercentage && (
           <Typography sx={styles.headerCell}>% of Total</Typography>

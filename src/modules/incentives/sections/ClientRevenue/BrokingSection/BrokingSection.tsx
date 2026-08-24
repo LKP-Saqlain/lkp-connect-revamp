@@ -23,9 +23,9 @@ const BrokingSection = ({ items }: Props) => {
         <Typography
           sx={{
             display: "inline-block",
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: 700,
-            color: "#101828",
+            color: "#185FA5",
 
             pb: 1,
 

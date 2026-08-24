@@ -52,8 +52,8 @@ const ClientRevenueRow = ({
           : "2.2fr 1.3fr 1.8fr 1.8fr 1.8fr .8fr",
 
         alignItems: "center",
-
-        minHeight: 72,
+        // border: "1px solid black",
+        minHeight: 40,
 
         px: "18px",
 
@@ -69,8 +69,8 @@ const ClientRevenueRow = ({
       <Box>
         <Typography
           sx={{
-            fontSize: 14,
-            fontWeight: 600,
+            fontSize: 13,
+            fontWeight: 500,
             color: "#101828",
           }}
         >
@@ -82,33 +82,40 @@ const ClientRevenueRow = ({
 
       <Typography
         sx={{
-          fontSize: 14,
+          fontSize: 12,
           color: "#667085",
-          fontWeight: 500,
+          fontWeight: 400,
         }}
       >
         {clientCode}
       </Typography>
 
       {/* Broking */}
-
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 0.5,
+        }}
+      >
         <Typography
           sx={{
-            fontWeight: 600,
-            fontSize: 14,
+            fontWeight: 400,
+            fontSize: 12,
             color: "#101828",
+            whiteSpace: "nowrap",
           }}
         >
           {broking}
         </Typography>
 
         <Typography
+          component="span"
           sx={{
-            mt: 0.3,
-            fontSize: 13,
+            fontSize: 12,
             color: "#2F80ED",
-            fontWeight: 600,
+            fontWeight: 400,
+            whiteSpace: "nowrap",
           }}
         >
           ({brokingCredit})
@@ -116,24 +123,31 @@ const ClientRevenueRow = ({
       </Box>
 
       {/* Non Broking */}
-
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 0.5,
+        }}
+      >
         <Typography
           sx={{
-            fontWeight: 600,
-            fontSize: 14,
+            fontWeight: 400,
+            fontSize: 12,
             color: "#101828",
+            whiteSpace: "nowrap",
           }}
         >
           {nonBroking}
         </Typography>
 
         <Typography
+          component="span"
           sx={{
-            mt: 0.3,
-            fontSize: 13,
+            fontSize: 12,
             color: "#27AE60",
-            fontWeight: 600,
+            fontWeight: 400,
+            whiteSpace: "nowrap",
           }}
         >
           ({nonBrokingCredit})
@@ -141,24 +155,31 @@ const ClientRevenueRow = ({
       </Box>
 
       {/* Total */}
-
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 0.5,
+        }}
+      >
         <Typography
           sx={{
-            fontWeight: 700,
-            fontSize: 14,
+            fontWeight: 400,
+            fontSize: 12,
             color: "#101828",
+            whiteSpace: "nowrap",
           }}
         >
           {totalRevenue}
         </Typography>
 
         <Typography
+          component="span"
           sx={{
-            mt: 0.3,
-            fontSize: 13,
+            fontSize: 12,
             color: "#185FA5",
-            fontWeight: 700,
+            fontWeight: 400,
+            whiteSpace: "nowrap",
           }}
         >
           ({totalCredit})
@@ -212,8 +233,8 @@ const ClientRevenueRow = ({
               sx={{
                 width: 48,
                 textAlign: "center",
-                fontSize: 14,
-                fontWeight: 600,
+                fontSize: 12,
+                fontWeight: 400,
                 color: "#101828",
               }}
             >
@@ -226,41 +247,63 @@ const ClientRevenueRow = ({
       {/* Expand */}
 
       <Box
-        onClick={onToggle}
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          cursor: "pointer",
-          userSelect: "none",
+          width: "100%",
         }}
       >
-        <Typography
+        <Box
+          onClick={onToggle}
           sx={{
-            fontSize: 13,
-            fontWeight: 600,
-            color: "#185FA5",
-            mr: 0.5,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "fit-content",
+
+            px: 1.8,
+            py: 0.3,
+
+            border: "1px solid #D0D5DD",
+            borderRadius: "5px",
+
+            cursor: "pointer",
+            userSelect: "none",
+
+            "&:hover": {
+              backgroundColor: "#F9FAFB",
+              borderColor: "#98A2B3",
+            },
           }}
         >
-          {expanded ? "Hide" : "View"}
-        </Typography>
+          <Typography
+            sx={{
+              fontSize: 12,
+              fontWeight: 500,
+              color: "#185FA5",
+              lineHeight: 1.2,
+            }}
+          >
+            {expanded ? "Hide" : "View"}
+          </Typography>
 
-        {expanded ? (
-          <KeyboardArrowDownRoundedIcon
-            sx={{
-              fontSize: 20,
-              color: "#185FA5",
-            }}
-          />
-        ) : (
-          <KeyboardArrowRightRoundedIcon
-            sx={{
-              fontSize: 20,
-              color: "#185FA5",
-            }}
-          />
-        )}
+          {expanded ? (
+            <KeyboardArrowDownRoundedIcon
+              sx={{
+                fontSize: 15,
+                color: "#185FA5",
+              }}
+            />
+          ) : (
+            <KeyboardArrowRightRoundedIcon
+              sx={{
+                fontSize: 15,
+                color: "#185FA5",
+              }}
+            />
+          )}
+        </Box>
       </Box>
     </Box>
   );

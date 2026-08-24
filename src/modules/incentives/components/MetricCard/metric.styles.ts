@@ -52,6 +52,6 @@ export const metricStyles = {
   subtitle: {
     mt: 1,
     fontSize: 12,
-    color: "#3B6D11",
+    color: "#6b7280",
   },
 } satisfies Record<string, SxProps<Theme>>;

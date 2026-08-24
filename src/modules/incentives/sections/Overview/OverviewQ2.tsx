@@ -17,8 +17,10 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import type {
   EligibilityChecklistData,
   EmployeeIncentiveData,
+  RevenueProgressData,
 } from "../../types/incentive.types";
 import { useEffect } from "react";
+import { fetchIncentiveSlabs } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 
 export interface EmployeeIncentiveResponse {
   statusCode: number;
@@ -29,23 +31,47 @@ export interface EmployeeIncentiveResponse {
 }
 
 const OverviewQ2 = () => {
-  const { employeeIncentive, incentiveSlabs, incentiveSlabsLoading } =
-    useAppSelector((state) => state.incentivePeriod);
   const dispatch = useAppDispatch();
 
+  const { employeeIncentive, incentiveSlabs, incentiveSlabsLoading } =
+    useAppSelector((state) => state.incentivePeriod);
+
   const employeeData = employeeIncentive?.data;
-  console.log("tes11111t", employeeData);
+  console.log("tes11111t", employeeData, incentiveSlabs, incentiveSlabsLoading);
 
   useEffect(() => {
     if (!employeeData?.empCode) return;
 
-    // dispatch(
-    //   fetchIncentiveSlabs({
-    //     empCode: "0040",
-    //     financialYear: "2026-27",
-    //   }),
-    // );
+    dispatch(
+      fetchIncentiveSlabs({
+        empCode: "0238",
+        financialYear: "2026-27",
+      }),
+    );
   }, [dispatch, employeeData?.empCode]);
+
+  const q2Slabs = incentiveSlabs?.data?.map((slab: any, index: any) => ({
+    id: String(index + 1),
+
+    range:
+      slab.toMultiple === 999
+        ? `${slab.fromMultiple}x & above`
+        : `${slab.fromMultiple}x – ${slab.toMultiple}x`,
+
+    text: `Broking ${slab.brokingPercentage}% · Non-broking ${slab.nonBrokingPercentage}%`,
+
+    disabled: slab.toMultiple === 999,
+  }));
+
+  const q2RevenueProgress: RevenueProgressData = {
+    ...Q2_REVENUE_PROGRESS,
+
+    slabs: q2Slabs && q2Slabs.length > 0 ? q2Slabs : Q2_REVENUE_PROGRESS.slabs,
+  };
+
+  // useEffect(() => {
+  //   if (!employeeData?.empCode) return;
+  // }, [dispatch, employeeData?.empCode]);
 
   const q2Metrics = Q2_METRICS.map((metric) => {
     switch (metric.id) {
@@ -65,6 +91,17 @@ const OverviewQ2 = () => {
             employeeData?.brokingRevenue != null
               ? `₹${employeeData.brokingRevenue.toLocaleString("en-IN")}`
               : metric.value,
+
+          subtitle:
+            employeeData?.brokingCredit != null &&
+            employeeData?.totalBrokingRevenue != null
+              ? `${employeeData.brokingCredit}% of ₹${employeeData.totalBrokingRevenue.toLocaleString(
+                  "en-IN",
+                  {
+                    maximumFractionDigits: 2,
+                  },
+                )}`
+              : metric.subtitle,
         };
 
       case "non-broking-credit":
@@ -74,6 +111,17 @@ const OverviewQ2 = () => {
             employeeData?.nonBrokingRevenue != null
               ? `₹${employeeData.nonBrokingRevenue.toLocaleString("en-IN")}`
               : metric.value,
+
+          subtitle:
+            employeeData?.nonBrokingCredit != null &&
+            employeeData?.totalNonBrokingRevenue != null
+              ? `${employeeData.nonBrokingCredit}% of ₹${employeeData.totalNonBrokingRevenue.toLocaleString(
+                  "en-IN",
+                  {
+                    maximumFractionDigits: 2,
+                  },
+                )}`
+              : metric.subtitle,
         };
 
       case "estimated-incentive":
@@ -109,7 +157,7 @@ const OverviewQ2 = () => {
             : Q2_ELIGIBILITY.qualifications[0].status,
       },
       {
-        title: "Non Broking",
+        title: "Non-broking revenue",
         actual:
           employeeData != null
             ? `${employeeData.nonBrokRevMultiple}x`
@@ -126,23 +174,23 @@ const OverviewQ2 = () => {
 
     accounts: [
       {
-        label: "New accounts",
+        label: "New accounts opened",
         required: `${employeeData?.requiredAccounts ?? 0} accounts`,
         actual: `${employeeData?.totalNewAccounts ?? 0} accounts`,
         eligible: employeeData?.accountStatus ?? false,
       },
       {
-        label: "₹1 Lac margin",
+        label: "Accounts fulfilling all criteria",
         required: `${employeeData?.requiredAccounts ?? 0} accounts`,
         actual: `${employeeData?.actualMarginCount ?? 0} accounts`,
         eligible: employeeData?.marginStatus ?? false,
       },
-      {
-        label: "₹100 brokerage",
-        required: `${employeeData?.requiredAccounts ?? 0} accounts`,
-        actual: `${employeeData?.actualBrokCount ?? 0} accounts`,
-        eligible: employeeData?.brokStatus ?? false,
-      },
+      // {
+      //   label: "₹100 brokerage",
+      //   required: `${employeeData?.requiredAccounts ?? 0} accounts`,
+      //   actual: `${employeeData?.actualBrokCount ?? 0} accounts`,
+      //   eligible: employeeData?.brokStatus ?? false,
+      // },
     ],
   };
 
@@ -156,7 +204,7 @@ const OverviewQ2 = () => {
     >
       <AlertBanner title={Q2_ALERT.title} description={Q2_ALERT.description} />
       <MetricGrid metrics={q2Metrics} period="q2" />
-      <RevenueProgress data={Q2_REVENUE_PROGRESS} />
+      <RevenueProgress data={q2RevenueProgress} />
       <EligibilityChecklist data={q2Eligibility} />
       <NoIncentiveCard data={Q2_NO_INCENTIVE} />
       <PolicyCard data={OVERVIEW_DATA.policy} />

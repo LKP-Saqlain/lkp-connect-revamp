@@ -37,21 +37,21 @@ export const summaryCardStyles = {
   },
 
   title: {
-    fontSize: "14px",
-    fontWeight: 600,
-    color: "#344054",
+    fontSize: "11px",
+    fontWeight: 400,
+    color: "#6b7280",
   },
 
   value: {
-    fontSize: "34px",
+    fontSize: "22px",
     fontWeight: 700,
     lineHeight: 1.1,
     mb: 0.5,
   },
 
   subtitle: {
-    fontSize: "14px",
-    color: "#667085",
-    fontWeight: 500,
+    fontSize: "11px",
+    color: "#6b7280",
+    fontWeight: 400,
   },
 } satisfies Record<string, SxProps<Theme>>;

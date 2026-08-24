@@ -106,7 +106,7 @@ export const Q1_ELIGIBILITY: EligibilityChecklistData = {
   title: "Eligibility checklist",
 
   banner: {
-    type: "success", // ✅ Add this
+    type: "success",
     title: "Eligible for incentive",
     description:
       "Revenue multiple 8.0x meets the 3x minimum. Incentive calculable at current slab.",
@@ -119,13 +119,13 @@ export const Q1_ELIGIBILITY: EligibilityChecklistData = {
       title: "Min Revenue",
       actual: "8.0x (₹12,00,000)",
       required: "3x (₹4,50,000)",
-      status: "completed", // ✅ Add this
+      status: "completed",
     },
     {
       title: "Non-Broking",
       actual: "3.0x (₹4,51,500)",
       required: "1x (₹1,50,000)",
-      status: "completed", // ✅ Add this
+      status: "completed",
     },
   ],
 

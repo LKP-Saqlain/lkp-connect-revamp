@@ -64,6 +64,7 @@ export const clientRevenueTableStyles = {
   },
 
   headerCell: {
+    textAlign: "center",
     fontSize: "13px",
     fontWeight: 600,
     color: "#667085",

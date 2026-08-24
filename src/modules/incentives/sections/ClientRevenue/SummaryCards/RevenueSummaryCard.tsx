@@ -1,7 +1,4 @@
 import { Box, Typography } from "@mui/material";
-
-import RadioButtonCheckedOutlinedIcon from "@mui/icons-material/RadioButtonCheckedOutlined";
-
 import { summaryCardStyles as styles } from "./summaryCard.styles";
 
 interface Props {
@@ -15,12 +12,12 @@ const RevenueSummaryCard = ({ title, value, subtitle, color }: Props) => {
   return (
     <Box sx={styles.card}>
       <Box sx={styles.titleRow}>
-        <RadioButtonCheckedOutlinedIcon
+        {/* <RadioButtonCheckedOutlinedIcon
           sx={{
             ...styles.icon,
             color,
           }}
-        />
+        /> */}
 
         <Typography sx={styles.title}>{title}</Typography>
       </Box>

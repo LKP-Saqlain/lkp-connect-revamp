@@ -13,21 +13,34 @@ const RevenueSplit = ({ broking, nonBroking }: Props) => {
     console.log("====================================");
   }, [broking, nonBroking]);
 
+  // Convert "₹195,025.48" -> 195025.48
+  const brokingAmount = Number(broking.replace(/[₹,]/g, "")) || 0;
+  const nonBrokingAmount = Number(nonBroking.replace(/[₹,]/g, "")) || 0;
+
+  // Add both credits
+  const totalCredit = brokingAmount + nonBrokingAmount;
+
+  // Format back to ₹
+  const formattedTotalCredit = `₹${totalCredit.toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
         gap: 4,
-        mt: 2,
-        pt: 2,
+        mt: 1,
+        pt: 1,
         borderTop: "1px solid #EAECF0",
         flexWrap: "wrap",
       }}
     >
       <Typography
         sx={{
-          fontSize: 13,
+          fontSize: 12,
           color: "#667085",
         }}
       >
@@ -39,13 +52,13 @@ const RevenueSplit = ({ broking, nonBroking }: Props) => {
             fontWeight: 600,
           }}
         >
-          ₹6,05,070
+          {broking}
         </Box>
       </Typography>
 
       <Typography
         sx={{
-          fontSize: 13,
+          fontSize: 12,
           color: "#667085",
         }}
       >
@@ -57,13 +70,13 @@ const RevenueSplit = ({ broking, nonBroking }: Props) => {
             fontWeight: 600,
           }}
         >
-          ₹4,24,060
+          {nonBroking}
         </Box>
       </Typography>
 
       <Typography
         sx={{
-          fontSize: 13,
+          fontSize: 12,
           color: "#667085",
         }}
       >
@@ -75,7 +88,7 @@ const RevenueSplit = ({ broking, nonBroking }: Props) => {
             fontWeight: 700,
           }}
         >
-          ₹10,29,130
+          {formattedTotalCredit}
         </Box>
       </Typography>
     </Box>

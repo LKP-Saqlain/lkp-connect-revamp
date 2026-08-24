@@ -287,4 +287,183 @@ export interface EmployeeIncentiveData {
   boosterEligible: boolean;
   teamBonus: number;
   perAccountRate: number;
+  brokingCredit: any;
+  nonBrokingCredit: any;
+  totalNonBrokingRevenue: any;
+  totalBrokingRevenue: any;
+}
+
+export interface GetclientwiseRevenuePayload {
+  empCode: string;
+  financialYear: string;
+  quarterName: string;
+}
+
+export interface ClientRevenueDetail {
+  clientCode: string;
+  clientName: string;
+  brokingRevenue: number;
+  totalBrokingCredits: number;
+  nonBrokingRevenue: number;
+  totalNonBrokingCredits: number;
+  totalRevenue: number;
+  revenuePercentage: number;
+}
+
+export interface ClientRevenueApiTotal {
+  totalCount: string;
+  brokingRevenue: number;
+  totalBrokingCredits: number;
+  nonBrokingRevenue: number;
+  totalNonBrokingCredits: number;
+  totalRevenue: number;
+}
+
+export interface ClientRevenueApiData {
+  clientDetails: ClientRevenueDetail[];
+  total: ClientRevenueApiTotal;
+}
+
+export interface ClientRevenueApiResponse {
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: string;
+  data: ClientRevenueApiData;
+  message: string;
+}
+
+export interface ClientwiseDetailRevenueResponse {
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: string;
+  data: ClientwiseDetailRevenueData;
+  message: string;
+}
+
+export interface ClientwiseDetailRevenueData {
+  brokRevenueDetails: BrokingRevenueDetails;
+  nonBrokRevenueDetails: NonBrokingRevenueDetails;
+}
+
+export interface BrokingRevenueDetails {
+  clientCode: string;
+  equity: number;
+  futures: number;
+  options: number;
+  commFut: number;
+  commOpt: number;
+  currFut: number;
+  currOpt: number;
+  slbm: number;
+  mtf: number;
+  totalBrokingRevenue: number;
+}
+
+export interface NonBrokingRevenueDetails {
+  clientCode: string;
+  researchAdvisoryLKP: number;
+  researchAdvisoryThirdParty: number;
+  pmsThirdParty: number;
+  aifThirdParty: number;
+  mututalFunds: number;
+  insurance: number;
+  curFixedIncomerOpt: number;
+  unlistedShares: number;
+  totalNonBrokingRevenue: number;
+}
+
+export interface EmpwiseDetailsRevenuePayload {
+  empCode: string;
+  financialYear: string;
+  quarterName: string;
+}
+
+export interface EmpwiseBrokingRevenueDetails {
+  empCode: string;
+  equity: number;
+  futures: number;
+  options: number;
+  commFut: number;
+  commOpt: number;
+  currFut: number;
+  currOpt: number;
+  slbm: number;
+  mtf: number;
+  totalBrokingRevenue: number;
+  brokingSharePercentage: number;
+}
+
+export interface EmpwiseNonBrokingRevenueDetails {
+  empCode: string;
+  researchAdvisoryLKP: number;
+  researchAdvisoryThirdParty: number;
+  pmsThirdParty: number;
+  aifThirdParty: number;
+  mututalFunds: number;
+  insurance: number;
+  curFixedIncomerOpt: number;
+  unlistedShares: number;
+  totalNonBrokingRevenue: number;
+  nonBrokingSharePercentage: number;
+}
+
+export interface EmpwiseMonthWiseRevenue {
+  empCode: string;
+  revenueYear: string;
+  monthName: string;
+  brokingRevenue: number;
+  nonBrokingRevenue: number;
+}
+
+export interface EmpwiseDetailsRevenueData {
+  brokRevenueDetails: EmpwiseBrokingRevenueDetails;
+  nonBrokRevenueDetails: EmpwiseNonBrokingRevenueDetails;
+  monthWiseRevenues: EmpwiseMonthWiseRevenue[];
+}
+
+export interface EmpwiseDetailsRevenueResponse {
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: string;
+  data: EmpwiseDetailsRevenueData;
+  message: string;
+}
+
+export interface EmpwiseDetailsRevenueResponse {
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: string;
+  data: EmpwiseDetailsRevenueData;
+  message: string;
+}
+// GetClientAcquisitionResponse;
+export interface ClientAcquisitionCounts {
+  empCode: string;
+  totalNewAccounts: number;
+  eligibleAccounts: number;
+  requiredAccounts: number;
+  actualMarginCount: number;
+  actualBrokCount: number;
+  finalStatus: string;
+}
+
+export interface ClientAcquisitionDetail {
+  clientCode: string;
+  clientName: string;
+  brokerage: number;
+  eligibleMargin: number;
+  eligibleBrokerage: number;
+  eligible: number;
+  accountStatus: string;
+}
+
+export interface GetClientAcquisitionResponse {
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: string;
+  data: {
+    clientAcqCounts: ClientAcquisitionCounts;
+    clientAcqDetails: ClientAcquisitionDetail[];
+  };
+  message: string;
 }

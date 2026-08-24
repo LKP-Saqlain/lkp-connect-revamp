@@ -10,7 +10,17 @@ import {
   fetchTeamMemberDetails,
   fetchEmployeeIncentive,
   fetchIncentiveSlabs,
+  fetchClientwiseRevenue,
+  fetchClientwiseDetailRevenue,
+  fetchEmpwiseDetailsRevenue,
+  fetchGetClientAcquisition,
 } from "./incentivePeriod.thunks";
+import type {
+  ClientRevenueApiResponse,
+  ClientwiseDetailRevenueResponse,
+  EmpwiseDetailsRevenueResponse,
+  GetClientAcquisitionResponse,
+} from "@/modules/incentives/types/incentive.types";
 
 // -----------------------------------------
 // State
@@ -29,6 +39,24 @@ export interface IncentivePeriodState {
   teamMemberDetailsLoading: boolean;
   employeeIncentiveLoading: boolean;
   incentiveSlabsLoading: boolean;
+
+  clientwiseRevenue: ClientRevenueApiResponse | null;
+  clientwiseRevenueLoading: boolean;
+  clientwiseRevenueError: string | null;
+
+  clientwiseDetailRevenue: ClientwiseDetailRevenueResponse | null;
+  clientwiseDetailRevenueLoading: boolean;
+  clientwiseDetailRevenueError: string | null;
+
+  //this is Revenue Breakdown
+
+  empwiseDetailsRevenue: EmpwiseDetailsRevenueResponse | null;
+  empwiseDetailsRevenueLoading: boolean;
+  empwiseDetailsRevenueError: string | null;
+
+  GetClientAcquisition: GetClientAcquisitionResponse | null;
+  GetClientAcquisitionLoading: boolean;
+  GetClientAcquisitionError: string | null;
 }
 
 // -----------------------------------------
@@ -48,6 +76,22 @@ const initialState: IncentivePeriodState = {
   teamMemberDetailsLoading: false,
   employeeIncentiveLoading: false,
   incentiveSlabsLoading: false,
+
+  clientwiseRevenue: null,
+  clientwiseRevenueLoading: false,
+  clientwiseRevenueError: null,
+
+  clientwiseDetailRevenue: null,
+  clientwiseDetailRevenueLoading: false,
+  clientwiseDetailRevenueError: null,
+
+  empwiseDetailsRevenue: null,
+  empwiseDetailsRevenueLoading: false,
+  empwiseDetailsRevenueError: null,
+
+  GetClientAcquisition: null,
+  GetClientAcquisitionLoading: false,
+  GetClientAcquisitionError: null,
 };
 
 // -----------------------------------------
@@ -56,9 +100,7 @@ const initialState: IncentivePeriodState = {
 
 const incentivePeriodSlice = createSlice({
   name: "incentivePeriod",
-
   initialState,
-
   reducers: {
     clearIncentivePeriodData: (state) => {
       state.teamMemberDetails = null;
@@ -66,19 +108,12 @@ const incentivePeriodSlice = createSlice({
       state.incentiveSlabs = null;
       state.error = null;
     },
-
     clearIncentiveError: (state) => {
       state.error = null;
     },
   },
-
   extraReducers: (builder) => {
     builder
-
-      // -----------------------------------------
-      // Team Member Details
-      // -----------------------------------------
-
       .addCase(fetchTeamMemberDetails.pending, (state) => {
         state.teamMemberDetailsLoading = true;
         state.loading = true;
@@ -99,10 +134,6 @@ const incentivePeriodSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to fetch team member details";
       })
-
-      // -----------------------------------------
-      // Employee Incentive
-      // -----------------------------------------
 
       .addCase(fetchEmployeeIncentive.pending, (state) => {
         state.employeeIncentiveLoading = true;
@@ -126,10 +157,6 @@ const incentivePeriodSlice = createSlice({
           action.payload || "Failed to calculate employee incentive";
       })
 
-      // -----------------------------------------
-      // Incentive Slabs
-      // -----------------------------------------
-
       .addCase(fetchIncentiveSlabs.pending, (state) => {
         state.incentiveSlabsLoading = true;
         state.error = null;
@@ -146,13 +173,73 @@ const incentivePeriodSlice = createSlice({
       .addCase(fetchIncentiveSlabs.rejected, (state, action) => {
         state.incentiveSlabsLoading = false;
         state.error = action.payload || "Failed to fetch incentive slabs";
+      })
+
+      .addCase(fetchClientwiseRevenue.pending, (state) => {
+        state.clientwiseRevenueLoading = true;
+        state.clientwiseRevenueError = null;
+      })
+
+      .addCase(fetchClientwiseRevenue.fulfilled, (state, action) => {
+        state.clientwiseRevenueLoading = false;
+        state.clientwiseRevenue = action.payload;
+      })
+
+      .addCase(fetchClientwiseRevenue.rejected, (state, action) => {
+        state.clientwiseRevenueLoading = false;
+        state.clientwiseRevenueError =
+          action.payload || "Failed to fetch client revenue";
+      })
+
+      .addCase(fetchClientwiseDetailRevenue.pending, (state) => {
+        state.clientwiseDetailRevenueLoading = true;
+        state.clientwiseDetailRevenueError = null;
+      })
+
+      .addCase(fetchClientwiseDetailRevenue.fulfilled, (state, action) => {
+        state.clientwiseDetailRevenueLoading = false;
+        state.clientwiseDetailRevenue = action.payload;
+      })
+
+      .addCase(fetchClientwiseDetailRevenue.rejected, (state, action) => {
+        state.clientwiseDetailRevenueLoading = false;
+        state.clientwiseDetailRevenueError =
+          action.payload || "Failed to fetch client detail revenue";
+      })
+
+      .addCase(fetchEmpwiseDetailsRevenue.pending, (state) => {
+        state.empwiseDetailsRevenueLoading = true;
+        state.empwiseDetailsRevenueError = null;
+      })
+
+      .addCase(fetchEmpwiseDetailsRevenue.fulfilled, (state, action) => {
+        state.empwiseDetailsRevenueLoading = false;
+        state.empwiseDetailsRevenue = action.payload;
+      })
+
+      .addCase(fetchEmpwiseDetailsRevenue.rejected, (state, action) => {
+        state.empwiseDetailsRevenueLoading = false;
+        state.empwiseDetailsRevenueError =
+          action.payload || "Failed to fetch employee-wise revenue";
+      })
+
+      .addCase(fetchGetClientAcquisition.pending, (state) => {
+        state.GetClientAcquisitionLoading = true;
+        state.GetClientAcquisitionError = null;
+      })
+
+      .addCase(fetchGetClientAcquisition.fulfilled, (state, action) => {
+        state.GetClientAcquisitionLoading = false;
+        state.GetClientAcquisition = action.payload;
+      })
+
+      .addCase(fetchGetClientAcquisition.rejected, (state, action) => {
+        state.GetClientAcquisitionLoading = false;
+        state.GetClientAcquisitionError =
+          action.payload || "Failed to fetch employee-wise revenue";
       });
   },
 });
-
-// -----------------------------------------
-// Actions
-// -----------------------------------------
 
 export const { clearIncentivePeriodData, clearIncentiveError } =
   incentivePeriodSlice.actions;

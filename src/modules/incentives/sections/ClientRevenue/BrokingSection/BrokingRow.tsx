@@ -23,8 +23,8 @@ const BrokingRow = ({ label, revenue }: Props) => {
     >
       <Typography
         sx={{
-          fontSize: 14,
-          fontWeight: 500,
+          fontSize: 12,
+          fontWeight: 400,
           color: "#344054",
         }}
       >
@@ -33,8 +33,8 @@ const BrokingRow = ({ label, revenue }: Props) => {
 
       <Typography
         sx={{
-          fontSize: 14,
-          fontWeight: 600,
+          fontSize: 12,
+          fontWeight: 400,
           color: "#2F80ED",
         }}
       >

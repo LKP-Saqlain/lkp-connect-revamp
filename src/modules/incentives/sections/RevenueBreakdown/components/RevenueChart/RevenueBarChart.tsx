@@ -11,20 +11,55 @@ interface Props {
   series: RevenueSeries[];
 }
 
+// -----------------------------------------
+// Indian number formatter
+// -----------------------------------------
+
+const formatIndianNumber = (value: number) => {
+  return value.toLocaleString("en-IN", {
+    maximumFractionDigits: 2,
+  });
+};
+
+// -----------------------------------------
+// Convert revenue to readable Indian format
+// -----------------------------------------
+
+const formatRevenue = (value: number) => {
+  if (value >= 10000000) {
+    return `₹${(value / 10000000).toFixed(2)} Cr`;
+  }
+
+  if (value >= 100000) {
+    return `₹${(value / 100000).toFixed(2)} L`;
+  }
+
+  if (value >= 1000) {
+    return `₹${(value / 1000).toFixed(2)} K`;
+  }
+
+  return `₹${formatIndianNumber(value)}`;
+};
+
 const RevenueBarChart = ({ categories, series }: Props) => {
   const options: ApexOptions = {
     chart: {
       type: "bar",
+
       toolbar: {
         show: false,
       },
+
       zoom: {
         enabled: false,
       },
+
       animations: {
         enabled: true,
       },
+
       fontFamily: "Lato",
+
       parentHeightOffset: 0,
     },
 
@@ -33,9 +68,13 @@ const RevenueBarChart = ({ categories, series }: Props) => {
     plotOptions: {
       bar: {
         horizontal: false,
+
         columnWidth: "38%",
+
         borderRadius: 6,
+
         borderRadiusApplication: "end",
+
         borderRadiusWhenStacked: "last",
       },
     },
@@ -50,6 +89,7 @@ const RevenueBarChart = ({ categories, series }: Props) => {
 
     grid: {
       borderColor: "#EAECF0",
+
       strokeDashArray: 4,
 
       xaxis: {
@@ -95,6 +135,8 @@ const RevenueBarChart = ({ categories, series }: Props) => {
     },
 
     yaxis: {
+      min: 0,
+
       axisBorder: {
         show: false,
       },
@@ -104,8 +146,8 @@ const RevenueBarChart = ({ categories, series }: Props) => {
       },
 
       labels: {
-        formatter(value) {
-          return `₹${value}L`;
+        formatter: (value: number) => {
+          return formatRevenue(value);
         },
 
         style: {
@@ -126,14 +168,16 @@ const RevenueBarChart = ({ categories, series }: Props) => {
 
     tooltip: {
       enabled: true,
+
       shared: true,
+
       intersect: false,
 
       theme: "light",
 
       y: {
         formatter: (value: number) => {
-          return `₹${value}L`;
+          return `₹${formatIndianNumber(value)}`;
         },
       },
 
@@ -141,6 +185,7 @@ const RevenueBarChart = ({ categories, series }: Props) => {
         show: true,
       },
     },
+
     states: {
       hover: {
         filter: {

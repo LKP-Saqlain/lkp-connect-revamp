@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 
 import ClientRevenueHeader from "./ClientRevenueHeader";
@@ -9,6 +9,9 @@ import { clientRevenueTableStyles as styles } from "./clientRevenueTable.styles"
 
 // import { CLIENT_REVENUE_TABLE } from "../../../constants/clientRevenue.data";
 import type { IncentivePeriod } from "@/modules/incentives/types/incentive.types";
+import { parseAmount } from "@/utils/helper";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchClientwiseDetailRevenue } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 
 interface Props {
   rows: any[];
@@ -16,49 +19,291 @@ interface Props {
   period: IncentivePeriod;
 }
 
-const ClientRevenueTable = ({ rows, total, period }: Props) => {
-  const [expandedRow, setExpandedRow] = useState<number | null>(null);
+type SortKey = "client" | "broking" | "nonBroking" | "totalRevenue";
 
-  const handleToggle = (id: number) => {
-    setExpandedRow((prev) => (prev === id ? null : id));
+type SortDirection = "asc" | "desc" | null;
+
+interface SortState {
+  key: SortKey | null;
+  direction: SortDirection;
+}
+
+const ClientRevenueTable = ({ rows, period }: Props) => {
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
+  const [sort, setSort] = useState<SortState>({
+    key: null,
+    direction: null,
+  });
+  const [selectedClientCode, setSelectedClientCode] = useState<string | null>(
+    null,
+  );
+  const dispatch = useAppDispatch();
+  const { clientwiseDetailRevenue } = useAppSelector(
+    (state) => state.incentivePeriod,
+  );
+
+  // Only use detail response for currently selected client
+  const detailData =
+    expandedRow !== null && clientwiseDetailRevenue?.data
+      ? clientwiseDetailRevenue.data
+      : null;
+  console.log("DetailData111111", detailData);
+
+  const brokingItems = detailData
+    ? [
+        {
+          label: "Equity",
+          value: `₹${detailData.brokRevenueDetails.equity.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Futures",
+          value: `₹${detailData.brokRevenueDetails.futures.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Options",
+          value: `₹${detailData.brokRevenueDetails.options.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Commodity Futures",
+          value: `₹${detailData.brokRevenueDetails.commFut.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Commodity Options",
+          value: `₹${detailData.brokRevenueDetails.commOpt.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Currency Futures",
+          value: `₹${detailData.brokRevenueDetails.currFut.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Currency Options",
+          value: `₹${detailData.brokRevenueDetails.currOpt.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "SLBM",
+          value: `₹${detailData.brokRevenueDetails.slbm.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "MTF",
+          value: `₹${detailData.brokRevenueDetails.mtf.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+      ]
+    : [];
+
+  const nonBrokingItems = detailData
+    ? [
+        {
+          label: "Research Advisory LKP",
+          value: `₹${detailData.nonBrokRevenueDetails.researchAdvisoryLKP.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Research Advisory Third Party",
+          value: `₹${detailData.nonBrokRevenueDetails.researchAdvisoryThirdParty.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "PMS Third Party",
+          value: `₹${detailData.nonBrokRevenueDetails.pmsThirdParty.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "AIF Third Party",
+          value: `₹${detailData.nonBrokRevenueDetails.aifThirdParty.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Mutual Funds",
+          value: `₹${detailData.nonBrokRevenueDetails.mututalFunds.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Insurance",
+          value: `₹${detailData.nonBrokRevenueDetails.insurance.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Currency / Fixed Income",
+          value: `₹${detailData.nonBrokRevenueDetails.curFixedIncomerOpt.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+        {
+          label: "Unlisted Shares",
+          value: `₹${detailData.nonBrokRevenueDetails.unlistedShares.toLocaleString(
+            "en-IN",
+          )}`,
+        },
+      ]
+    : [];
+
+  const handleToggle = (id: number, clientCode: string) => {
+    // If clicking the already expanded row, collapse it
+    if (expandedRow === id) {
+      setExpandedRow(null);
+      setSelectedClientCode(null);
+      return;
+    }
+
+    // Set selected row immediately
+    setExpandedRow(id);
+    setSelectedClientCode(clientCode);
+    console.log(selectedClientCode);
+
+    // Call detail API only when View is clicked
+    dispatch(
+      fetchClientwiseDetailRevenue({
+        clientcode: clientCode,
+        financialYear: "2026-27",
+        quarterName: "Q2",
+      }),
+    );
   };
+
+  console.log("apiResponse1", clientwiseDetailRevenue);
+
+  const handleSort = (key: SortKey) => {
+    setSort((prev) => {
+      // First click → ascending
+      if (prev.key !== key) {
+        return {
+          key,
+          direction: "asc",
+        };
+      }
+
+      // Ascending → descending
+      if (prev.direction === "asc") {
+        return {
+          key,
+          direction: "desc",
+        };
+      }
+
+      // Descending → remove sorting
+      return {
+        key: null,
+        direction: null,
+      };
+    });
+  };
+
+  const sortedRows = useMemo(() => {
+    if (!sort.key || !sort.direction) {
+      return rows;
+    }
+
+    const sorted = [...rows];
+
+    sorted.sort((a, b) => {
+      let valueA: string | number = "";
+      let valueB: string | number = "";
+
+      switch (sort.key) {
+        case "client":
+          valueA = a.client ?? "";
+          valueB = b.client ?? "";
+          break;
+
+        case "broking":
+          valueA = parseAmount(a.broking);
+          valueB = parseAmount(b.broking);
+          break;
+
+        case "nonBroking":
+          valueA = parseAmount(a.nonBroking);
+          valueB = parseAmount(b.nonBroking);
+          break;
+
+        case "totalRevenue":
+          valueA = parseAmount(a.totalRevenue);
+          valueB = parseAmount(b.totalRevenue);
+          break;
+      }
+
+      if (typeof valueA === "string" && typeof valueB === "string") {
+        return sort.direction === "asc"
+          ? valueA.localeCompare(valueB)
+          : valueB.localeCompare(valueA);
+      }
+
+      return sort.direction === "asc"
+        ? Number(valueA) - Number(valueB)
+        : Number(valueB) - Number(valueA);
+    });
+
+    return sorted;
+  }, [rows, sort]);
 
   return (
     <Box sx={styles.card}>
-      <ClientRevenueHeader showPercentage={period !== "fy"} />
+      <ClientRevenueHeader
+        showPercentage={period !== "fy"}
+        sort={sort}
+        onSort={handleSort}
+      />
 
       <Box sx={styles.rows}>
-        {rows.map((client) => (
-          <Fragment key={client.id}>
-            <ClientRevenueRow
-              client={client.client}
-              clientCode={client.clientCode}
-              broking={client.broking}
-              brokingCredit={client.brokingCredit}
-              nonBroking={client.nonBroking}
-              nonBrokingCredit={client.nonBrokingCredit}
-              totalRevenue={client.totalRevenue}
-              totalCredit={client.totalCredit}
+        {sortedRows.map((client) => {
+          console.log("ClientDataCheck", client);
 
-              percentage={client.percentage}
-              capped={client.isCap}
+          const isExpanded = expandedRow === client.id;
 
-              showPercentage={period !== "fy"}
-
-              expanded={expandedRow === client.id}
-              onToggle={() => handleToggle(client.id)}
-            />
-
-            {expandedRow === client.id && (
-              <ClientRevenueExpanded
+          return (
+            <Fragment key={client.id}>
+              <ClientRevenueRow
+                client={client.client}
+                clientCode={client.clientCode}
                 broking={client.broking}
+                brokingCredit={client.brokingCredit}
                 nonBroking={client.nonBroking}
-                brokingItems={total.brokingItems}
-                nonBrokingItems={total.nonBrokingItems}
+                nonBrokingCredit={client.nonBrokingCredit}
+                totalRevenue={client.totalRevenue}
+                totalCredit={client.totalCredit}
+                percentage={client.percentage}
+                capped={client.isCap}
+                showPercentage={period !== "fy"}
+                expanded={isExpanded}
+                onToggle={() => handleToggle(client.id, client.clientCode)}
               />
-            )}
-          </Fragment>
-        ))}
+
+              {isExpanded && (
+                <ClientRevenueExpanded
+                  broking={client.brokingCredit}
+                  nonBroking={client.nonBrokingCredit}
+                  totalCredit={client.totalCredit}
+                  brokingItems={brokingItems}
+                  nonBrokingItems={nonBrokingItems}
+                  // loading={clientwiseDetailRevenueLoading}
+                />
+              )}
+            </Fragment>
+          );
+        })}
       </Box>
     </Box>
   );

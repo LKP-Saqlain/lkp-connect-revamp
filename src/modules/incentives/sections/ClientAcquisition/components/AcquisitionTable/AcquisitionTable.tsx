@@ -1,84 +1,231 @@
 import {
+  Box,
+  Paper,
   Table,
   TableBody,
+  TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  Paper,
-  Box,
   Typography,
 } from "@mui/material";
+
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import AcquisitionTableRow from "./AcquisitionTableRow";
+
 import type { AcquisitionClient } from "../../types/clientAcquisition.types";
-import { acquisitionTableStyles as styles } from "./acquisitionTable.styles";
-import { useState } from "react";
 
-interface Props {
-  clients: AcquisitionClient[];
-}
-
-const AcquisitionTable = ({ clients }: Props) => {
-  const [expandedId, setExpandedId] = useState<number | null>(
-    clients.find((item) => item.expanded)?.id ?? null,
-  );
-
+const AcquisitionTable = ({ clients }: { clients: AcquisitionClient[] }) => {
   return (
-    <Box sx={styles.root}>
-      <Box sx={styles.header}>
-        <PersonAddAltOutlinedIcon sx={styles.headerIcon} />
+    <Box
+      sx={{
+        backgroundColor: "#FFFFFF",
+        border: "1px solid #E4E7EC",
+        borderRadius: "8px",
+        overflow: "hidden",
+      }}
+    >
+      {/* Header */}
 
-        <Typography sx={styles.headerTitle}>
-          Clients acquired during the year
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 0.8,
+          px: 2,
+          py: 1.5,
+          borderBottom: "1px solid #EAECF0",
+        }}
+      >
+        <PersonAddAltOutlinedIcon
+          sx={{
+            color: "#185FA5",
+            fontSize: 16,
+          }}
+        />
+
+        <Typography
+          sx={{
+            fontSize: "13px",
+            fontWeight: 600,
+            color: "#101828",
+          }}
+        >
+          Account qualification status
         </Typography>
       </Box>
 
       <TableContainer component={Paper} elevation={0}>
-        <Table sx={styles.table}>
-          <TableHead sx={styles.tableHead}>
+        <Table
+          sx={{
+            width: "100%",
+            tableLayout: "fixed",
+          }}
+        >
+          <TableHead>
             <TableRow>
-              <TableCell sx={styles.headCell}>#</TableCell>
-
-              <TableCell sx={styles.headCell}>Client</TableCell>
-
-              <TableCell sx={styles.headCell}>Client code</TableCell>
-
-              <TableCell sx={styles.headCell}>
-                Date of account opening
+              <TableCell
+                sx={{
+                  width: "3%",
+                  fontSize: "10px",
+                  color: "#667085",
+                  fontWeight: 500,
+                  py: 1,
+                  px: 1.5,
+                }}
+              >
+                #
               </TableCell>
-
-              <TableCell sx={styles.headCell}>Broking revenue (₹)</TableCell>
-
-              <TableCell sx={styles.headCell}>
-                Non-broking revenue (₹)
-              </TableCell>
-
-              <TableCell sx={styles.headCell}>Total revenue (₹)</TableCell>
 
               <TableCell
                 sx={{
-                  ...styles.headCell,
-                  textAlign: "right",
+                  width: "25%",
+                  fontSize: "11px",
+                  color: "#667085",
+                  fontWeight: 500,
+                  py: 1,
+                  px: 1.5,
                 }}
               >
-                Details
+                Account
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  width: "25%",
+                  fontSize: "11px",
+                  color: "#667085",
+                  fontWeight: 500,
+                  py: 1,
+                  px: 1.5,
+                }}
+              >
+                Margin / funding
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  width: "25%",
+                  fontSize: "11px",
+                  color: "#667085",
+                  fontWeight: 500,
+                  py: 1,
+                  px: 1.5,
+                }}
+              >
+                Brokerage
+              </TableCell>
+
+              <TableCell
+                align="right"
+                sx={{
+                  width: "22%",
+                  fontSize: "11px",
+                  color: "#667085",
+                  fontWeight: 500,
+                  py: 1,
+                  px: 1.5,
+                }}
+              >
+                Status
               </TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {clients.map((client) => (
-              <AcquisitionTableRow
-                key={client.id}
-                client={client}
-                expanded={expandedId === client.id}
-                onToggle={() =>
-                  setExpandedId((prev) =>
-                    prev === client.id ? null : client.id,
-                  )
-                }
-              />
+            {clients.map((client, index) => (
+              <TableRow key={client.id}>
+                <TableCell
+                  sx={{
+                    fontSize: "10px",
+                    color: "#98A2B3",
+                    py: 0.8,
+                    px: 1.5,
+                  }}
+                >
+                  {index + 1}
+                </TableCell>
+
+                <TableCell
+                  sx={{
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    color: "#101828",
+                    py: 0.8,
+                    px: 1.5,
+                  }}
+                >
+                  {client.name}
+                </TableCell>
+
+                <TableCell
+                  sx={{
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    py: 0.8,
+                    px: 1.5,
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{
+                      color: client.margin >= 100000 ? "#12B76A" : "#D64545",
+                      fontWeight: 500,
+                    }}
+                  >
+                    ₹{client.margin.toLocaleString("en-IN")}{" "}
+                    {client.margin >= 100000 ? "✓" : "✕"}
+                  </Box>
+                </TableCell>
+
+                <TableCell
+                  sx={{
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    py: 0.8,
+                    px: 1.5,
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{
+                      color: client.brokerage >= 100 ? "#12B76A" : "#D64545",
+                      fontWeight: 500,
+                    }}
+                  >
+                    ₹{client.brokerage.toLocaleString("en-IN")}{" "}
+                    {client.brokerage >= 100 ? "✓" : "✕"}
+                  </Box>
+                </TableCell>
+
+                <TableCell
+                  align="right"
+                  sx={{
+                    py: 0.8,
+                    px: 1.5,
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+
+                      px: 1,
+                      py: 0.35,
+
+                      borderRadius: "12px",
+
+                      backgroundColor: "#FFF3D6",
+                      color: "#9A6700",
+
+                      fontSize: "10px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {client.status}
+                  </Box>
+                </TableCell>
+              </TableRow>
             ))}
           </TableBody>
         </Table>

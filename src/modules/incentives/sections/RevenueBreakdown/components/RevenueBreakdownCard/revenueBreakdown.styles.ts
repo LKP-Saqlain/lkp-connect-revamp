@@ -71,7 +71,7 @@ export const revenueBreakdownStyles = {
     justifyContent: "space-between",
     alignItems: "center",
 
-    minHeight: "42px",
+    minHeight: "40px",
 
     borderBottom: "1px solid #F2F4F7",
 
@@ -81,14 +81,14 @@ export const revenueBreakdownStyles = {
   },
 
   rowLabel: {
-    fontSize: "14px",
-    fontWeight: 500,
+    fontSize: "12px",
+    fontWeight: 400,
     color: "#344054",
   },
 
   rowValue: {
-    fontSize: "14px",
-    fontWeight: 600,
+    fontSize: "12px",
+    fontWeight: 400,
     color: "#101828",
   },
 } satisfies Record<string, SxProps<Theme>>;

@@ -7,7 +7,7 @@ interface Props {
 }
 
 const SummaryCards = ({ summary }: Props) => {
-  return <RevenueBreakdownSummaryCard summary={summary} columns={4} />;
+  return <RevenueBreakdownSummaryCard summary={summary} columns={3} />;
 };
 
 export default SummaryCards;

@@ -24,7 +24,7 @@ const NonBrokingSection = ({ items }: Props) => {
             display: "inline-block",
             fontSize: 16,
             fontWeight: 700,
-            color: "#101828",
+            color: "#1D9E75",
             // border: "1px solid black",
             pb: 1,
 

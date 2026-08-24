@@ -7,7 +7,6 @@ export interface GetTeamMemberDetailsPayload {
 }
 
 export interface GetTeamMemberDetailsResponse {
-  // Add actual API response structure once backend response is available.
   data?: unknown;
   message?: string;
   status?: boolean;
@@ -30,9 +29,55 @@ export interface GetIncentiveSlabsPayload {
   financialYear: string;
 }
 
+export interface GetclientwiseRevenuePayload {
+  empCode: string;
+  financialYear: string;
+  quarterName: string;
+}
+export interface GetclientwiseDetailRevenuePayload {
+  clientcode: string;
+  financialYear: string;
+  quarterName: string;
+}
+
+export interface GetEmpwiseDetailsRevenuePayload {
+  empCode: string;
+  financialYear: string;
+  quarterName: string;
+}
+
+export interface GetClientAcquisitionPayload {
+  empCode: string;
+  financialYear: string;
+  quarterName: string;
+}
+
+// export interface GetclientwiseDetailsRevenue {
+//   empCode: string;
+//   financialYear: string;
+//   quarterName: string;
+// }
+
+// export interface GetIncentiveSlabsResponse {
+//   // Add actual API response structure once backend response is available.
+//   data?: unknown;
+//   message?: string;
+//   status?: boolean;
+// }
+
+export interface IncentiveSlab {
+  empcode: string;
+  fromMultiple: number;
+  toMultiple: number;
+  brokingPercentage: number;
+  nonBrokingPercentage: number;
+  boosterPercentage: string;
+}
+
 export interface GetIncentiveSlabsResponse {
-  // Add actual API response structure once backend response is available.
-  data?: unknown;
-  message?: string;
-  status?: boolean;
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: string;
+  data: IncentiveSlab[];
+  message: string;
 }

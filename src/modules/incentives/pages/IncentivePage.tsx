@@ -27,7 +27,6 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchTeamMemberDetails,
   fetchEmployeeIncentive,
-  fetchIncentiveSlabs,
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 
 const IncentivePage = () => {
@@ -55,15 +54,40 @@ const IncentivePage = () => {
     }
 
     const payload = {
-      empCode: "0238",
+      empCode: "0040",
+      financialYear: "2026-27",
+      quarterName,
+    };
+
+    dispatch(fetchEmployeeIncentive(payload));
+  }, [dispatch, quarterName, isQuarterPeriod]);
+
+  useEffect(() => {
+    const employeeType = employeeIncentive?.data?.employeeType;
+
+    if (!isQuarterPeriod || !quarterName || !employeeType) {
+      return;
+    }
+
+    const allowedEmployeeTypes = ["TL", "BM", "AH"];
+
+    if (!allowedEmployeeTypes.includes(employeeType)) {
+      return;
+    }
+
+    const payload = {
+      empCode: "0040",
       financialYear: "2026-27",
       quarterName,
     };
 
     dispatch(fetchTeamMemberDetails(payload));
-
-    dispatch(fetchEmployeeIncentive(payload));
-  }, [dispatch, quarterName, isQuarterPeriod]);
+  }, [
+    dispatch,
+    employeeIncentive?.data?.employeeType,
+    quarterName,
+    isQuarterPeriod,
+  ]);
 
   const handleTabChange = (value: string) => {
     if (isPolicyPage) {

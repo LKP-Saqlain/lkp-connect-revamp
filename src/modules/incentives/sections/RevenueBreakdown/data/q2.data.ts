@@ -23,13 +23,13 @@ export const Q2_REVENUE_BREAKDOWN: RevenueBreakdownData = {
       subtitle: "22% of total",
       color: "#27AE60",
     },
-    {
-      id: "topProduct",
-      title: "Top product",
-      value: "Options",
-      subtitle: "₹11,24,212 • Broking",
-      color: "#101828",
-    },
+    // {
+    //   id: "topProduct",
+    //   title: "Top product",
+    //   value: "Options",
+    //   subtitle: "₹11,24,212 • Broking",
+    //   color: "#101828",
+    // },
   ],
 
   table: {
@@ -40,27 +40,47 @@ export const Q2_REVENUE_BREAKDOWN: RevenueBreakdownData = {
       items: [
         {
           id: 1,
-          name: "Research Advisory - LKP",
+          name: "Equity",
           value: "₹2,44,918",
         },
         {
           id: 2,
-          name: "Research Advisory - Third Party",
+          name: "Futures",
           value: "₹3,22,644",
         },
         {
           id: 3,
-          name: "Mutual Funds",
+          name: "Options",
           value: "₹4,28,197",
         },
         {
           id: 4,
-          name: "Insurance",
+          name: "Comm Fut",
           value: "₹5,02,673",
         },
         {
           id: 5,
-          name: "Fixed Income",
+          name: "Comm Opt",
+          value: "₹6,46,568",
+        },
+        {
+          id: 6,
+          name: "Curr Fut",
+          value: "₹1,46,568",
+        },
+        {
+          id: 7,
+          name: "Curr Opt",
+          value: "₹6,46,568",
+        },
+        {
+          id: 8,
+          name: "SLBM",
+          value: "₹6,46,568",
+        },
+        {
+          id: 9,
+          name: "MTF Interest",
           value: "₹6,46,568",
         },
       ],
@@ -83,17 +103,32 @@ export const Q2_REVENUE_BREAKDOWN: RevenueBreakdownData = {
         },
         {
           id: 3,
-          name: "Mutual Funds",
+          name: "PMS – Third Party",
           value: "₹4,28,197",
         },
         {
           id: 4,
-          name: "Insurance",
+          name: "AIF – Third Party",
           value: "₹5,02,673",
         },
         {
           id: 5,
+          name: "Mutual Funds",
+          value: "₹6,46,568",
+        },
+        {
+          id: 6,
+          name: "Insurance",
+          value: "₹6,46,568",
+        },
+        {
+          id: 7,
           name: "Fixed Income",
+          value: "₹6,46,568",
+        },
+        {
+          id: 8,
+          name: "Unlisted Shares",
           value: "₹6,46,568",
         },
       ],

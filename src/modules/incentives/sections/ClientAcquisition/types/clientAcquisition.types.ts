@@ -2,8 +2,10 @@ export interface AcquisitionSummaryCard {
   id: string;
   title: string;
   value: string;
-  subtitle: string;
+  subtitle?: string;
   color: string;
+
+  suffix?: string;
 }
 
 export interface AcquisitionBreakdownItem {
@@ -35,28 +37,34 @@ export interface AcquisitionDetailItem {
   value: string;
 }
 
+// export interface AcquisitionClient {
+//   id: number;
+//   name?: string;
+//   client?: string;
+//   marginFunding?: string;
+//   brokerage?: string;
+//   status?: string;
+// }
+
 export interface AcquisitionClient {
-  id: number;
+  id: string;
+  name: string;
+  margin: number;
+  brokerage: number;
+  status: string;
+}
 
-  client: string;
-
-  clientCode: string;
-
-  accountOpening: string;
-
-  brokingRevenue: string;
-
-  nonBrokingRevenue: string;
-
-  totalRevenue: string;
-
-  expanded?: boolean;
-
-  details: AcquisitionDetails;
+export type AcquisitionRule = string;
+export interface AcquisitionRole {
+  title: string;
+  description: string;
 }
 
 export interface ClientAcquisitionData {
   summary: AcquisitionSummaryCard[];
-
   clients: AcquisitionClient[];
+
+  rules: AcquisitionRule[];
+
+  role: AcquisitionRole;
 }
