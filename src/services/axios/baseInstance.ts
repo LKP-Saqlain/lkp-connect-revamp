@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import { setupRequestInterceptor } from "./requestInterceptor";
 import { setupResponseInterceptor } from "./responseInterceptor";
 

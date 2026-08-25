@@ -49,11 +49,9 @@ const MONTH_ORDER: Record<string, number> = {
 const RevenueBreakdown = ({ period }: Props) => {
   const dispatch = useAppDispatch();
 
-  const {
-    empwiseDetailsRevenue,
-    empwiseDetailsRevenueLoading,
-    empwiseDetailsRevenueError,
-  } = useAppSelector((state) => state.incentivePeriod);
+  const { empwiseDetailsRevenue } = useAppSelector(
+    (state) => state.incentivePeriod,
+  );
 
   // -----------------------------------------
   // Q2 API
@@ -66,7 +64,7 @@ const RevenueBreakdown = ({ period }: Props) => {
 
     dispatch(
       fetchEmpwiseDetailsRevenue({
-        empCode: "0040",
+        empCode: "5434",
         financialYear: "2026-27",
         quarterName: "Q2",
       }),
@@ -280,22 +278,6 @@ const RevenueBreakdown = ({ period }: Props) => {
           : period === "q3"
             ? Q3_REVENUE_BREAKDOWN
             : Q4_REVENUE_BREAKDOWN;
-
-  // -----------------------------------------
-  // Loading
-  // -----------------------------------------
-
-  if (period === "q2" && empwiseDetailsRevenueLoading) {
-    return <div>Loading revenue breakdown...</div>;
-  }
-
-  // -----------------------------------------
-  // Error
-  // -----------------------------------------
-
-  if (period === "q2" && empwiseDetailsRevenueError) {
-    return <div>{empwiseDetailsRevenueError}</div>;
-  }
 
   return (
     <RevenueBreakdownLayout

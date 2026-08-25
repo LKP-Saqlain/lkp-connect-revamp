@@ -223,6 +223,7 @@ export interface EmployeeIncentiveData {
   totalRevenue: number;
 
   revenueMultiple: number;
+  reqRevenueMultiple: number;
   brokRevMultiple: number;
   reqBrokRevMultiple: number | null;
 
@@ -464,6 +465,16 @@ export interface GetClientAcquisitionResponse {
   data: {
     clientAcqCounts: ClientAcquisitionCounts;
     clientAcqDetails: ClientAcquisitionDetail[];
+  };
+  message: string;
+}
+
+export interface GetRevenueEmployeeTypeResponse {
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: string;
+  data: {
+    employeeType: string;
   };
   message: string;
 }

@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 
 import ClientRevenueHeader from "./ClientRevenueHeader";
@@ -37,10 +37,29 @@ const ClientRevenueTable = ({ rows, period }: Props) => {
   const [selectedClientCode, setSelectedClientCode] = useState<string | null>(
     null,
   );
+  const [search, setSearch] = useState("");
+
   const dispatch = useAppDispatch();
   const { clientwiseDetailRevenue } = useAppSelector(
     (state) => state.incentivePeriod,
   );
+
+  useEffect(() => {
+    console.log("TESTaa", search);
+  }, [search]);
+
+  const filteredRows = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    console.log("asdasdasd", query);
+    if (!query) {
+      return rows;
+    }
+    return rows.filter((client) =>
+      String(client.client ?? "")
+        .toLowerCase()
+        .includes(query),
+    );
+  }, [rows, search]);
 
   // Only use detail response for currently selected client
   const detailData =
@@ -214,10 +233,10 @@ const ClientRevenueTable = ({ rows, period }: Props) => {
 
   const sortedRows = useMemo(() => {
     if (!sort.key || !sort.direction) {
-      return rows;
+      return filteredRows;
     }
 
-    const sorted = [...rows];
+    const sorted = [...filteredRows];
 
     sorted.sort((a, b) => {
       let valueA: string | number = "";
@@ -257,7 +276,7 @@ const ClientRevenueTable = ({ rows, period }: Props) => {
     });
 
     return sorted;
-  }, [rows, sort]);
+  }, [filteredRows, sort]);
 
   return (
     <Box sx={styles.card}>
@@ -265,9 +284,30 @@ const ClientRevenueTable = ({ rows, period }: Props) => {
         showPercentage={period !== "fy"}
         sort={sort}
         onSort={handleSort}
+        value={search}
+        onChange={setSearch}
       />
 
-      <Box sx={styles.rows}>
+      <Box
+        sx={{
+          ...styles.rows,
+          maxHeight: "calc(100vh - 360px)",
+          overflowY: "auto",
+
+          "&::-webkit-scrollbar": {
+            width: 6,
+          },
+
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#D0D5DD",
+            borderRadius: 3,
+          },
+
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "transparent",
+          },
+        }}
+      >
         {sortedRows.map((client) => {
           console.log("ClientDataCheck", client);
 
@@ -289,6 +329,7 @@ const ClientRevenueTable = ({ rows, period }: Props) => {
                 showPercentage={period !== "fy"}
                 expanded={isExpanded}
                 onToggle={() => handleToggle(client.id, client.clientCode)}
+                search={search}
               />
 
               {isExpanded && (

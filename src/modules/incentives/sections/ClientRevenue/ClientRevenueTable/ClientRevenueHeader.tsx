@@ -22,9 +22,17 @@ interface Props {
   showPercentage: boolean;
   sort: SortState;
   onSort: (key: SortKey) => void;
+  value?: any;
+  onChange?: any;
 }
 
-const ClientRevenueHeader = ({ showPercentage, sort, onSort }: Props) => {
+const ClientRevenueHeader = ({
+  showPercentage,
+  sort,
+  onSort,
+  value,
+  onChange,
+}: Props) => {
   return (
     <>
       <Box sx={styles.header}>
@@ -65,7 +73,7 @@ const ClientRevenueHeader = ({ showPercentage, sort, onSort }: Props) => {
       </Box>
 
       <Box sx={styles.toolbar}>
-        <SearchBar />
+        <SearchBar value={value} onChange={onChange} />
       </Box>
 
       <Box

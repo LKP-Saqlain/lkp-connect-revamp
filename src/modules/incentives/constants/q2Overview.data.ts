@@ -53,44 +53,32 @@ export const Q2_METRICS: MetricCardData[] = [
 
 export const Q2_REVENUE_PROGRESS: RevenueProgressData = {
   multiplier: "2.0x",
-
   multiplierColor: "#D92D20",
-
   subtitle: "Below minimum",
-
   subtitleColor: "#D92D20",
-
   mpc: "3x",
-
   barMax: 3,
-
   progressPercent: 67,
-
   target: {
     label: "3x CTC",
     value: "₹4,50,000",
   },
-
   broking: {
     label: "Broking credit (30%)",
     amount: "₹2,40,000",
     percent: "53%",
   },
-
   nonBroking: {
     label: "Non-broking credit (70%)",
     amount: "₹60,000",
     percent: "13%",
   },
-
   netCredit: {
     label: "Net credit",
     amount: "₹3,00,000",
     percent: "67%",
   },
-
   slabLabel: "Below minimum",
-
   slabs: [
     {
       id: "1",

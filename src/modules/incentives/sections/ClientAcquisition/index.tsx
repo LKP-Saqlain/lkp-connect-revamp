@@ -63,7 +63,7 @@ const ClientAcquisition = ({ period }: Props) => {
 
     dispatch(
       fetchGetClientAcquisition({
-        empCode: "0040",
+        empCode: "5434",
         financialYear: "2026-27",
         quarterName: "Q2",
       }),

@@ -37,14 +37,14 @@ const OverviewQ2 = () => {
     useAppSelector((state) => state.incentivePeriod);
 
   const employeeData = employeeIncentive?.data;
-  console.log("tes11111t", employeeData, incentiveSlabs, incentiveSlabsLoading);
+  console.log("tes11111t", employeeData);
 
   useEffect(() => {
     if (!employeeData?.empCode) return;
 
     dispatch(
       fetchIncentiveSlabs({
-        empCode: "0238",
+        empCode: "5434",
         financialYear: "2026-27",
       }),
     );
@@ -66,12 +66,136 @@ const OverviewQ2 = () => {
   const q2RevenueProgress: RevenueProgressData = {
     ...Q2_REVENUE_PROGRESS,
 
+    // Revenue multiple
+    multiplier:
+      employeeData?.revenueMultiple != null
+        ? `${employeeData.revenueMultiple}x`
+        : Q2_REVENUE_PROGRESS.multiplier,
+
+    // MPC / required revenue multiple
+    mpc:
+      employeeData?.reqRevenueMultiple != null
+        ? `${employeeData.reqRevenueMultiple}x`
+        : Q2_REVENUE_PROGRESS.mpc,
+
+    // Progress bar
+    barMax: employeeData?.reqRevenueMultiple ?? Q2_REVENUE_PROGRESS.barMax,
+
+    progressPercent:
+      employeeData?.revenueMultiple != null && employeeData?.reqRevenueMultiple
+        ? Math.min(
+            (employeeData.revenueMultiple / employeeData.reqRevenueMultiple) *
+              100,
+            100,
+          )
+        : Q2_REVENUE_PROGRESS.progressPercent,
+
+    // Target
+    target: {
+      label:
+        employeeData?.reqRevenueMultiple != null
+          ? `${employeeData.reqRevenueMultiple}x CTC`
+          : Q2_REVENUE_PROGRESS.target.label,
+
+      value:
+        employeeData?.empQuarterCTC != null &&
+        employeeData?.reqRevenueMultiple != null
+          ? `₹${(
+              employeeData.empQuarterCTC * employeeData.reqRevenueMultiple
+            ).toLocaleString("en-IN")}`
+          : Q2_REVENUE_PROGRESS.target.value,
+    },
+
+    // Broking credit
+    broking: {
+      ...Q2_REVENUE_PROGRESS.broking,
+
+      label: `Broking credit (${employeeData?.brokingCredit}%)`,
+
+      amount:
+        employeeData?.brokingRevenue != null
+          ? `₹${employeeData.brokingRevenue.toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : Q2_REVENUE_PROGRESS.broking.amount,
+
+      percent:
+        employeeData?.brokingCredit != null
+          ? `${(
+              (employeeData.brokingRevenue / employeeData?.empCTC) *
+              100
+            ).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}%`
+          : Q2_REVENUE_PROGRESS.broking.percent,
+    },
+
+    // Non-broking credit
+    nonBroking: {
+      ...Q2_REVENUE_PROGRESS.nonBroking,
+
+      label: `Non-Broking credit (${employeeData?.nonBrokingCredit}%)`,
+
+      amount:
+        employeeData?.nonBrokingRevenue != null
+          ? `₹${employeeData.nonBrokingRevenue.toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : Q2_REVENUE_PROGRESS.nonBroking.amount,
+
+      percent:
+        employeeData?.nonBrokingCredit != null
+          ? `${(
+              (employeeData.nonBrokingRevenue / employeeData?.empCTC) *
+              100
+            ).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}%`
+          : Q2_REVENUE_PROGRESS.nonBroking.percent,
+    },
+
+    // Net credit
+    netCredit: {
+      ...Q2_REVENUE_PROGRESS.netCredit,
+
+      label: "Net credit",
+
+      // Broking amount + Non-broking amount
+      amount:
+        employeeData?.brokingRevenue != null &&
+        employeeData?.nonBrokingRevenue != null
+          ? `₹${(
+              employeeData.brokingRevenue + employeeData.nonBrokingRevenue
+            ).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : Q2_REVENUE_PROGRESS.netCredit.amount,
+
+      // Broking percentage + Non-broking percentage
+      percent:
+        employeeData?.brokingRevenue != null &&
+        employeeData?.nonBrokingRevenue != null &&
+        employeeData?.empCTC
+          ? `${(
+              (employeeData.brokingRevenue / employeeData.empCTC) * 100 +
+              (employeeData.nonBrokingRevenue / employeeData.empCTC) * 100
+            ).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}%`
+          : Q2_REVENUE_PROGRESS.netCredit.percent,
+    },
+
+    // Slab label
+    slabLabel:
+      employeeData?.revenueMultiple != null &&
+      employeeData?.reqRevenueMultiple != null
+        ? employeeData.revenueMultiple >= employeeData.reqRevenueMultiple
+          ? "Eligible"
+          : "Below minimum"
+        : Q2_REVENUE_PROGRESS.slabLabel,
+
     slabs: q2Slabs && q2Slabs.length > 0 ? q2Slabs : Q2_REVENUE_PROGRESS.slabs,
   };
-
-  // useEffect(() => {
-  //   if (!employeeData?.empCode) return;
-  // }, [dispatch, employeeData?.empCode]);
 
   const q2Metrics = Q2_METRICS.map((metric) => {
     switch (metric.id) {
@@ -140,7 +264,6 @@ const OverviewQ2 = () => {
 
   const q2Eligibility: EligibilityChecklistData = {
     ...Q2_ELIGIBILITY,
-
     qualifications: [
       {
         title: "Min Revenue",

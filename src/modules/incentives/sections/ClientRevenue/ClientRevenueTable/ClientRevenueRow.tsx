@@ -23,6 +23,7 @@ interface Props {
   percentage?: string;
   capped?: boolean;
   showPercentage?: boolean;
+  search: string;
 }
 
 const ClientRevenueRow = ({
@@ -42,7 +43,36 @@ const ClientRevenueRow = ({
   showPercentage = false,
   expanded = false,
   onToggle,
+  search,
 }: Props) => {
+  const highlightText = (text: string, search: string) => {
+    if (!search.trim()) {
+      return text;
+    }
+
+    const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const parts = text.split(new RegExp(`(${escapedSearch})`, "gi"));
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === search.trim().toLowerCase() ? (
+        <Box
+          key={index}
+          component="span"
+          sx={{
+            backgroundColor: "#FFF1A8",
+            borderRadius: "2px",
+            px: "1px",
+          }}
+        >
+          {part}
+        </Box>
+      ) : (
+        part
+      ),
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -74,7 +104,7 @@ const ClientRevenueRow = ({
             color: "#101828",
           }}
         >
-          {client}
+          {highlightText(client, search)}
         </Typography>
       </Box>
 

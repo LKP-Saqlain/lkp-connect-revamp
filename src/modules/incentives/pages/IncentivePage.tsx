@@ -21,12 +21,12 @@ import type {
   IncentiveTab,
   PolicyTab,
 } from "../types/incentive.types";
-import ApiLoader from "@/components/common/ApiLoader/ApiLoader";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 import {
   fetchTeamMemberDetails,
   fetchEmployeeIncentive,
+  fetchGetRevenueEmployeeType,
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 
 const IncentivePage = () => {
@@ -35,11 +35,8 @@ const IncentivePage = () => {
   const [policyTab, setPolicyTab] = useState<PolicyTab>("policy-summary");
   const dispatch = useAppDispatch();
 
-  const {
-    teamMemberDetails,
-    employeeIncentive,
-    loading: isIncentivePeriodLoading,
-  } = useAppSelector((state) => state.incentivePeriod);
+  const { teamMemberDetails, employeeIncentive, GetRevenueEmployeeType } =
+    useAppSelector((state) => state.incentivePeriod);
 
   const isPolicyPage = period === "sales-policy";
   const isAnnualTargetPage = period === "annual-target";
@@ -52,14 +49,18 @@ const IncentivePage = () => {
     if (!isQuarterPeriod || !quarterName) {
       return;
     }
-
     const payload = {
-      empCode: "0040",
+      empCode: "5434",
       financialYear: "2026-27",
       quarterName,
     };
 
     dispatch(fetchEmployeeIncentive(payload));
+
+    const employeePayload = {
+      empCode: "5434",
+    };
+    dispatch(fetchGetRevenueEmployeeType(employeePayload));
   }, [dispatch, quarterName, isQuarterPeriod]);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ const IncentivePage = () => {
     }
 
     const payload = {
-      empCode: "0040",
+      empCode: "5434",
       financialYear: "2026-27",
       quarterName,
     };
@@ -88,6 +89,10 @@ const IncentivePage = () => {
     quarterName,
     isQuarterPeriod,
   ]);
+
+  useEffect(() => {
+    console.log("GetRevenueEmployeeTypeResponse", GetRevenueEmployeeType);
+  }, [GetRevenueEmployeeType]);
 
   const handleTabChange = (value: string) => {
     if (isPolicyPage) {
@@ -137,9 +142,6 @@ const IncentivePage = () => {
   return (
     <>
       <PeriodBar value={period} onChange={setPeriod} />
-
-      <ApiLoader open={isQuarterPeriod && isIncentivePeriodLoading} />
-
       <Box
         sx={{
           px: 3,

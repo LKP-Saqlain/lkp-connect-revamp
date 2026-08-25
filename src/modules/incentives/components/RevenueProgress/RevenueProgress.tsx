@@ -1,13 +1,21 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+
 import ProgressIcon from "@/assets/images/progressIcon.svg";
 import { revenueProgressStyles as styles } from "./revenue.styles";
 
 import type { RevenueProgressProps } from "@/modules/incentives/types/incentive.types";
-import { Divider } from "@mui/material";
 import SlabRow from "./SlabRow";
 
 const RevenueProgress = ({ data }: RevenueProgressProps) => {
+  const currentMultiplier = parseFloat(data.multiplier ?? "0");
+  const targetMultiplier = parseFloat(data.mpc ?? "0");
+
+  const progressPercent =
+    targetMultiplier > 0
+      ? Math.min((currentMultiplier / targetMultiplier) * 100, 100)
+      : 0;
   return (
     <Box sx={styles.card}>
       <Box sx={styles.header}>
@@ -21,23 +29,17 @@ const RevenueProgress = ({ data }: RevenueProgressProps) => {
               gap: 0.5,
             }}
           >
-            <Box
-              component="img"
-              src={ProgressIcon}
-              alt="progress-icon"
-              sx={{}}
-            />
+            <Box component="img" src={ProgressIcon} alt="progress-icon" />
             Revenue progress
           </Typography>
 
           <Typography sx={styles.mpc}>
-            MPC: <Box component="span">3x CTC</Box>
+            MPC: <Box component="span">{`${data.mpc} CTC`}</Box>
           </Typography>
         </Box>
 
         {/* Row 2 */}
         <Box sx={styles.bottomRow}>
-          {/* <Typography sx={styles.multiplier}>{data.multiplier}</Typography> */}
           <Typography
             sx={{
               ...styles.multiplier,
@@ -52,16 +54,17 @@ const RevenueProgress = ({ data }: RevenueProgressProps) => {
 
             <Typography sx={styles.targetValue}>
               <Box component="span" sx={styles.targetText}>
-                3x CTC
+                {data.target.label}
               </Box>
 
               <Box component="span" sx={styles.targetAmount}>
                 {" "}
-                = ₹18,00,000
+                = {data.target.value}
               </Box>
             </Typography>
           </Box>
         </Box>
+
         {data.slabLabel && (
           <Typography
             sx={{
@@ -77,26 +80,29 @@ const RevenueProgress = ({ data }: RevenueProgressProps) => {
       </Box>
 
       <Box sx={styles.progressWrapper}>
-        {/* Labels */}
         <Box sx={styles.progressLabels}>
           <Typography sx={styles.progressLabel}>0x</Typography>
 
-          <Typography sx={styles.progressLabelCenter}>MPC 3x</Typography>
+          {/* <Typography sx={styles.progressLabelCenter}>
+            MPC {targetMultiplier}x
+          </Typography> */}
 
-          <Typography sx={styles.progressLabelEnd}>3x</Typography>
+          <Typography sx={styles.progressLabelEnd}>
+            {targetMultiplier}x
+          </Typography>
         </Box>
 
-        {/* Progress Bar */}
         <Box sx={styles.progressTrack}>
           <Box
             sx={{
               ...styles.progressFill,
-              width: `${data.progressPercent ?? 100}%`,
+              width: `${progressPercent}%`,
             }}
           />
         </Box>
       </Box>
 
+      {/* Revenue Legend */}
       <Box sx={styles.legend}>
         <Legend
           colorStyle={styles.dotBlue}
@@ -118,7 +124,9 @@ const RevenueProgress = ({ data }: RevenueProgressProps) => {
           item={data.netCredit}
         />
       </Box>
-      {data.slabs && (
+
+      {/* Incentive slabs */}
+      {data.slabs && data.slabs.length > 0 && (
         <Box sx={styles.slabContainer}>
           {data.slabs.map((item) => (
             <SlabRow key={item.id} item={item} />
@@ -136,7 +144,11 @@ const Legend = ({
 }: {
   colorStyle: any;
   amountColor: string;
-  item: any;
+  item: {
+    label: string;
+    amount: string;
+    percent: string;
+  };
 }) => (
   <Box sx={styles.legendRow}>
     <Box sx={styles.left}>
@@ -145,7 +157,13 @@ const Legend = ({
       <Typography sx={styles.legendLabel}>{item.label}</Typography>
     </Box>
 
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1,
+      }}
+    >
       <Typography
         sx={{
           color: amountColor,

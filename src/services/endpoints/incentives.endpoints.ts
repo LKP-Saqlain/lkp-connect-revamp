@@ -6,4 +6,5 @@ export const incentivesEndpoints = {
   GetclientwiseDetailsRevenue: "MIS/GetclientwiseDetailsRevenue",
   GetEmpwiseDetailsRevenue: "MIS/GetEmpwiseDetailsRevenue",
   GetClientAcquisition: "MIS/GetClientAcquisition",
+  GetRevenueEmployeeType: "MIS/GetRevenueEmployeeType",
 } as const;

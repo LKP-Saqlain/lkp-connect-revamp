@@ -52,6 +52,10 @@ export interface GetClientAcquisitionPayload {
   quarterName: string;
 }
 
+export interface GetRevenueEmployeeTypePayload {
+  empCode: string;
+}
+
 // export interface GetclientwiseDetailsRevenue {
 //   empCode: string;
 //   financialYear: string;

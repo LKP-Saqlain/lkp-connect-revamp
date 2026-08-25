@@ -3,6 +3,7 @@ import type {
   ClientwiseDetailRevenueResponse,
   EmpwiseDetailsRevenueResponse,
   GetClientAcquisitionResponse,
+  GetRevenueEmployeeTypeResponse,
 } from "@/modules/incentives/types/incentive.types";
 import baseInstance from "../axios/baseInstance";
 import { incentivesEndpoints } from "../endpoints/incentives.endpoints";
@@ -15,6 +16,7 @@ import type {
   GetEmpwiseDetailsRevenuePayload,
   GetIncentiveSlabsPayload,
   GetIncentiveSlabsResponse,
+  GetRevenueEmployeeTypePayload,
   GetTeamMemberDetailsPayload,
   GetTeamMemberDetailsResponse,
 } from "./payloadInterface";
@@ -88,6 +90,17 @@ export const GetClientAcquisition = async (
 ): Promise<GetClientAcquisitionResponse> => {
   const response = await baseInstance.post<GetClientAcquisitionResponse>(
     incentivesEndpoints.GetClientAcquisition,
+    payload,
+  );
+
+  return response.data;
+};
+
+export const GetRevenueEmployeeType = async (
+  payload: GetRevenueEmployeeTypePayload,
+): Promise<GetRevenueEmployeeTypeResponse> => {
+  const response = await baseInstance.post<GetRevenueEmployeeTypeResponse>(
+    incentivesEndpoints.GetRevenueEmployeeType,
     payload,
   );
 

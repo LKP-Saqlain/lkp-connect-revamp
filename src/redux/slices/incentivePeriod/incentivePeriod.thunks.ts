@@ -18,12 +18,15 @@ import {
   GetEmpwiseDetailsRevenue,
   type GetClientAcquisitionPayload,
   GetClientAcquisition,
+  type GetRevenueEmployeeTypePayload,
+  GetRevenueEmployeeType,
 } from "@/services/api";
 import type {
   ClientRevenueApiResponse,
   ClientwiseDetailRevenueResponse,
   EmpwiseDetailsRevenueResponse,
   GetClientAcquisitionResponse,
+  GetRevenueEmployeeTypeResponse,
 } from "@/modules/incentives/types/incentive.types";
 
 export const fetchTeamMemberDetails = createAsyncThunk<
@@ -189,6 +192,33 @@ export const fetchGetClientAcquisition = createAsyncThunk<
   async (payload, { rejectWithValue }) => {
     try {
       const response = await GetClientAcquisition(payload);
+
+      if (!response.isSuccess) {
+        return rejectWithValue(
+          response.errorMessages || "Failed to fetch employee-wise revenue",
+        );
+      }
+
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to fetch employee-wise revenue",
+      );
+    }
+  },
+);
+
+export const fetchGetRevenueEmployeeType = createAsyncThunk<
+  GetRevenueEmployeeTypeResponse,
+  GetRevenueEmployeeTypePayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchGetRevenueEmployeeType",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetRevenueEmployeeType(payload);
 
       if (!response.isSuccess) {
         return rejectWithValue(

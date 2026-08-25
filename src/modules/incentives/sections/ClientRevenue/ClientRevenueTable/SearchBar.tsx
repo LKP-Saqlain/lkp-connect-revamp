@@ -1,12 +1,16 @@
 import { Box, InputBase } from "@mui/material";
-
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
-const SearchBar = () => {
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+const SearchBar = ({ value, onChange }: Props) => {
   return (
     <Box
       sx={{
-        width: 190,
+        width: 250,
         height: 34,
 
         border: "1px solid #E4E7EC",
@@ -40,6 +44,8 @@ const SearchBar = () => {
             opacity: 1,
           },
         }}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
       />
     </Box>
   );
