@@ -1,5 +1,6 @@
-export type IncentivePeriod =
-  "fy" | "q1" | "q2" | "q3" | "q4" | "sales-policy" | "annual-target";
+export type IncentivePeriod = "fy" | "q1" | "q2" | "q3" | "q4";
+
+export type SpecialIncentiveTab = "sales-policy" | "annual-target";
 
 export type IncentiveTab =
   "overview" | "client-revenue" | "revenue-breakdown" | "client-acquisition";
@@ -7,9 +8,8 @@ export type IncentiveTab =
 export type PolicyTab = "policy-summary" | "incentive-calculator";
 
 export interface PeriodItem {
-  id: IncentivePeriod;
+  id: IncentivePeriod | SpecialIncentiveTab;
   label: string;
-
   disabled?: boolean;
   notification?: boolean;
 }
@@ -218,8 +218,10 @@ export interface EmployeeIncentiveData {
   empCTC: number;
   empQuarterCTC: number;
 
-  brokingRevenue: number;
-  nonBrokingRevenue: number;
+  brokingRevenue?: number;
+  brokingCredits: number;
+  nonBrokingRevenue?: number;
+  nonBrokingCredits: number;
   totalRevenue: number;
 
   revenueMultiple: number;
@@ -303,20 +305,28 @@ export interface GetclientwiseRevenuePayload {
 export interface ClientRevenueDetail {
   clientCode: string;
   clientName: string;
-  brokingRevenue: number;
-  totalBrokingCredits: number;
+  brokingRevenue?: number;
+  brokingCredits: number;
+  totalBrokingCredits?: number;
+  totalBrokingRevenue: number;
   nonBrokingRevenue: number;
-  totalNonBrokingCredits: number;
+  totalNonBrokingCredits?: number;
+  totalNonBrokingRevenue: number;
   totalRevenue: number;
   revenuePercentage: number;
+  nonBrokingCredits: number;
 }
 
 export interface ClientRevenueApiTotal {
   totalCount: string;
-  brokingRevenue: number;
+  brokingRevenue?: number;
+  brokingCredits: number;
   totalBrokingCredits: number;
+  nonBrokingCredits: number;
+  totalBrokingRevenue: number;
   nonBrokingRevenue: number;
-  totalNonBrokingCredits: number;
+  totalNonBrokingCredits?: number;
+  totalNonBrokingRevenue: number;
   totalRevenue: number;
 }
 

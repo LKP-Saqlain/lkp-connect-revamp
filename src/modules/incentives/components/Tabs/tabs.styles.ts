@@ -4,22 +4,34 @@ export const tabsStyles = {
   root: {
     display: "flex",
     alignItems: "center",
-    gap: 4,
+    justifyContent: "space-between",
 
     width: "100%",
-    // border: "1px solid black",
+
     borderTopLeftRadius: "10px",
     borderTopRightRadius: "10px",
-    backgroundColor: "#FFFFFF",
 
-    // borderBottom: "1px solid #E5E7EB",
+    backgroundColor: "#FFFFFF",
 
     px: 2,
     py: 0,
   },
 
+  leftTabs: {
+    display: "flex",
+    alignItems: "center",
+    gap: 4,
+  },
+
+  rightTabs: {
+    display: "flex",
+    alignItems: "center",
+    gap: 4,
+  },
+
   tab: {
     position: "relative",
+
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

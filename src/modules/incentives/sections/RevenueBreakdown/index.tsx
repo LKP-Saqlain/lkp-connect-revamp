@@ -95,7 +95,7 @@ const RevenueBreakdown = ({ period }: Props) => {
         id: "totalRevenue",
         title: "Total revenue",
         value: formatIndianCurrency(totalRevenue),
-        subtitle: "Across 14 products",
+        subtitle: "Across 17 products",
         color: "#101828",
       },
       {

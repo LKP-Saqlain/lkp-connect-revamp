@@ -17,6 +17,9 @@ export const INCENTIVE_TABS: TabItem[] = [
     id: "client-acquisition",
     label: "Client acquisition",
   },
+];
+
+export const INCENTIVE_ACTION_TABS: TabItem[] = [
   {
     id: "sales-policy",
     label: "Sales Policy",

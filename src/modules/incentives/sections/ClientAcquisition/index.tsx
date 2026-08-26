@@ -50,11 +50,9 @@ interface Props {
 const ClientAcquisition = ({ period }: Props) => {
   const dispatch = useAppDispatch();
 
-  const {
-    GetClientAcquisition,
-    GetClientAcquisitionLoading,
-    GetClientAcquisitionError,
-  } = useAppSelector((state) => state.incentivePeriod);
+  const { GetClientAcquisition } = useAppSelector(
+    (state) => state.incentivePeriod,
+  );
 
   useEffect(() => {
     if (period !== "q2") {
@@ -71,17 +69,8 @@ const ClientAcquisition = ({ period }: Props) => {
   }, [dispatch, period]);
 
   useEffect(() => {
-    console.log(
-      "GetClientAcq",
-      GetClientAcquisition,
-      GetClientAcquisitionError,
-      GetClientAcquisitionLoading,
-    );
-  }, [
-    GetClientAcquisition,
-    GetClientAcquisitionError,
-    GetClientAcquisitionLoading,
-  ]);
+    console.log("GetClientAcq", GetClientAcquisition);
+  }, [GetClientAcquisition]);
 
   const counts = GetClientAcquisition?.data?.clientAcqCounts;
   console.log("Testss", counts);

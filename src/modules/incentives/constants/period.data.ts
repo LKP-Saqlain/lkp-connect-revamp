@@ -23,12 +23,12 @@ export const PERIODS: PeriodItem[] = [
     id: "q4",
     label: "Q4 · Jan–Mar",
   },
-  {
-    id: "sales-policy",
-    label: "Sales Policy",
-  },
-  {
-    id: "annual-target",
-    label: "Annual Target",
-  },
+  // {
+  //   id: "sales-policy",
+  //   label: "Sales Policy",
+  // },
+  // {
+  //   id: "annual-target",
+  //   label: "Annual Target",
+  // },
 ];

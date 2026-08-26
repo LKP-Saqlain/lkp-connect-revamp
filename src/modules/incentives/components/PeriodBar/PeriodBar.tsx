@@ -21,7 +21,7 @@ const PeriodBar = ({
   return (
     <Box sx={periodStyles.root}>
       <Box sx={periodStyles.left}>
-        <Typography sx={periodStyles.label}>Period : </Typography>
+        <Typography sx={periodStyles.label}>Period :</Typography>
 
         <Box sx={periodStyles.chipContainer}>
           {PERIODS.map((period) => (

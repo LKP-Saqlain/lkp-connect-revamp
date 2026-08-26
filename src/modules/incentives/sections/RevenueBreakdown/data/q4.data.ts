@@ -6,7 +6,7 @@ export const Q4_REVENUE_BREAKDOWN: RevenueBreakdownData = {
       id: "totalRevenue",
       title: "Total revenue",
       value: "₹96,40,000",
-      subtitle: "Across 14 products",
+      subtitle: "Across 17 products",
       color: "#101828",
     },
     {

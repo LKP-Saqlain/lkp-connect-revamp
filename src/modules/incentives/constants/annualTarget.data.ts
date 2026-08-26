@@ -112,15 +112,15 @@ export const MONTHLY_REVENUE = [
 ];
 
 export const REVENUE_CHART = {
-  title: "Revenue Achievement (Target vs Actual)",
+  title: "Month-wise revenue credit",
 
   legend: [
     {
-      label: "Target",
+      label: "Broking",
       color: "#185FA5",
     },
     {
-      label: "Actual",
+      label: "Non Broking",
       color: "#6A8E3A",
     },
   ],

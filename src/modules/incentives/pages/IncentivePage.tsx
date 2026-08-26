@@ -7,19 +7,17 @@ import IncentiveTabs from "../components/Tabs";
 
 import Overview from "../sections/Overview/Overview";
 import ClientRevenue from "../sections/ClientRevenue";
-import PolicySummary from "../sections/Overview/PolicySummary";
-import IncentiveCalculator from "../sections/Overview/IncentiveCalculator";
 import AnnualTarget from "../sections/Overview/AnnualTarget/AnnualTarget";
 import RevenueBreakdown from "../sections/RevenueBreakdown";
 import ClientAcquisition from "../sections/ClientAcquisition";
-import { INCENTIVE_TABS } from "../constants/tab.data";
-import { POLICY_TABS } from "../constants/policyTabs.data";
+import { INCENTIVE_TABS, INCENTIVE_ACTION_TABS } from "../constants/tab.data";
+import SalesPolicy from "../sections/Overview/SalesPolicy";
 import { getQuarterName } from "../constants/overall";
 
 import type {
   IncentivePeriod,
   IncentiveTab,
-  PolicyTab,
+  SpecialIncentiveTab,
 } from "../types/incentive.types";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
@@ -32,16 +30,18 @@ import {
 const IncentivePage = () => {
   const [period, setPeriod] = useState<IncentivePeriod>("fy");
   const [tab, setTab] = useState<IncentiveTab>("overview");
-  const [policyTab, setPolicyTab] = useState<PolicyTab>("policy-summary");
+
+  const [actionTab, setActionTab] = useState<SpecialIncentiveTab | null>(null);
+
   const dispatch = useAppDispatch();
 
   const { teamMemberDetails, employeeIncentive, GetRevenueEmployeeType } =
     useAppSelector((state) => state.incentivePeriod);
 
-  const isPolicyPage = period === "sales-policy";
-  const isAnnualTargetPage = period === "annual-target";
-  const tabs = isPolicyPage ? POLICY_TABS : INCENTIVE_TABS;
-  const activeTab = isPolicyPage ? policyTab : tab;
+  // const isPolicyPage = specialTab === "sales-policy";
+  // const isAnnualTargetPage = specialTab === "annual-target";
+  // const tabs = isPolicyPage ? POLICY_TABS : INCENTIVE_TABS;
+  // const activeTab = isPolicyPage ? policyTab : tab;
   const quarterName = getQuarterName(period);
   const isQuarterPeriod = quarterName !== null;
 
@@ -95,23 +95,21 @@ const IncentivePage = () => {
   }, [GetRevenueEmployeeType]);
 
   const handleTabChange = (value: string) => {
-    if (isPolicyPage) {
-      setPolicyTab(value as PolicyTab);
-    } else {
-      setTab(value as IncentiveTab);
-    }
+    setTab(value as IncentiveTab);
+    setActionTab(null);
+  };
+
+  const handleActionTabChange = (value: string) => {
+    setActionTab(value as SpecialIncentiveTab);
+    setTab(null);
   };
 
   const renderContent = () => {
-    if (isPolicyPage) {
-      return policyTab === "policy-summary" ? (
-        <PolicySummary />
-      ) : (
-        <IncentiveCalculator />
-      );
+    if (actionTab === "sales-policy") {
+      return <SalesPolicy />;
     }
 
-    if (isAnnualTargetPage) {
+    if (actionTab === "annual-target") {
       return <AnnualTarget />;
     }
 
@@ -141,7 +139,12 @@ const IncentivePage = () => {
 
   return (
     <>
-      <PeriodBar value={period} onChange={setPeriod} />
+      <PeriodBar
+        value={period}
+        onChange={(value) => {
+          setPeriod(value);
+        }}
+      />
       <Box
         sx={{
           px: 3,
@@ -149,14 +152,28 @@ const IncentivePage = () => {
           backgroundColor: "#F5F7FB",
         }}
       >
-        {!isAnnualTargetPage && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            backgroundColor: "#FFFFFF",
+            borderTopLeftRadius: "10px",
+            borderTopRightRadius: "10px",
+            px: 2,
+            border: "1px solid solid",
+          }}
+        >
           <IncentiveTabs
-            items={tabs}
-            value={activeTab}
+            items={INCENTIVE_TABS}
+            actionItems={INCENTIVE_ACTION_TABS}
+            value={tab}
+            actionValue={actionTab ?? undefined}
             onChange={handleTabChange}
+            onActionChange={handleActionTabChange}
           />
-        )}
-
+        </Box>
         {renderContent()}
       </Box>
     </>

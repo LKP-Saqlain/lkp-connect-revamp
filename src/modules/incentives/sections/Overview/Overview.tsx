@@ -11,7 +11,7 @@ interface Props {
   employeeIncentive?: any;
 }
 
-const Overview = ({ period, teamMemberDetails, employeeIncentive }: Props) => {
+const Overview = ({ period }: Props) => {
   switch (period) {
     case "q1":
       return <OverviewQ1 period={period} />;

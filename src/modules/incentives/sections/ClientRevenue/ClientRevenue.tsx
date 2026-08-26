@@ -27,7 +27,7 @@ const ClientRevenue = ({ period }: Props) => {
 
     dispatch(
       fetchClientwiseRevenue({
-        empCode: "5434",
+        empCode: "5293",
         financialYear: "2026-27",
         quarterName: "Q2",
       }),
@@ -64,16 +64,16 @@ const ClientRevenue = ({ period }: Props) => {
         title: "Total revenue",
         value: `₹${apiData.total.totalRevenue.toLocaleString("en-IN")}`,
         subtitle: `Credit: ₹${(
-          apiData.total.totalBrokingCredits +
-          apiData.total.totalNonBrokingCredits
+          apiData.total.totalBrokingRevenue +
+          apiData.total.totalNonBrokingRevenue
         ).toLocaleString("en-IN")}`,
         color: "#101828",
       },
       {
         id: "broking",
         title: "Broking Revenue Credit",
-        value: `₹${apiData.total.totalBrokingCredits.toLocaleString("en-IN")}`,
-        subtitle: `30% of ₹${apiData.total.brokingRevenue.toLocaleString(
+        value: `₹${apiData.total.totalBrokingRevenue.toLocaleString("en-IN")}`,
+        subtitle: `30% of ₹${apiData.total.brokingCredits.toLocaleString(
           "en-IN",
         )}`,
         color: "#2F80ED",
@@ -81,10 +81,8 @@ const ClientRevenue = ({ period }: Props) => {
       {
         id: "non-broking",
         title: "Non-Broking Revenue Credit",
-        value: `₹${apiData.total.totalNonBrokingCredits.toLocaleString(
-          "en-IN",
-        )}`,
-        subtitle: `70% of ₹${apiData.total.nonBrokingRevenue.toLocaleString(
+        value: `₹${apiData.total.nonBrokingCredits.toLocaleString("en-IN")}`,
+        subtitle: `70% of ₹${apiData.total.totalNonBrokingRevenue.toLocaleString(
           "en-IN",
         )}`,
         color: "#27AE60",
@@ -95,37 +93,37 @@ const ClientRevenue = ({ period }: Props) => {
       id: index + 1,
       client: client.clientName,
       clientCode: client.clientCode,
-      broking: `₹${client.brokingRevenue.toLocaleString("en-IN")}`,
-      brokingCredit: `₹${client.totalBrokingCredits.toLocaleString("en-IN")}`,
+      broking: `₹${client.brokingCredits.toLocaleString("en-IN")}`,
+      brokingCredit: `₹${client.totalBrokingRevenue.toLocaleString("en-IN")}`,
 
-      nonBroking: `₹${client.nonBrokingRevenue.toLocaleString("en-IN")}`,
-      nonBrokingCredit: `₹${client.totalNonBrokingCredits.toLocaleString(
+      nonBroking: `₹${client.nonBrokingCredits.toLocaleString("en-IN")}`,
+      nonBrokingCredit: `₹${client.totalNonBrokingRevenue.toLocaleString(
         "en-IN",
       )}`,
       totalRevenue: `₹${client.totalRevenue.toLocaleString("en-IN")}`,
       totalCredit: `₹${(
-        client.totalBrokingCredits + client.totalNonBrokingCredits
+        client.totalBrokingRevenue + client.totalNonBrokingRevenue
       ).toLocaleString("en-IN")}`,
       percentage: `${client.revenuePercentage}%`,
       isCap: client.revenuePercentage >= 25,
     }));
 
     const q2Total = {
-      brokingRevenue: `₹${apiData.total.brokingRevenue.toLocaleString(
+      brokingCredits: `₹${apiData.total.brokingCredits.toLocaleString(
         "en-IN",
       )}`,
-      brokingCredit: `₹${apiData.total.totalBrokingCredits.toLocaleString(
+      brokingCredit: `₹${apiData.total.totalBrokingRevenue.toLocaleString(
         "en-IN",
       )}`,
-      nonBrokingRevenue: `₹${apiData.total.nonBrokingRevenue.toLocaleString(
+      nonBrokingRevenue: `₹${apiData.total.nonBrokingCredits.toLocaleString(
         "en-IN",
       )}`,
-      nonBrokingCredit: `₹${apiData.total.totalNonBrokingCredits.toLocaleString(
+      nonBrokingCredit: `₹${apiData.total.totalNonBrokingRevenue.toLocaleString(
         "en-IN",
       )}`,
       totalRevenue: `₹${apiData.total.totalRevenue.toLocaleString("en-IN")}`,
       totalCredit: `₹${(
-        apiData.total.totalBrokingCredits + apiData.total.totalNonBrokingCredits
+        apiData.total.totalBrokingRevenue + apiData.total.totalNonBrokingRevenue
       ).toLocaleString("en-IN")}`,
       totalClients: apiData.total.totalCount,
       brokingItems: Q2_CLIENT_REVENUE.total.brokingItems,

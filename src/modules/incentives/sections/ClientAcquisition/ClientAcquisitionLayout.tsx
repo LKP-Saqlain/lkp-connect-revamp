@@ -23,7 +23,7 @@ const ClientAcquisitionLayout = ({ summary, clients, rules, role }: Props) => {
   return (
     <Box
       sx={{
-        mt: 2,
+        mt: 3,
         mb: 2,
 
         display: "flex",

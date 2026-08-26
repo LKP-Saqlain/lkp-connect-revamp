@@ -33,8 +33,9 @@ export interface EmployeeIncentiveResponse {
 const OverviewQ2 = () => {
   const dispatch = useAppDispatch();
 
-  const { employeeIncentive, incentiveSlabs, incentiveSlabsLoading } =
-    useAppSelector((state) => state.incentivePeriod);
+  const { employeeIncentive, incentiveSlabs } = useAppSelector(
+    (state) => state.incentivePeriod,
+  );
 
   const employeeData = employeeIncentive?.data;
   console.log("tes11111t", employeeData);
@@ -110,19 +111,19 @@ const OverviewQ2 = () => {
     broking: {
       ...Q2_REVENUE_PROGRESS.broking,
 
-      label: `Broking credit (${employeeData?.brokingCredit}%)`,
+      label: `Broking credit (${employeeData?.brokingPercent}%)`,
 
       amount:
-        employeeData?.brokingRevenue != null
-          ? `₹${employeeData.brokingRevenue.toLocaleString("en-IN", {
+        employeeData?.brokingCredits != null
+          ? `₹${employeeData.brokingCredits.toLocaleString("en-IN", {
               maximumFractionDigits: 2,
             })}`
           : Q2_REVENUE_PROGRESS.broking.amount,
 
       percent:
-        employeeData?.brokingCredit != null
+        employeeData?.brokingPercent != null
           ? `${(
-              (employeeData.brokingRevenue / employeeData?.empCTC) *
+              (employeeData.brokingCredits / employeeData?.empCTC) *
               100
             ).toLocaleString("en-IN", {
               maximumFractionDigits: 2,
@@ -134,19 +135,19 @@ const OverviewQ2 = () => {
     nonBroking: {
       ...Q2_REVENUE_PROGRESS.nonBroking,
 
-      label: `Non-Broking credit (${employeeData?.nonBrokingCredit}%)`,
+      label: `Non-Broking credit (${employeeData?.nonBrokingPercent}%)`,
 
       amount:
-        employeeData?.nonBrokingRevenue != null
-          ? `₹${employeeData.nonBrokingRevenue.toLocaleString("en-IN", {
+        employeeData?.nonBrokingCredits != null
+          ? `₹${employeeData.nonBrokingCredits.toLocaleString("en-IN", {
               maximumFractionDigits: 2,
             })}`
           : Q2_REVENUE_PROGRESS.nonBroking.amount,
 
       percent:
-        employeeData?.nonBrokingCredit != null
+        employeeData?.nonBrokingPercent != null
           ? `${(
-              (employeeData.nonBrokingRevenue / employeeData?.empCTC) *
+              (employeeData.nonBrokingCredits / employeeData?.empCTC) *
               100
             ).toLocaleString("en-IN", {
               maximumFractionDigits: 2,
@@ -162,10 +163,10 @@ const OverviewQ2 = () => {
 
       // Broking amount + Non-broking amount
       amount:
-        employeeData?.brokingRevenue != null &&
-        employeeData?.nonBrokingRevenue != null
+        employeeData?.brokingCredits != null &&
+        employeeData?.nonBrokingCredits != null
           ? `₹${(
-              employeeData.brokingRevenue + employeeData.nonBrokingRevenue
+              employeeData.brokingCredits + employeeData.nonBrokingCredits
             ).toLocaleString("en-IN", {
               maximumFractionDigits: 2,
             })}`
@@ -173,12 +174,12 @@ const OverviewQ2 = () => {
 
       // Broking percentage + Non-broking percentage
       percent:
-        employeeData?.brokingRevenue != null &&
-        employeeData?.nonBrokingRevenue != null &&
+        employeeData?.brokingCredits != null &&
+        employeeData?.nonBrokingCredits != null &&
         employeeData?.empCTC
           ? `${(
-              (employeeData.brokingRevenue / employeeData.empCTC) * 100 +
-              (employeeData.nonBrokingRevenue / employeeData.empCTC) * 100
+              (employeeData.brokingCredits / employeeData.empCTC) * 100 +
+              (employeeData.nonBrokingCredits / employeeData.empCTC) * 100
             ).toLocaleString("en-IN", {
               maximumFractionDigits: 2,
             })}%`
@@ -212,14 +213,14 @@ const OverviewQ2 = () => {
         return {
           ...metric,
           value:
-            employeeData?.brokingRevenue != null
-              ? `₹${employeeData.brokingRevenue.toLocaleString("en-IN")}`
+            employeeData?.brokingCredits != null
+              ? `₹${employeeData.brokingCredits.toLocaleString("en-IN")}`
               : metric.value,
 
           subtitle:
-            employeeData?.brokingCredit != null &&
+            employeeData?.brokingPercent != null &&
             employeeData?.totalBrokingRevenue != null
-              ? `${employeeData.brokingCredit}% of ₹${employeeData.totalBrokingRevenue.toLocaleString(
+              ? `${employeeData.brokingPercent}% of ₹${employeeData.totalBrokingRevenue.toLocaleString(
                   "en-IN",
                   {
                     maximumFractionDigits: 2,
@@ -232,14 +233,14 @@ const OverviewQ2 = () => {
         return {
           ...metric,
           value:
-            employeeData?.nonBrokingRevenue != null
-              ? `₹${employeeData.nonBrokingRevenue.toLocaleString("en-IN")}`
+            employeeData?.nonBrokingCredits != null
+              ? `₹${employeeData.nonBrokingCredits.toLocaleString("en-IN")}`
               : metric.value,
 
           subtitle:
-            employeeData?.nonBrokingCredit != null &&
+            employeeData?.nonBrokingPercent != null &&
             employeeData?.totalNonBrokingRevenue != null
-              ? `${employeeData.nonBrokingCredit}% of ₹${employeeData.totalNonBrokingRevenue.toLocaleString(
+              ? `${employeeData.nonBrokingPercent}% of ₹${employeeData.totalNonBrokingRevenue.toLocaleString(
                   "en-IN",
                   {
                     maximumFractionDigits: 2,

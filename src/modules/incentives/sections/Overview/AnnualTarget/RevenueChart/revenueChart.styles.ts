@@ -20,27 +20,27 @@ export const revenueChartStyles = {
   },
 
   title: {
-    fontSize: "20px",
-    fontWeight: 700,
-    color: "#101828",
+    fontSize: "15px",
+    fontWeight: 500,
+    color: "#111",
   },
 
   legend: {
     display: "flex",
     alignItems: "center",
-    gap: 3,
+    gap: 1,
   },
 
   legendItem: {
     display: "flex",
     alignItems: "center",
-    gap: 1,
+    gap: 0.5,
   },
 
   legendDot: {
     width: 10,
     height: 10,
-    borderRadius: "50%",
+    borderRadius: "10%",
   },
 
   legendText: {

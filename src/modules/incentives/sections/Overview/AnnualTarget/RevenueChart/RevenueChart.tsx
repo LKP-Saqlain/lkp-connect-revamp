@@ -1,12 +1,11 @@
 import Chart from "react-apexcharts";
 import type { ApexOptions } from "apexcharts";
 import { Box, Typography } from "@mui/material";
-
 import {
   MONTHLY_REVENUE,
   REVENUE_CHART,
 } from "../../../../constants/annualTarget.data";
-
+import BarChartIcon from "@mui/icons-material/BarChart";
 import ChartLegend from "./ChartLegend";
 import { revenueChartStyles as styles } from "./revenueChart.styles";
 
@@ -119,8 +118,23 @@ const RevenueChart = () => {
   return (
     <Box sx={styles.card}>
       <Box sx={styles.header}>
-        <Typography sx={styles.title}>{REVENUE_CHART.title}</Typography>
-
+        <Typography
+          sx={{
+            ...styles.title,
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+          }}
+        >
+          {/* <Box
+            component="img"
+            src={<BarChartIcon />}
+            alt="title-icon"
+            sx={{ width: 18, height: 18 }}
+          /> */}
+          <BarChartIcon sx={{ width: 18, height: 18 }} />
+          {REVENUE_CHART.title}
+        </Typography>
         <ChartLegend items={REVENUE_CHART.legend} />
       </Box>
 
