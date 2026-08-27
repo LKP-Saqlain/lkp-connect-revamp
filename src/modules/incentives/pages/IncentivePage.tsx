@@ -28,8 +28,6 @@ import {
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 // import { getUserId } from "@/auth/session";
 import { useAuth } from "@/auth/AuthContext";
-const { userId } = useAuth();
-const EMP_CODE = userId ?? "";
 // const EMP_CODE = "0238";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
@@ -47,6 +45,9 @@ const IncentivePage = () => {
 
   const quarterName = getQuarterName(period);
   const isQuarterPeriod = quarterName !== null;
+
+  const { userId } = useAuth();
+  const EMP_CODE = userId ?? "";
 
   // employeeType now comes from this dedicated API, not from employeeIncentive
   const employeeType = GetRevenueEmployeeType?.data?.employeeType;
