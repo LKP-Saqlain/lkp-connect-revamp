@@ -27,7 +27,7 @@ const ClientRevenue = ({ period }: Props) => {
 
     dispatch(
       fetchClientwiseRevenue({
-        empCode: "5293",
+        empCode: "0238",
         financialYear: "2026-27",
         quarterName: "Q2",
       }),

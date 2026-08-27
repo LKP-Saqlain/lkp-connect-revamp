@@ -9,9 +9,10 @@ interface Props {
   period: IncentivePeriod;
   teamMemberDetails?: any;
   employeeIncentive?: any;
+  employeeType?: string;
 }
 
-const Overview = ({ period }: Props) => {
+const Overview = ({ period, employeeType }: Props) => {
   switch (period) {
     case "q1":
       return <OverviewQ1 period={period} />;
@@ -26,7 +27,7 @@ const Overview = ({ period }: Props) => {
       return <OverviewQ4 period={period} />;
 
     default:
-      return <OverviewFY period={period} />;
+      return <OverviewFY period={period} employeeType={employeeType} />;
   }
 };
 

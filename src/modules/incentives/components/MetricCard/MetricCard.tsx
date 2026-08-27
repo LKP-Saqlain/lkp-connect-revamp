@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { metricStyles } from "./metric.styles";
@@ -5,10 +6,25 @@ import { metricStyles } from "./metric.styles";
 import type { MetricCardData } from "../../types/incentive.types";
 
 interface MetricCardProps {
-  metric: MetricCardData;
+  metric: MetricCardData & { icon?: string | ReactNode };
 }
 
 const MetricCard = ({ metric }: MetricCardProps) => {
+  const renderIcon = () => {
+    if (!metric.icon) return null;
+    if (typeof metric.icon === "string") {
+      return (
+        <Box
+          component="img"
+          src={metric.icon}
+          alt="title-icon"
+          sx={{ width: 18, height: 18 }}
+        />
+      );
+    }
+    return metric.icon; // ReactNode (MUI icon etc.)
+  };
+
   return (
     <Box sx={metricStyles.card}>
       <Typography
@@ -19,12 +35,7 @@ const MetricCard = ({ metric }: MetricCardProps) => {
           gap: 0.5,
         }}
       >
-        <Box
-          component="img"
-          src={metric.icon}
-          alt="title-icon"
-          sx={{ width: 18, height: 18 }}
-        />
+        {renderIcon()}
         {metric.title}
       </Typography>
 
@@ -32,12 +43,8 @@ const MetricCard = ({ metric }: MetricCardProps) => {
         <Typography
           sx={{
             ...metricStyles.value,
-            ...(metric.title === "Revenue multiple" && {
-              color: "#185FA5",
-            }),
-            ...(metric.color && {
-              color: metric.color,
-            }),
+            ...(metric.title === "Revenue multiple" && { color: "#185FA5" }),
+            ...(metric.color && { color: metric.color }),
           }}
         >
           {metric.value}

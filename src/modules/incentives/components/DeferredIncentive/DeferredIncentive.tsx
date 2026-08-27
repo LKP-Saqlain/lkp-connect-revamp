@@ -11,9 +11,13 @@ import type { DeferredIncentiveData } from "../../types/incentive.types";
 
 interface DeferredIncentiveProps {
   data: DeferredIncentiveData;
+  centerAmount?: boolean;
 }
 
-const DeferredIncentive = ({ data }: DeferredIncentiveProps) => {
+const DeferredIncentive = ({
+  data,
+  centerAmount = false,
+}: DeferredIncentiveProps) => {
   return (
     <Box sx={styles.card}>
       <Typography
@@ -37,8 +41,23 @@ const DeferredIncentive = ({ data }: DeferredIncentiveProps) => {
 
       <Box>
         {data.rows.map((row) => (
-          <DeferredRow key={row.id} row={row} />
+          <DeferredRow key={row.id} row={row} centerAmount={centerAmount} />
         ))}
+
+        {data.total && (
+          <Box sx={styles.totalRow}>
+            <Typography sx={styles.totalLabel}>{data.total.label}</Typography>
+            <Typography
+              sx={{
+                ...styles.totalAmount,
+                color: data.total.color ?? "#12B76A",
+                ...(centerAmount && { width: "100%", textAlign: "center" }),
+              }}
+            >
+              {data.total.amount}
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );

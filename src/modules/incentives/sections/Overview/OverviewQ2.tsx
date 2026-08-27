@@ -45,7 +45,7 @@ const OverviewQ2 = () => {
 
     dispatch(
       fetchIncentiveSlabs({
-        empCode: "5434",
+        empCode: "0238",
         financialYear: "2026-27",
       }),
     );

@@ -89,6 +89,17 @@ export interface RevenueProgressData {
   slabs?: SlabItem[];
 }
 
+export interface PerformanceSectionData {
+  id: string;
+  icon: "self" | "team";
+  title: string;
+  criteria: {
+    actual: string; // "1.4x"
+    required: string; // "1.0x of total CTC"
+  };
+  metrics: MetricCardData[];
+}
+
 export interface DeferredIncentiveRow {
   id: string;
 
@@ -101,12 +112,21 @@ export interface DeferredIncentiveRow {
   statusColor?: string;
 }
 
+export interface OverviewTLData {
+  selfPerformance: PerformanceSectionData;
+  teamPerformance: PerformanceSectionData;
+  deferred: DeferredIncentiveData;
+}
+
 export interface DeferredIncentiveData {
   title: string;
-
   info: string;
-
   rows: DeferredIncentiveRow[];
+  total?: {
+    label: string;
+    amount: string;
+    color?: string;
+  };
 }
 
 export interface PolicyCardData {

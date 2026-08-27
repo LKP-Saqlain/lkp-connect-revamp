@@ -27,6 +27,10 @@ import {
   fetchGetRevenueEmployeeType,
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 
+const EMP_CODE = "0238"; // TODO: replace with logged-in user's empCode once auth/session is wired
+
+const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
+
 const IncentivePage = () => {
   const [period, setPeriod] = useState<IncentivePeriod>("fy");
   const [tab, setTab] = useState<IncentiveTab>("overview");
@@ -38,61 +42,53 @@ const IncentivePage = () => {
   const { teamMemberDetails, employeeIncentive, GetRevenueEmployeeType } =
     useAppSelector((state) => state.incentivePeriod);
 
-  // const isPolicyPage = specialTab === "sales-policy";
-  // const isAnnualTargetPage = specialTab === "annual-target";
-  // const tabs = isPolicyPage ? POLICY_TABS : INCENTIVE_TABS;
-  // const activeTab = isPolicyPage ? policyTab : tab;
   const quarterName = getQuarterName(period);
   const isQuarterPeriod = quarterName !== null;
 
+  // employeeType now comes from this dedicated API, not from employeeIncentive
+  const employeeType = GetRevenueEmployeeType?.data?.employeeType;
+  const isTeamRole = employeeType
+    ? TEAM_ROLE_TYPES.includes(employeeType)
+    : false;
+
+  // 1) Fetch who's logged in / their role — runs ONCE on mount, independent of period
+  useEffect(() => {
+    dispatch(fetchGetRevenueEmployeeType({ empcode: EMP_CODE }));
+  }, [dispatch]);
+
+  // 2) Fetch employee incentive data for the selected quarter (unchanged, still period-driven)
   useEffect(() => {
     if (!isQuarterPeriod || !quarterName) {
       return;
     }
+
     const payload = {
-      empCode: "5434",
+      empCode: EMP_CODE,
       financialYear: "2026-27",
       quarterName,
     };
 
     dispatch(fetchEmployeeIncentive(payload));
-
-    const employeePayload = {
-      empCode: "5434",
-    };
-    dispatch(fetchGetRevenueEmployeeType(employeePayload));
   }, [dispatch, quarterName, isQuarterPeriod]);
 
+  // 3) Fetch team member details — now gated on the role API instead of employeeIncentive
   useEffect(() => {
-    const employeeType = employeeIncentive?.data?.employeeType;
-
     if (!isQuarterPeriod || !quarterName || !employeeType) {
       return;
     }
 
-    const allowedEmployeeTypes = ["TL", "BM", "AH"];
-
-    if (!allowedEmployeeTypes.includes(employeeType)) {
+    if (!isTeamRole) {
       return;
     }
 
     const payload = {
-      empCode: "5434",
+      empCode: EMP_CODE,
       financialYear: "2026-27",
       quarterName,
     };
 
     dispatch(fetchTeamMemberDetails(payload));
-  }, [
-    dispatch,
-    employeeIncentive?.data?.employeeType,
-    quarterName,
-    isQuarterPeriod,
-  ]);
-
-  useEffect(() => {
-    console.log("GetRevenueEmployeeTypeResponse", GetRevenueEmployeeType);
-  }, [GetRevenueEmployeeType]);
+  }, [dispatch, employeeType, isTeamRole, quarterName, isQuarterPeriod]);
 
   const handleTabChange = (value: string) => {
     setTab(value as IncentiveTab);
@@ -115,7 +111,14 @@ const IncentivePage = () => {
 
     switch (tab) {
       case "overview":
-        return <Overview period={period} />;
+        return (
+          <Overview
+            period={period}
+            teamMemberDetails={teamMemberDetails}
+            employeeIncentive={employeeIncentive}
+            employeeType={employeeType}
+          />
+        );
 
       case "client-revenue":
         return <ClientRevenue period={period} />;
@@ -132,6 +135,7 @@ const IncentivePage = () => {
             period={period}
             teamMemberDetails={teamMemberDetails}
             employeeIncentive={employeeIncentive}
+            employeeType={employeeType}
           />
         );
     }
@@ -145,13 +149,7 @@ const IncentivePage = () => {
           setPeriod(value);
         }}
       />
-      <Box
-        sx={{
-          px: 3,
-          py: 0,
-          backgroundColor: "#F5F7FB",
-        }}
-      >
+      <Box sx={{ px: 3, py: 0, backgroundColor: "#F5F7FB" }}>
         <Box
           sx={{
             display: "flex",

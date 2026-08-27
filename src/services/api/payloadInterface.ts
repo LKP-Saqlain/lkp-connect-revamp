@@ -53,7 +53,7 @@ export interface GetClientAcquisitionPayload {
 }
 
 export interface GetRevenueEmployeeTypePayload {
-  empCode: string;
+  empcode: string;
 }
 
 // export interface GetclientwiseDetailsRevenue {

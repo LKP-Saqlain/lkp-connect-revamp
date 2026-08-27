@@ -53,20 +53,24 @@ export const deferredStyles = {
 
   row: {
     display: "grid",
-    // border: "1px solid black",
     gridTemplateColumns: "1fr auto auto",
-
     alignItems: "center",
-
     gap: 2,
-
     py: 0.8,
-
     "&:not(:last-child)": {
       borderBottom: "1px solid #F2F4F7",
     },
   },
-
+  rowCentered: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr 1fr",
+    alignItems: "center",
+    gap: 2,
+    py: 0.8,
+    "&:not(:last-child)": {
+      borderBottom: "1px solid #F2F4F7",
+    },
+  },
   period: {
     fontSize: 12,
 
@@ -87,5 +91,23 @@ export const deferredStyles = {
     fontWeight: 500,
 
     textAlign: "right",
+  },
+
+  totalRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    pt: 1.5,
+    mt: 0.5,
+    borderTop: "1px solid #F2F4F7",
+  },
+  totalLabel: {
+    fontSize: 13,
+    fontWeight: 600,
+    color: "#111111",
+  },
+  totalAmount: {
+    fontSize: 14,
+    fontWeight: 700,
   },
 } satisfies Record<string, SxProps<Theme>>;

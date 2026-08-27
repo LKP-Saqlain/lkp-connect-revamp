@@ -7,16 +7,24 @@ import type { DeferredIncentiveRow } from "../../types/incentive.types";
 
 interface DeferredRowProps {
   row: DeferredIncentiveRow;
+  centerAmount?: boolean;
 }
 
-const DeferredRow = ({ row }: DeferredRowProps) => {
+const DeferredRow = ({ row, centerAmount = false }: DeferredRowProps) => {
   return (
-    <Box sx={styles.row}>
+    <Box sx={centerAmount ? styles.rowCentered : styles.row}>
       <Box>
         <Typography sx={styles.period}>{row.period}</Typography>
       </Box>
 
-      <Typography sx={styles.amount}>{row.amount}</Typography>
+      <Typography
+        sx={{
+          ...styles.amount,
+          ...(centerAmount && { textAlign: "center" }),
+        }}
+      >
+        {row.amount}
+      </Typography>
 
       <Typography
         sx={{
