@@ -17,15 +17,15 @@ const SlabRow = ({ item }: Props) => {
       <Box
         sx={[
           styles.slabContent,
-          item.active && styles.activeSlab,
-          item.disabled && styles.disabledSlab,
+          Boolean(item.active) && styles.activeSlab,
+          Boolean(item.disabled) && styles.disabledSlab,
         ]}
       >
         <Typography
           sx={[
             styles.slabText,
-            item.active && { color: "#FFFFFF" },
-            item.disabled && { color: "#98A2B3" },
+            Boolean(item.active) && { color: "#FFFFFF" },
+            Boolean(item.disabled) && { color: "#98A2B3" },
           ]}
         >
           {item.text}

@@ -37,17 +37,8 @@ export interface AcquisitionDetailItem {
   value: string;
 }
 
-// export interface AcquisitionClient {
-//   id: number;
-//   name?: string;
-//   client?: string;
-//   marginFunding?: string;
-//   brokerage?: string;
-//   status?: string;
-// }
-
 export interface AcquisitionClient {
-  id: string;
+  id: number;
   name: string;
   margin: number;
   brokerage: number;

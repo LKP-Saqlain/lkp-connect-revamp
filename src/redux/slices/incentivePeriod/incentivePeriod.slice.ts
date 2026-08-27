@@ -163,39 +163,39 @@ const incentivePeriodSlice = createSlice({
         state.error = action.payload || "Failed to fetch incentive slabs";
       })
 
-      .addCase(fetchClientwiseRevenue.pending, (state) => {})
+      // .addCase(fetchClientwiseRevenue.pending, (state) => {})
 
       .addCase(fetchClientwiseRevenue.fulfilled, (state, action) => {
         state.clientwiseRevenue = action.payload;
       })
 
-      .addCase(fetchClientwiseRevenue.rejected, (state, action) => {})
+      // .addCase(fetchClientwiseRevenue.rejected, (state, action) => {})
 
-      .addCase(fetchClientwiseDetailRevenue.pending, (state) => {})
+      // .addCase(fetchClientwiseDetailRevenue.pending, (state) => {})
 
       .addCase(fetchClientwiseDetailRevenue.fulfilled, (state, action) => {
         state.clientwiseDetailRevenue = action.payload;
       })
 
-      .addCase(fetchClientwiseDetailRevenue.rejected, (state, action) => {
+      .addCase(fetchClientwiseDetailRevenue.rejected, (action: any) => {
         action.payload || "Failed to fetch client detail revenue";
       })
 
-      .addCase(fetchEmpwiseDetailsRevenue.pending, (state) => {})
+      // .addCase(fetchEmpwiseDetailsRevenue.pending, (state) => {})
 
       .addCase(fetchEmpwiseDetailsRevenue.fulfilled, (state, action) => {
         state.empwiseDetailsRevenue = action.payload;
       })
 
-      .addCase(fetchEmpwiseDetailsRevenue.rejected, (state, action) => {})
+      // .addCase(fetchEmpwiseDetailsRevenue.rejected, (state, action) => {})
 
-      .addCase(fetchGetClientAcquisition.pending, (state) => {})
+      // .addCase(fetchGetClientAcquisition.pending, (state) => {})
 
       .addCase(fetchGetClientAcquisition.fulfilled, (state, action) => {
         state.GetClientAcquisition = action.payload;
       })
 
-      .addCase(fetchGetClientAcquisition.rejected, (state, action) => {
+      .addCase(fetchGetClientAcquisition.rejected, (action: any) => {
         action.payload || "Failed to fetch employee-wise revenue";
       })
 
@@ -204,6 +204,7 @@ const incentivePeriodSlice = createSlice({
       })
 
       .addCase(fetchGetRevenueEmployeeType.rejected, (state, action) => {
+        console.log(state);
         action.payload || "Failed to fetch employee-wise revenue";
       });
   },

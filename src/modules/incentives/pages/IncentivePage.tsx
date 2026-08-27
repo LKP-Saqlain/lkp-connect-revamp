@@ -33,7 +33,7 @@ const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
 
 const IncentivePage = () => {
   const [period, setPeriod] = useState<IncentivePeriod>("fy");
-  const [tab, setTab] = useState<IncentiveTab>("overview");
+  const [tab, setTab] = useState<any>("overview");
 
   const [actionTab, setActionTab] = useState<SpecialIncentiveTab | null>(null);
 

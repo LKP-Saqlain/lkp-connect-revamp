@@ -52,7 +52,7 @@ const AcquisitionRules = ({ rules }: any) => {
       {/* Rules */}
 
       <Box>
-        {rules.map((rule, index) => (
+        {rules.map((rule: any, index: any) => (
           <Box
             key={index}
             sx={{

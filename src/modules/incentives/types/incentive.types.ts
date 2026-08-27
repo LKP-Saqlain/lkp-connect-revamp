@@ -8,7 +8,7 @@ export type IncentiveTab =
 export type PolicyTab = "policy-summary" | "incentive-calculator";
 
 export interface PeriodItem {
-  id: IncentivePeriod | SpecialIncentiveTab;
+  id: IncentivePeriod | SpecialIncentiveTab | any;
   label: string;
   disabled?: boolean;
   notification?: boolean;

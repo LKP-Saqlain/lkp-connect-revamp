@@ -1,6 +1,8 @@
+// import type { iconMapper } from "@/layouts/DashboardLayout/Sidebar/iconMapper";
+
 export interface HeaderAction {
   id: string;
-  icon: string;
+  icon: any;
   tooltip: string;
   badgeCount?: number;
   hidden?: boolean;
