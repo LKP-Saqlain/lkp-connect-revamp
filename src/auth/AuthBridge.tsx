@@ -17,6 +17,8 @@ const AuthBridge = ({ children }: AuthBridgeProps) => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    console.log("Params", params);
+
     const encryptedData = params.get("data");
 
     if (encryptedData) {

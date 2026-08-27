@@ -28,7 +28,7 @@ import {
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 import { getUserId } from "@/auth/session";
 
-const EMP_CODE = getUserId() ?? "";
+const EMP_CODE = getUserId() ?? "0238";
 // const EMP_CODE = "0238";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
