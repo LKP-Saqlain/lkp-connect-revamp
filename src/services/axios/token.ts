@@ -1,5 +1,7 @@
-import { getAccessToken as getSessionToken } from "@/auth/session";
+const STORAGE_KEYS = {
+  token: "lkp_token",
+} as const;
 
 export const getAccessToken = (): string | null => {
-  return getSessionToken();
+  return sessionStorage.getItem(STORAGE_KEYS.token);
 };

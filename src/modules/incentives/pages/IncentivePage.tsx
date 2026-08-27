@@ -26,9 +26,10 @@ import {
   fetchEmployeeIncentive,
   fetchGetRevenueEmployeeType,
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
-import { getUserId } from "@/auth/session";
-
-const EMP_CODE = getUserId() ?? "";
+// import { getUserId } from "@/auth/session";
+import { useAuth } from "@/auth/AuthContext";
+const { userId } = useAuth();
+const EMP_CODE = userId ?? "";
 // const EMP_CODE = "0238";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
