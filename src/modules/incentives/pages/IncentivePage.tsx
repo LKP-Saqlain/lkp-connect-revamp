@@ -47,7 +47,8 @@ const IncentivePage = () => {
   const isQuarterPeriod = quarterName !== null;
 
   const { userId } = useAuth();
-  const EMP_CODE = userId ?? "";
+  // const EMP_CODE = userId ?? "";
+  const EMP_CODE = "0238";
 
   // employeeType now comes from this dedicated API, not from employeeIncentive
   const employeeType = GetRevenueEmployeeType?.data?.employeeType;
