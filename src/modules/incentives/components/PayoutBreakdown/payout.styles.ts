@@ -26,9 +26,9 @@ export const payoutStyles = {
   },
 
   title: {
-    fontSize: 14,
+    fontSize: 13,
 
-    fontWeight: 600,
+    fontWeight: 500,
 
     color: "#111827",
   },
@@ -44,7 +44,7 @@ export const payoutStyles = {
 
     color: "#6B7280",
 
-    fontSize: 12,
+    fontSize: 11,
 
     borderBottom: "1px solid #EEF2F6",
   },
@@ -62,7 +62,7 @@ export const payoutStyles = {
 
     borderBottom: "1px solid #EEF2F6",
 
-    fontSize: 13,
+    fontSize: 3,
   },
 
   highlightRow: {
@@ -73,19 +73,17 @@ export const payoutStyles = {
 
   amount: {
     textAlign: "right",
-    fontSize: "13px",
-    fontWeight: 500,
+    fontSize: "12px",
+    fontWeight: 400,
   },
 
   basis: {
     color: "#667085",
-
     fontSize: 12,
   },
 
   rate: {
     color: "#667085",
-
     fontSize: 12,
   },
 } satisfies Record<string, SxProps<Theme>>;

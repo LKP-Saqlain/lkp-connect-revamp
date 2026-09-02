@@ -1,14 +1,13 @@
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
-const SectionHeader = ({
-  title,
-  actual,
-  required,
-}: {
+interface SectionHeaderProps {
   title: string;
   actual: string;
   required: string;
-}) => (
+}
+
+const SectionHeader = ({ title, actual, required }: SectionHeaderProps) => (
   <Box
     sx={{
       display: "flex",

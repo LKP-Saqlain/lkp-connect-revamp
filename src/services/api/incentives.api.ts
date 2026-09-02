@@ -11,26 +11,23 @@ import type {
   CalculateEmployeeIncentivePayload,
   CalculateEmployeeIncentiveResponse,
   GetClientAcquisitionPayload,
+  GetClientAcquisitionReportingHeadPayload,
   GetclientwiseDetailRevenuePayload,
   GetclientwiseRevenuePayload,
   GetEmpwiseDetailsRevenuePayload,
   GetIncentiveSlabsPayload,
   GetIncentiveSlabsResponse,
   GetRevenueEmployeeTypePayload,
-  GetTeamMemberDetailsPayload,
-  GetTeamMemberDetailsResponse,
+  GetTeamDistributionPayload,
 } from "./payloadInterface";
-
-export const getTeamMemberDetails = async (
-  payload: GetTeamMemberDetailsPayload,
-) => {
-  const response = await baseInstance.post<GetTeamMemberDetailsResponse>(
-    incentivesEndpoints.getTeamMemberDetails,
-    payload,
-  );
-
-  return response.data;
-};
+import type { GetClientAcquisitionReportingHeadResponse } from "@/modules/incentives/sections/ClientAcquisition/types/clientAcquisition.types";
+import type { GetTeamDistributionResponse } from "@/modules/incentives/types/teamDistribution.types";
+import type {
+  GetTeamMultipleAndIncentiveSummaryPayload,
+  GetTeamMultipleAndIncentiveSummaryResponse,
+  GetTeamSummaryPayload,
+  GetTeamSummaryResponse,
+} from "@/modules/incentives/types/teamSummary.types";
 
 export const calculateEmployeeIncentive = async (
   payload: CalculateEmployeeIncentivePayload,
@@ -104,5 +101,50 @@ export const GetRevenueEmployeeType = async (
     payload,
   );
 
+  return response.data;
+};
+
+export const GetClientAcquisitionReportingHead = async (
+  payload: GetClientAcquisitionReportingHeadPayload,
+): Promise<GetClientAcquisitionReportingHeadResponse> => {
+  const response =
+    await baseInstance.post<GetClientAcquisitionReportingHeadResponse>(
+      incentivesEndpoints.GetClientAcquisitionReportingHead,
+      payload,
+    );
+
+  return response.data;
+};
+
+export const GetTeamDistribution = async (
+  payload: GetTeamDistributionPayload,
+): Promise<GetTeamDistributionResponse> => {
+  const response = await baseInstance.post<GetTeamDistributionResponse>(
+    incentivesEndpoints.GetTeamDistribution,
+    payload,
+  );
+
+  return response.data;
+};
+
+export const GetTeamMultipleAndIncentiveSummary = async (
+  payload: GetTeamMultipleAndIncentiveSummaryPayload,
+): Promise<GetTeamMultipleAndIncentiveSummaryResponse> => {
+  const response =
+    await baseInstance.post<GetTeamMultipleAndIncentiveSummaryResponse>(
+      incentivesEndpoints.GetTeamMultipleAndIncentiveSummary,
+      payload,
+    );
+
+  return response.data;
+};
+
+export const GetTeamSummary = async (
+  payload: GetTeamSummaryPayload,
+): Promise<GetTeamSummaryResponse> => {
+  const response = await baseInstance.post<GetTeamSummaryResponse>(
+    incentivesEndpoints.GetTeamSummary,
+    payload,
+  );
   return response.data;
 };

@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 
-import { headerData } from "./header.data";
+// import { headerData } from "./header.data";
 import { headerStyles } from "./header.styles";
 
-import HeaderActions from "./HeaderActions";
-import UserProfile from "./UserProfile";
+// import HeaderActions from "./HeaderActions";
+// import UserProfile from "./UserProfile";
 // import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Header = () => {
@@ -14,10 +14,10 @@ const Header = () => {
       <Box sx={headerStyles.leftContainer}>
         {/* <Typography sx={headerStyles.title}> {title}</Typography> */}
       </Box>
-      <Box sx={headerStyles.rightContainer}>
+      {/* <Box sx={headerStyles.rightContainer}>
         <HeaderActions actions={headerData.actions} />
         <UserProfile user={headerData.user} />
-      </Box>
+      </Box> */}
     </Box>
   );
 };

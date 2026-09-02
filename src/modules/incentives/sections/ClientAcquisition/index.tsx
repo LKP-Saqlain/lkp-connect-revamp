@@ -1,79 +1,66 @@
-// import ClientAcquisitionLayout from "./ClientAcquisitionLayout";
-
-// import { FY_CLIENT_ACQUISITION } from "./data/fy.data";
-// import { Q1_CLIENT_ACQUISITION } from "./data/q1.data";
-// import { Q2_CLIENT_ACQUISITION } from "./data/q2.data";
-// import { Q3_CLIENT_ACQUISITION } from "./data/q3.data";
-// import { Q4_CLIENT_ACQUISITION } from "./data/q4.data";
-
-// import type { IncentivePeriod } from "../../types/incentive.types";
-
-// interface Props {
-//   period: IncentivePeriod;
-// }
-
-// const ClientAcquisition = ({ period }: Props) => {
-//   const data =
-//     period === "q1"
-//       ? Q1_CLIENT_ACQUISITION
-//       : period === "q2"
-//         ? Q2_CLIENT_ACQUISITION
-//         : period === "q3"
-//           ? Q3_CLIENT_ACQUISITION
-//           : period === "q4"
-//             ? Q4_CLIENT_ACQUISITION
-//             : FY_CLIENT_ACQUISITION;
-
-//   return (
-//     <ClientAcquisitionLayout
-//       summary={data.summary}
-//       clients={data.clients}
-//       rules={data.rules}
-//       role={data.role}
-//     />
-//   );
-// };
-
-// export default ClientAcquisition;
+import { useEffect } from "react";
 
 import ClientAcquisitionLayout from "./ClientAcquisitionLayout";
+import ClientAcquisitionTL from "./ClientAcquisitionTL";
 import { CLIENT_ACQUISITION_DATA } from "./data/clientAcquisition.data";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchGetClientAcquisition } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
+import {
+  fetchGetClientAcquisition,
+  fetchGetClientAcquisitionReportingHead,
+} from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 import type { IncentivePeriod } from "../../types/incentive.types";
-import { useEffect } from "react";
+
+const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
 
 interface Props {
   period: IncentivePeriod;
+  employeeType?: string;
 }
 
-const ClientAcquisition = ({ period }: Props) => {
+const ClientAcquisition = ({ period, employeeType }: Props) => {
   const dispatch = useAppDispatch();
 
-  const { GetClientAcquisition } = useAppSelector(
-    (state) => state.incentivePeriod,
-  );
+  const isTeamRole = employeeType
+    ? TEAM_ROLE_TYPES.includes(employeeType)
+    : false;
+
+  const { GetClientAcquisition, GetClientAcquisitionReportingHead } =
+    useAppSelector((state) => state.incentivePeriod);
 
   useEffect(() => {
-    if (period !== "q2") {
-      return;
+    if (period !== "q2") return;
+
+    if (isTeamRole) {
+      dispatch(
+        fetchGetClientAcquisitionReportingHead({
+          empCode: "0238",
+          financialYear: "2026-27",
+          quarterName: "Q2",
+        }),
+      );
+    } else {
+      dispatch(
+        fetchGetClientAcquisition({
+          empCode: "0238",
+          financialYear: "2026-27",
+          quarterName: "Q2",
+        }),
+      );
     }
+  }, [dispatch, period, isTeamRole]);
 
-    dispatch(
-      fetchGetClientAcquisition({
-        empCode: "0238",
-        financialYear: "2026-27",
-        quarterName: "Q2",
-      }),
+  if (isTeamRole) {
+    return (
+      <ClientAcquisitionTL
+        data={GetClientAcquisitionReportingHead?.data}
+        rules={CLIENT_ACQUISITION_DATA.rules}
+      />
     );
-  }, [dispatch, period]);
+  }
 
-  useEffect(() => {
-    console.log("GetClientAcq", GetClientAcquisition);
-  }, [GetClientAcquisition]);
+  // ---- everything below is your existing RM / BDM / Dealer code, unchanged ----
 
   const counts = GetClientAcquisition?.data?.clientAcqCounts;
-  console.log("Testss", counts);
 
   const summary = counts
     ? [

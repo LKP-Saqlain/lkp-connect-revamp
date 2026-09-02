@@ -1,17 +1,5 @@
 import type { EmployeeIncentiveData } from "@/modules/incentives/types/incentive.types";
 
-export interface GetTeamMemberDetailsPayload {
-  empCode: string;
-  financialYear: string;
-  quarterName: string;
-}
-
-export interface GetTeamMemberDetailsResponse {
-  data?: unknown;
-  message?: string;
-  status?: boolean;
-}
-
 export interface CalculateEmployeeIncentivePayload {
   empCode: string;
   financialYear: string;
@@ -84,4 +72,20 @@ export interface GetIncentiveSlabsResponse {
   errorMessages: string;
   data: IncentiveSlab[];
   message: string;
+}
+
+export interface GetClientAcquisitionReportingHeadPayload {
+  empCode: string;
+  financialYear: string;
+  quarterName: string;
+}
+
+export interface GetTeamDistributionPayload {
+  empCode: string;
+  financialYear: string;
+}
+
+export interface TeamSummaryBasePayload {
+  empCode: string;
+  financialYear: string;
 }

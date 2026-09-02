@@ -1,5 +1,4 @@
 export const incentivesEndpoints = {
-  getTeamMemberDetails: "/MIS/GetTeamMemberDetails",
   calculateEmployeeIncentive: "/MIS/CalculateEmployeeIncentive",
   GetIncentiveSlabs: "/MIS/GetIncentiveSlabs",
   GetclientwiseRevenue: "MIS/GetclientwiseRevenue",
@@ -7,4 +6,8 @@ export const incentivesEndpoints = {
   GetEmpwiseDetailsRevenue: "MIS/GetEmpwiseDetailsRevenue",
   GetClientAcquisition: "MIS/GetClientAcquisition",
   GetRevenueEmployeeType: "MIS/GetRevenueEmployeeType",
+  GetClientAcquisitionReportingHead: "MIS/GetClientAcquisitionReportingHead",
+  GetTeamDistribution: "MIS/GetTeamDistribution",
+  GetTeamMultipleAndIncentiveSummary: "MIS/GetTeamMultipleandIncentiveSummary",
+  GetTeamSummary: "MIS/GetTeamSummary",
 } as const;

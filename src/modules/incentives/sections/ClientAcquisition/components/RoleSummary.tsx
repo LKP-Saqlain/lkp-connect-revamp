@@ -1,12 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import type { ReactNode } from "react";
 
 interface Props {
   title: string;
   description: string;
+  icon?: ReactNode;
 }
 
-const RoleSummary = ({ title, description }: Props) => {
+const RoleSummary = ({ title, description, icon }: Props) => {
   return (
     <Box
       sx={{
@@ -25,13 +27,18 @@ const RoleSummary = ({ title, description }: Props) => {
         gap: 1,
       }}
     >
-      <AccountCircleOutlinedIcon
+      {icon ?? (
+        <AccountCircleOutlinedIcon
+          sx={{ color: "#185FA5", fontSize: 28, flexShrink: 0 }}
+        />
+      )}
+      {/* <AccountCircleOutlinedIcon
         sx={{
           color: "#185FA5",
           fontSize: 28,
           flexShrink: 0,
         }}
-      />
+      /> */}
 
       <Box>
         <Typography

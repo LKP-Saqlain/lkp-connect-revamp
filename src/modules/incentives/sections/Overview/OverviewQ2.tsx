@@ -13,6 +13,8 @@ import RevenueProgress from "../../components/RevenueProgress";
 import MetricGrid from "../../components/MetricCard";
 import EligibilityChecklist from "../../components/EligibilityChecklist";
 import NoIncentiveCard from "../../components/NoIncentiveCard";
+import TeamEligibilityChecklist from "../../components/TeamEligibilityChecklist";
+import TeamRoleCard from "../../components/TeamRoleCard/TeamRoleCard";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import type {
   EligibilityChecklistData,
@@ -22,6 +24,18 @@ import type {
 import { useEffect } from "react";
 import { fetchIncentiveSlabs } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 
+import {
+  buildQ2TLSummary,
+  buildQ2TLSelfMetrics,
+  buildQ2TLSelfCriteria,
+  buildQ2TLTeamMetrics,
+  buildQ2TLTeamCriteria,
+  buildQ2TLEligibility,
+  Q2_TL_ROLE,
+  buildQ2TLPayout,
+} from "../../constants/q2OverviewTL.data";
+import PayoutBreakdown from "../../components/PayoutBreakdown";
+
 export interface EmployeeIncentiveResponse {
   statusCode: number;
   isSuccess: boolean;
@@ -30,7 +44,55 @@ export interface EmployeeIncentiveResponse {
   message: string;
 }
 
-const OverviewQ2 = () => {
+const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
+
+const performanceCardSx = {
+  display: "flex",
+  flexDirection: "column",
+  gap: 1.5,
+  backgroundColor: "#FFFFFF",
+  border: "1px solid #E5E7EB",
+  borderRadius: "16px",
+  p: 2,
+} as const;
+
+// Local to this file only — matches SectionHeader used in OverviewQ1.tsx
+const SectionHeader = ({
+  title,
+  actual,
+  required,
+}: {
+  title: string;
+  actual: string;
+  required: string;
+}) => (
+  <Box
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+    }}
+  >
+    <Box sx={{ fontSize: 13, fontWeight: 500, color: "#111111" }}>{title}</Box>
+    <Box sx={{ fontSize: 12, fontWeight: 400, color: "#667085" }}>
+      Minimum performance criteria:{" "}
+      <Box component="span" sx={{ fontWeight: 700, color: "#101828" }}>
+        {actual}
+      </Box>{" "}
+      / {required}
+    </Box>
+  </Box>
+);
+
+interface OverviewQ2Props {
+  employeeType?: string;
+}
+
+const OverviewQ2 = ({ employeeType }: OverviewQ2Props) => {
+  const isTeamRole = employeeType
+    ? TEAM_ROLE_TYPES.includes(employeeType)
+    : false;
+
   const dispatch = useAppDispatch();
 
   const { employeeIncentive, incentiveSlabs } = useAppSelector(
@@ -38,10 +100,13 @@ const OverviewQ2 = () => {
   );
 
   const employeeData = employeeIncentive?.data;
-  console.log("tes11111t", employeeData);
 
   useEffect(() => {
-    if (!employeeData?.empCode) return;
+    console.log("employeeIncentive123123", employeeIncentive);
+  }, [employeeIncentive]);
+
+  useEffect(() => {
+    if (!employeeData?.empCode || isTeamRole) return;
 
     dispatch(
       fetchIncentiveSlabs({
@@ -49,7 +114,45 @@ const OverviewQ2 = () => {
         financialYear: "2026-27",
       }),
     );
-  }, [dispatch, employeeData?.empCode]);
+  }, [dispatch, employeeData?.empCode, isTeamRole]);
+
+  if (isTeamRole) {
+    const q2TLSummary = buildQ2TLSummary(employeeData);
+    const q2TLSelfMetrics = buildQ2TLSelfMetrics(employeeData);
+    const q2TLSelfCriteria = buildQ2TLSelfCriteria(employeeData);
+    const q2TLTeamMetrics = buildQ2TLTeamMetrics(employeeData);
+    const q2TLTeamCriteria = buildQ2TLTeamCriteria(employeeData);
+    const q2TLEligibility = buildQ2TLEligibility(employeeData);
+    const q2TLPayout = buildQ2TLPayout(employeeData);
+
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 3 }}>
+        <MetricGrid metrics={q2TLSummary} period="q2" />
+
+        <Box sx={performanceCardSx}>
+          <SectionHeader
+            title={q2TLSelfCriteria.title}
+            actual={q2TLSelfCriteria.actual}
+            required={q2TLSelfCriteria.required}
+          />
+          <MetricGrid metrics={q2TLSelfMetrics} />
+        </Box>
+
+        <Box sx={performanceCardSx}>
+          <SectionHeader
+            title={q2TLTeamCriteria.title}
+            actual={q2TLTeamCriteria.actual}
+            required={q2TLTeamCriteria.required}
+          />
+          <MetricGrid metrics={q2TLTeamMetrics} />
+        </Box>
+
+        <TeamEligibilityChecklist data={q2TLEligibility} />
+        <PayoutBreakdown data={q2TLPayout} />
+        <TeamRoleCard data={Q2_TL_ROLE} />
+      </Box>
+    );
+  }
 
   const q2Slabs = incentiveSlabs?.data?.map((slab: any, index: any) => ({
     id: String(index + 1),
@@ -67,19 +170,16 @@ const OverviewQ2 = () => {
   const q2RevenueProgress: RevenueProgressData = {
     ...Q2_REVENUE_PROGRESS,
 
-    // Revenue multiple
     multiplier:
       employeeData?.revenueMultiple != null
         ? `${employeeData.revenueMultiple}x`
         : Q2_REVENUE_PROGRESS.multiplier,
 
-    // MPC / required revenue multiple
     mpc:
       employeeData?.reqRevenueMultiple != null
         ? `${employeeData.reqRevenueMultiple}x`
         : Q2_REVENUE_PROGRESS.mpc,
 
-    // Progress bar
     barMax: employeeData?.reqRevenueMultiple ?? Q2_REVENUE_PROGRESS.barMax,
 
     progressPercent:
@@ -91,7 +191,6 @@ const OverviewQ2 = () => {
           )
         : Q2_REVENUE_PROGRESS.progressPercent,
 
-    // Target
     target: {
       label:
         employeeData?.reqRevenueMultiple != null
@@ -107,7 +206,6 @@ const OverviewQ2 = () => {
           : Q2_REVENUE_PROGRESS.target.value,
     },
 
-    // Broking credit
     broking: {
       ...Q2_REVENUE_PROGRESS.broking,
 
@@ -131,7 +229,6 @@ const OverviewQ2 = () => {
           : Q2_REVENUE_PROGRESS.broking.percent,
     },
 
-    // Non-broking credit
     nonBroking: {
       ...Q2_REVENUE_PROGRESS.nonBroking,
 
@@ -155,13 +252,11 @@ const OverviewQ2 = () => {
           : Q2_REVENUE_PROGRESS.nonBroking.percent,
     },
 
-    // Net credit
     netCredit: {
       ...Q2_REVENUE_PROGRESS.netCredit,
 
       label: "Net credit",
 
-      // Broking amount + Non-broking amount
       amount:
         employeeData?.brokingCredits != null &&
         employeeData?.nonBrokingCredits != null
@@ -172,7 +267,6 @@ const OverviewQ2 = () => {
             })}`
           : Q2_REVENUE_PROGRESS.netCredit.amount,
 
-      // Broking percentage + Non-broking percentage
       percent:
         employeeData?.brokingCredits != null &&
         employeeData?.nonBrokingCredits != null &&
@@ -186,7 +280,6 @@ const OverviewQ2 = () => {
           : Q2_REVENUE_PROGRESS.netCredit.percent,
     },
 
-    // Slab label
     slabLabel:
       employeeData?.revenueMultiple != null &&
       employeeData?.reqRevenueMultiple != null
@@ -309,12 +402,6 @@ const OverviewQ2 = () => {
         actual: `${employeeData?.actualMarginCount ?? 0} accounts`,
         eligible: employeeData?.marginStatus ?? false,
       },
-      // {
-      //   label: "₹100 brokerage",
-      //   required: `${employeeData?.requiredAccounts ?? 0} accounts`,
-      //   actual: `${employeeData?.actualBrokCount ?? 0} accounts`,
-      //   eligible: employeeData?.brokStatus ?? false,
-      // },
     ],
   };
 

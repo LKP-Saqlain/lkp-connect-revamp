@@ -14,10 +14,29 @@ interface TabItemProps {
 const TabItem = ({ item, active, onClick }: TabItemProps) => {
   return (
     <Box
-      sx={[tabsStyles.tab, active && tabsStyles.activeTab]}
-      onClick={() => onClick(item.id)}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+      }}
     >
-      <Typography sx={tabsStyles.tabText}>{item.label}</Typography>
+      {item.hasSeparator && (
+        <Box
+          sx={{
+            width: "1px",
+            height: 20,
+            backgroundColor: "#E4E7EC",
+            mr: 4, // matches the gap between tabs (gap: 4 in leftTabs)
+            flexShrink: 0,
+          }}
+        />
+      )}
+
+      <Box
+        sx={[tabsStyles.tab, active && tabsStyles.activeTab]}
+        onClick={() => onClick(item.id)}
+      >
+        <Typography sx={tabsStyles.tabText}>{item.label}</Typography>
+      </Box>
     </Box>
   );
 };

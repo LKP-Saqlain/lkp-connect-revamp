@@ -106,4 +106,11 @@ export const periodStyles = {
 
     color: "#185FA5",
   },
+  separator: {
+    width: "1px",
+    height: 25,
+    backgroundColor: "#E4E7EC",
+    mx: 0.5,
+    mt: 0.7,
+  },
 } satisfies Record<string, SxProps<Theme>>;

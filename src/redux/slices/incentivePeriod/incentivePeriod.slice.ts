@@ -1,13 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import type {
-  GetTeamMemberDetailsResponse,
   CalculateEmployeeIncentiveResponse,
   GetIncentiveSlabsResponse,
 } from "@/services/api";
 
 import {
-  fetchTeamMemberDetails,
   fetchEmployeeIncentive,
   fetchIncentiveSlabs,
   fetchClientwiseRevenue,
@@ -15,6 +13,11 @@ import {
   fetchEmpwiseDetailsRevenue,
   fetchGetClientAcquisition,
   fetchGetRevenueEmployeeType,
+  fetchGetClientAcquisitionReportingHead,
+  fetchGetTeamDistribution,
+  fetchTeamMultipleSummary,
+  fetchTeamIncentiveSummary,
+  fetchTeamSummary,
 } from "./incentivePeriod.thunks";
 import type {
   ClientRevenueApiResponse,
@@ -23,14 +26,18 @@ import type {
   GetClientAcquisitionResponse,
   GetRevenueEmployeeTypeResponse,
 } from "@/modules/incentives/types/incentive.types";
+import type { GetClientAcquisitionReportingHeadResponse } from "@/modules/incentives/sections/ClientAcquisition/types/clientAcquisition.types";
+import type { GetTeamDistributionResponse } from "@/modules/incentives/types/teamDistribution.types";
+import type {
+  GetTeamMultipleAndIncentiveSummaryResponse,
+  GetTeamSummaryResponse,
+} from "@/modules/incentives/types/teamSummary.types";
 
 // -----------------------------------------
 // State
 // -----------------------------------------
 
 export interface IncentivePeriodState {
-  teamMemberDetails: GetTeamMemberDetailsResponse | null;
-
   employeeIncentive: CalculateEmployeeIncentiveResponse | null;
 
   incentiveSlabs: GetIncentiveSlabsResponse | null;
@@ -52,6 +59,11 @@ export interface IncentivePeriodState {
 
   GetClientAcquisition: GetClientAcquisitionResponse | null;
   GetRevenueEmployeeType: GetRevenueEmployeeTypeResponse | null;
+  GetClientAcquisitionReportingHead: GetClientAcquisitionReportingHeadResponse | null;
+  GetTeamDistribution: GetTeamDistributionResponse | null;
+  teamMultipleSummary: GetTeamMultipleAndIncentiveSummaryResponse | null;
+  teamIncentiveSummary: GetTeamMultipleAndIncentiveSummaryResponse | null;
+  teamSummary: GetTeamSummaryResponse | null;
 }
 
 // -----------------------------------------
@@ -59,27 +71,23 @@ export interface IncentivePeriodState {
 // -----------------------------------------
 
 const initialState: IncentivePeriodState = {
-  teamMemberDetails: null,
-
   employeeIncentive: null,
-
   incentiveSlabs: null,
-
   loading: false,
   error: null,
-
   teamMemberDetailsLoading: false,
   employeeIncentiveLoading: false,
   incentiveSlabsLoading: false,
-
   clientwiseRevenue: null,
-
   clientwiseDetailRevenue: null,
-
   empwiseDetailsRevenue: null,
-
   GetClientAcquisition: null,
   GetRevenueEmployeeType: null,
+  GetClientAcquisitionReportingHead: null,
+  GetTeamDistribution: null,
+  teamMultipleSummary: null,
+  teamIncentiveSummary: null,
+  teamSummary: null,
 };
 
 // -----------------------------------------
@@ -91,7 +99,6 @@ const incentivePeriodSlice = createSlice({
   initialState,
   reducers: {
     clearIncentivePeriodData: (state) => {
-      state.teamMemberDetails = null;
       state.employeeIncentive = null;
       state.incentiveSlabs = null;
       state.error = null;
@@ -102,27 +109,6 @@ const incentivePeriodSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTeamMemberDetails.pending, (state) => {
-        state.teamMemberDetailsLoading = true;
-        state.loading = true;
-        state.error = null;
-      })
-
-      .addCase(
-        fetchTeamMemberDetails.fulfilled,
-        (state, action: PayloadAction<GetTeamMemberDetailsResponse>) => {
-          state.teamMemberDetailsLoading = false;
-          state.loading = false;
-          state.teamMemberDetails = action.payload;
-        },
-      )
-
-      .addCase(fetchTeamMemberDetails.rejected, (state, action) => {
-        state.teamMemberDetailsLoading = false;
-        state.loading = false;
-        state.error = action.payload || "Failed to fetch team member details";
-      })
-
       .addCase(fetchEmployeeIncentive.pending, (state) => {
         state.employeeIncentiveLoading = true;
         state.loading = true;
@@ -206,7 +192,42 @@ const incentivePeriodSlice = createSlice({
       .addCase(fetchGetRevenueEmployeeType.rejected, (state, action) => {
         console.log(state);
         action.payload || "Failed to fetch employee-wise revenue";
-      });
+      })
+
+      .addCase(
+        fetchGetClientAcquisitionReportingHead.fulfilled,
+        (state, action) => {
+          state.GetClientAcquisitionReportingHead = action.payload;
+        },
+      )
+      .addCase(
+        fetchGetClientAcquisitionReportingHead.rejected,
+        (state, action) => {
+          console.log(state);
+          action.payload ||
+            "Failed to fetch client acquisition (reporting head)";
+        },
+      )
+      .addCase(fetchGetTeamDistribution.fulfilled, (state, action) => {
+        state.GetTeamDistribution = action.payload;
+      })
+      .addCase(fetchGetTeamDistribution.rejected, (state, action) => {
+        console.log(state);
+        action.payload || "Failed to fetch team distribution";
+      })
+      .addCase(fetchTeamMultipleSummary.fulfilled, (state, action) => {
+        state.teamMultipleSummary = action.payload;
+      })
+      .addCase(fetchTeamMultipleSummary.rejected, () => {})
+
+      .addCase(fetchTeamIncentiveSummary.fulfilled, (state, action) => {
+        state.teamIncentiveSummary = action.payload;
+      })
+      .addCase(fetchTeamIncentiveSummary.rejected, () => {})
+      .addCase(fetchTeamSummary.fulfilled, (state, action) => {
+        state.teamSummary = action.payload;
+      })
+      .addCase(fetchTeamSummary.rejected, () => {});
   },
 });
 

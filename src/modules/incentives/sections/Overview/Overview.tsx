@@ -15,10 +15,10 @@ interface Props {
 const Overview = ({ period, employeeType }: Props) => {
   switch (period) {
     case "q1":
-      return <OverviewQ1 period={period} />;
+      return <OverviewQ1 period={period} employeeType={employeeType} />;
 
     case "q2":
-      return <OverviewQ2 />;
+      return <OverviewQ2 employeeType={employeeType} />;
 
     case "q3":
       return <OverviewQ3 />;

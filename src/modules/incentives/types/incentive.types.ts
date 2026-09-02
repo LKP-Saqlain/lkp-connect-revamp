@@ -3,7 +3,11 @@ export type IncentivePeriod = "fy" | "q1" | "q2" | "q3" | "q4";
 export type SpecialIncentiveTab = "sales-policy" | "annual-target";
 
 export type IncentiveTab =
-  "overview" | "client-revenue" | "revenue-breakdown" | "client-acquisition";
+  | "overview"
+  | "client-revenue"
+  | "revenue-breakdown"
+  | "client-acquisition"
+  | "team-summary";
 
 export type PolicyTab = "policy-summary" | "incentive-calculator";
 
@@ -17,7 +21,7 @@ export interface PeriodItem {
 export interface TabItem {
   id: string;
   label: string;
-
+  hasSeparator?: boolean;
   disabled?: boolean;
 }
 
@@ -33,7 +37,7 @@ export interface MetricCardData {
 
   caption?: string;
 
-  icon?: string;
+  icon?: any;
 
   color?: string;
 }
@@ -255,15 +259,20 @@ export interface EmployeeIncentiveData {
   cadEligibleAccounts: number;
   totalNewAccounts: number;
   requiredAccounts: number;
-  accountStatus: boolean;
+  eligibleAccounts: number;
 
-  actualMarginCount: number;
-  reqMarginCount: number;
-  marginStatus: boolean;
+  accountStatus?: boolean;
 
-  actualBrokCount: number;
-  reqBrokCount: number;
-  brokStatus: boolean;
+  actualMarginCount?: number;
+  reqMarginCount?: number;
+  marginStatus?: boolean;
+
+  actualBrokCount?: number;
+  reqBrokCount?: number;
+  brokStatus?: boolean;
+
+  reqMarginValue: number;
+  reqBrokValue: number;
 
   selfMultiple: number;
   reqSelfMultiple: number;
@@ -273,8 +282,11 @@ export interface EmployeeIncentiveData {
   teamCTC: number;
   teamQuarterCTC: number;
   teamBrokingRevenue: number;
+  teamBrokingCredits: number;
   teamNonBrokingRevenue: number;
+  teamNonBrokingCredits: number;
   teamRevenue: number;
+  teamRevenueCredits: number;
 
   teamRevMultiple: number;
   reqTeamRevMultiple: number;
@@ -298,24 +310,33 @@ export interface EmployeeIncentiveData {
   nonBrokingPercent: number;
   boosterPercent: number;
 
+  brokIncPercent: number;
+  nonBrokIncPercent: number;
+
   brokingIncentive: number;
   nonBrokingIncentive: number;
   boosterAmount: number;
   newAccountsIncentive: number;
   finalIncentive: number;
 
+  teamNewAccounts: number;
+  teamEligibleNewAccounts: number;
+  teamNewAccBonus: number;
+
   eligibleMembers: number;
   totalMembers: number;
 
   boosterEligible: boolean;
-  teamBonus: number;
-  perAccountRate: number;
-  brokingCredit: any;
-  nonBrokingCredit: any;
+  teamBonus?: number;
+  perAccountRate?: number;
+  brokingCredit?: any;
+  nonBrokingCredit?: any;
   totalNonBrokingRevenue: any;
   totalBrokingRevenue: any;
-}
 
+  selfNewAccountRate?: number;
+  teamNewAccountRate?: number;
+}
 export interface GetclientwiseRevenuePayload {
   empCode: string;
   financialYear: string;
@@ -507,4 +528,21 @@ export interface GetRevenueEmployeeTypeResponse {
     employeeType: string;
   };
   message: string;
+}
+
+export interface TeamEligibilityItem {
+  id: string;
+  label: string;
+  value: string;
+  status: "completed" | "pending";
+}
+
+export interface TeamEligibilityChecklistData {
+  title: string;
+  items: TeamEligibilityItem[];
+}
+
+export interface TeamRoleData {
+  title: string;
+  description: string;
 }

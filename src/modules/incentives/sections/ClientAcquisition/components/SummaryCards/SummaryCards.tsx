@@ -75,6 +75,17 @@ const SummaryCards = ({ summary }: Props) => {
               </Typography>
             )}
           </Box>
+          {item.subtitle && (
+            <Typography
+              sx={{
+                fontSize: "10px",
+                color: "#98A2B3",
+                mt: 0.25,
+              }}
+            >
+              {item.subtitle}
+            </Typography>
+          )}
         </Box>
       ))}
     </Box>

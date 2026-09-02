@@ -1,5 +1,5 @@
 export {
-  fetchTeamMemberDetails,
+  // fetchTeamMemberDetails,
   fetchEmployeeIncentive,
   fetchIncentiveSlabs,
 } from "./incentivePeriod/incentivePeriod.thunks";

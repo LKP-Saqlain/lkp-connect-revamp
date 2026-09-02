@@ -10,58 +10,60 @@ import ClientRevenue from "../sections/ClientRevenue";
 import AnnualTarget from "../sections/Overview/AnnualTarget/AnnualTarget";
 import RevenueBreakdown from "../sections/RevenueBreakdown";
 import ClientAcquisition from "../sections/ClientAcquisition";
-import { INCENTIVE_TABS, INCENTIVE_ACTION_TABS } from "../constants/tab.data";
+import TeamOverview from "../sections/TeamOverview/TeamOverview";
+import {
+  INCENTIVE_TABS,
+  INCENTIVE_ACTION_TABS,
+  TEAM_SUMMARY_TAB,
+} from "../constants/tab.data";
 import SalesPolicy from "../sections/Overview/SalesPolicy";
 import { getQuarterName } from "../constants/overall";
-
 import type {
   IncentivePeriod,
   IncentiveTab,
   SpecialIncentiveTab,
 } from "../types/incentive.types";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-
 import {
-  fetchTeamMemberDetails,
   fetchEmployeeIncentive,
   fetchGetRevenueEmployeeType,
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
-// import { getUserId } from "@/auth/session";
 import { useAuth } from "@/auth/AuthContext";
-// const EMP_CODE = "0238";
+import TeamSummary from "../sections/TeamSummary/TeamSummary";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
 
 const IncentivePage = () => {
   const [period, setPeriod] = useState<IncentivePeriod>("fy");
-  const [tab, setTab] = useState<any>("overview");
-
+  const [tab, setTab] = useState<IncentiveTab>("overview");
   const [actionTab, setActionTab] = useState<SpecialIncentiveTab | null>(null);
+  const [showTeamOverview, setShowTeamOverview] = useState(false);
 
   const dispatch = useAppDispatch();
 
-  const { teamMemberDetails, employeeIncentive, GetRevenueEmployeeType } =
-    useAppSelector((state) => state.incentivePeriod);
+  const { employeeIncentive, GetRevenueEmployeeType } = useAppSelector(
+    (state) => state.incentivePeriod,
+  );
 
   const quarterName = getQuarterName(period);
   const isQuarterPeriod = quarterName !== null;
 
   const { userId } = useAuth();
-  // const EMP_CODE = userId ?? "";
-  const EMP_CODE = "0238";
+  const EMP_CODE = userId;
 
-  // employeeType now comes from this dedicated API, not from employeeIncentive
   const employeeType = GetRevenueEmployeeType?.data?.employeeType;
   const isTeamRole = employeeType
     ? TEAM_ROLE_TYPES.includes(employeeType)
     : false;
 
-  // 1) Fetch who's logged in / their role — runs ONCE on mount, independent of period
+  const activeTabs = isTeamRole
+    ? [...INCENTIVE_TABS, TEAM_SUMMARY_TAB]
+    : INCENTIVE_TABS;
+
   useEffect(() => {
     dispatch(fetchGetRevenueEmployeeType({ empcode: EMP_CODE }));
   }, [dispatch]);
 
-  // 2) Fetch employee incentive data for the selected quarter (unchanged, still period-driven)
   useEffect(() => {
     if (!isQuarterPeriod || !quarterName) {
       return;
@@ -76,36 +78,34 @@ const IncentivePage = () => {
     dispatch(fetchEmployeeIncentive(payload));
   }, [dispatch, quarterName, isQuarterPeriod]);
 
-  // 3) Fetch team member details — now gated on the role API instead of employeeIncentive
-  useEffect(() => {
-    if (!isQuarterPeriod || !quarterName || !employeeType) {
-      return;
-    }
+  const handlePeriodChange = (value: IncentivePeriod) => {
+    setShowTeamOverview(false);
+    setActionTab(null);
+    setPeriod(value);
+  };
 
-    if (!isTeamRole) {
-      return;
-    }
-
-    const payload = {
-      empCode: EMP_CODE,
-      financialYear: "2026-27",
-      quarterName,
-    };
-
-    dispatch(fetchTeamMemberDetails(payload));
-  }, [dispatch, employeeType, isTeamRole, quarterName, isQuarterPeriod]);
+  const handleTeamOverviewClick = () => {
+    setActionTab(null);
+    setShowTeamOverview(true);
+  };
 
   const handleTabChange = (value: string) => {
+    setShowTeamOverview(false);
     setTab(value as IncentiveTab);
     setActionTab(null);
   };
 
   const handleActionTabChange = (value: string) => {
+    setShowTeamOverview(false);
     setActionTab(value as SpecialIncentiveTab);
-    setTab(null);
+    setTab(null as any);
   };
 
   const renderContent = () => {
+    if (showTeamOverview) {
+      return <TeamOverview empCode={EMP_CODE} />;
+    }
+
     if (actionTab === "sales-policy") {
       return <SalesPolicy />;
     }
@@ -119,7 +119,6 @@ const IncentivePage = () => {
         return (
           <Overview
             period={period}
-            teamMemberDetails={teamMemberDetails}
             employeeIncentive={employeeIncentive}
             employeeType={employeeType}
           />
@@ -132,13 +131,17 @@ const IncentivePage = () => {
         return <RevenueBreakdown period={period} />;
 
       case "client-acquisition":
-        return <ClientAcquisition period={period} />;
+        return (
+          <ClientAcquisition period={period} employeeType={employeeType} />
+        );
+
+      case "team-summary":
+        return <TeamSummary period={period} empCode={EMP_CODE} />;
 
       default:
         return (
           <Overview
             period={period}
-            teamMemberDetails={teamMemberDetails}
             employeeIncentive={employeeIncentive}
             employeeType={employeeType}
           />
@@ -150,33 +153,36 @@ const IncentivePage = () => {
     <>
       <PeriodBar
         value={period}
-        onChange={(value) => {
-          setPeriod(value);
-        }}
+        onChange={handlePeriodChange}
+        showTeamOverview={isTeamRole}
+        teamOverviewActive={showTeamOverview}
+        onTeamOverviewClick={handleTeamOverviewClick}
       />
       <Box sx={{ px: 3, py: 0, backgroundColor: "#F5F7FB" }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-            backgroundColor: "#FFFFFF",
-            borderTopLeftRadius: "10px",
-            borderTopRightRadius: "10px",
-            px: 2,
-            border: "1px solid solid",
-          }}
-        >
-          <IncentiveTabs
-            items={INCENTIVE_TABS}
-            actionItems={INCENTIVE_ACTION_TABS}
-            value={tab}
-            actionValue={actionTab ?? undefined}
-            onChange={handleTabChange}
-            onActionChange={handleActionTabChange}
-          />
-        </Box>
+        {!showTeamOverview && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              backgroundColor: "#FFFFFF",
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+              px: 2,
+              border: "1px solid solid",
+            }}
+          >
+            <IncentiveTabs
+              items={activeTabs}
+              actionItems={INCENTIVE_ACTION_TABS}
+              value={tab}
+              actionValue={actionTab ?? undefined}
+              onChange={handleTabChange}
+              onActionChange={handleActionTabChange}
+            />
+          </Box>
+        )}
         {renderContent()}
       </Box>
     </>

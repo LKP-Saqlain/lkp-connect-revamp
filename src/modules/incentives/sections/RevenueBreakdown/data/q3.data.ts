@@ -23,13 +23,13 @@ export const Q3_REVENUE_BREAKDOWN: RevenueBreakdownData = {
       subtitle: "22% of total",
       color: "#27AE60",
     },
-    {
-      id: "topProduct",
-      title: "Top product",
-      value: "Options",
-      subtitle: "₹11,24,212 • Broking",
-      color: "#101828",
-    },
+    // {
+    //   id: "topProduct",
+    //   title: "Top product",
+    //   value: "Options",
+    //   subtitle: "₹11,24,212 • Broking",
+    //   color: "#101828",
+    // },
   ],
   table: {
     broking: {

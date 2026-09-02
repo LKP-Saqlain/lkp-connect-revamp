@@ -1,11 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
-  getTeamMemberDetails,
   calculateEmployeeIncentive,
   GetIncentiveSlabs,
-  type GetTeamMemberDetailsPayload,
-  type GetTeamMemberDetailsResponse,
   type CalculateEmployeeIncentivePayload,
   type CalculateEmployeeIncentiveResponse,
   type GetIncentiveSlabsPayload,
@@ -20,6 +17,13 @@ import {
   GetClientAcquisition,
   type GetRevenueEmployeeTypePayload,
   GetRevenueEmployeeType,
+  type GetClientAcquisitionReportingHeadPayload,
+  GetClientAcquisitionReportingHead,
+  type GetTeamDistributionPayload,
+  GetTeamDistribution,
+  type TeamSummaryBasePayload,
+  GetTeamMultipleAndIncentiveSummary,
+  GetTeamSummary,
 } from "@/services/api";
 import type {
   ClientRevenueApiResponse,
@@ -28,27 +32,13 @@ import type {
   GetClientAcquisitionResponse,
   GetRevenueEmployeeTypeResponse,
 } from "@/modules/incentives/types/incentive.types";
-
-export const fetchTeamMemberDetails = createAsyncThunk<
-  GetTeamMemberDetailsResponse,
-  GetTeamMemberDetailsPayload,
-  { rejectValue: string }
->(
-  "incentivePeriod/fetchTeamMemberDetails",
-  async (payload, { rejectWithValue }) => {
-    try {
-      const response = await getTeamMemberDetails(payload);
-
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Failed to fetch team member details",
-      );
-    }
-  },
-);
+import type { GetClientAcquisitionReportingHeadResponse } from "@/modules/incentives/sections/ClientAcquisition/types/clientAcquisition.types";
+import type { GetTeamDistributionResponse } from "@/modules/incentives/types/teamDistribution.types";
+import type {
+  GetTeamMultipleAndIncentiveSummaryResponse,
+  GetTeamSummaryPayload,
+  GetTeamSummaryResponse,
+} from "@/modules/incentives/types/teamSummary.types";
 
 export const fetchEmployeeIncentive = createAsyncThunk<
   CalculateEmployeeIncentiveResponse,
@@ -236,3 +226,139 @@ export const fetchGetRevenueEmployeeType = createAsyncThunk<
     }
   },
 );
+
+export const fetchGetClientAcquisitionReportingHead = createAsyncThunk<
+  GetClientAcquisitionReportingHeadResponse,
+  GetClientAcquisitionReportingHeadPayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchGetClientAcquisitionReportingHead",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetClientAcquisitionReportingHead(payload);
+      if (!response.isSuccess) {
+        return rejectWithValue(
+          response.errorMessages ||
+            "Failed to fetch client acquisition (reporting head)",
+        );
+      }
+
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to fetch client acquisition (reporting head)",
+      );
+    }
+  },
+);
+
+export const fetchGetTeamDistribution = createAsyncThunk<
+  GetTeamDistributionResponse,
+  GetTeamDistributionPayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchGetTeamDistribution",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetTeamDistribution(payload);
+
+      if (!response.isSuccess) {
+        return rejectWithValue(
+          response.errorMessages || "Failed to fetch team distribution",
+        );
+      }
+
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to fetch team distribution",
+      );
+    }
+  },
+);
+
+export const fetchTeamMultipleSummary = createAsyncThunk<
+  GetTeamMultipleAndIncentiveSummaryResponse,
+  TeamSummaryBasePayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchTeamMultipleSummary",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetTeamMultipleAndIncentiveSummary({
+        ...payload,
+        optionType: "Multiple_summary",
+      });
+
+      if (!response.isSuccess) {
+        return rejectWithValue(
+          response.errorMessages || "Failed to fetch multiple summary",
+        );
+      }
+
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to fetch multiple summary",
+      );
+    }
+  },
+);
+
+export const fetchTeamIncentiveSummary = createAsyncThunk<
+  GetTeamMultipleAndIncentiveSummaryResponse,
+  TeamSummaryBasePayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchTeamIncentiveSummary",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetTeamMultipleAndIncentiveSummary({
+        ...payload,
+        optionType: "Incentive_summary",
+      });
+
+      if (!response.isSuccess) {
+        return rejectWithValue(
+          response.errorMessages || "Failed to fetch incentive summary",
+        );
+      }
+
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to fetch incentive summary",
+      );
+    }
+  },
+);
+
+export const fetchTeamSummary = createAsyncThunk<
+  GetTeamSummaryResponse,
+  GetTeamSummaryPayload,
+  { rejectValue: string }
+>("incentivePeriod/fetchTeamSummary", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await GetTeamSummary(payload);
+    if (!response.isSuccess) {
+      return rejectWithValue(
+        response.errorMessages || "Failed to fetch team summary",
+      );
+    }
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(
+      error?.response?.data?.message ||
+        error?.message ||
+        "Failed to fetch team summary",
+    );
+  }
+});

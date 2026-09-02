@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
 
 import PeriodChip from "./PeriodChip";
 import { periodStyles } from "./period.styles";
@@ -11,12 +12,18 @@ interface PeriodBarProps {
   value: IncentivePeriod;
   onChange: (period: IncentivePeriod) => void;
   financialYear?: string;
+  showTeamOverview?: boolean;
+  teamOverviewActive?: boolean;
+  onTeamOverviewClick?: () => void;
 }
 
 const PeriodBar = ({
   value,
   onChange,
   financialYear = "FY 2026-27",
+  showTeamOverview = false,
+  teamOverviewActive = false,
+  onTeamOverviewClick,
 }: PeriodBarProps) => {
   return (
     <Box sx={periodStyles.root}>
@@ -28,10 +35,34 @@ const PeriodBar = ({
             <PeriodChip
               key={period.id}
               item={period}
-              active={period.id === value}
+              active={!teamOverviewActive && period.id === value}
               onClick={onChange}
             />
           ))}
+
+          {showTeamOverview && (
+            <>
+              <Box sx={periodStyles.separator} />
+
+              <Box
+                onClick={onTeamOverviewClick}
+                sx={[
+                  periodStyles.chip,
+                  teamOverviewActive && periodStyles.activeChip,
+                ]}
+              >
+                <AutoAwesomeOutlinedIcon
+                  sx={{
+                    fontSize: 14,
+                    color: teamOverviewActive ? "#FFFFFF" : "#344054",
+                  }}
+                />
+                <Typography sx={periodStyles.chipText}>
+                  Team Overview
+                </Typography>
+              </Box>
+            </>
+          )}
         </Box>
       </Box>
 

@@ -12,6 +12,7 @@ import type { IncentivePeriod } from "@/modules/incentives/types/incentive.types
 import { parseAmount } from "@/utils/helper";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchClientwiseDetailRevenue } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
+import { getQuarterName } from "@/modules/incentives/constants/overall";
 
 interface Props {
   rows: any[];
@@ -43,6 +44,7 @@ const ClientRevenueTable = ({ rows, period }: Props) => {
   const { clientwiseDetailRevenue } = useAppSelector(
     (state) => state.incentivePeriod,
   );
+  const quarterName = getQuarterName(period);
 
   useEffect(() => {
     console.log("TESTaa", search);
@@ -198,7 +200,7 @@ const ClientRevenueTable = ({ rows, period }: Props) => {
       fetchClientwiseDetailRevenue({
         clientcode: clientCode,
         financialYear: "2026-27",
-        quarterName: "Q2",
+        quarterName: quarterName,
       }),
     );
   };

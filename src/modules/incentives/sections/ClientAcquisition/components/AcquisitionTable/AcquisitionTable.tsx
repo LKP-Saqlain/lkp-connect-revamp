@@ -54,7 +54,14 @@ const AcquisitionTable = ({ clients }: { clients: AcquisitionClient[] }) => {
         </Typography>
       </Box>
 
-      <TableContainer component={Paper} elevation={0}>
+      <TableContainer
+        component={Paper}
+        elevation={0}
+        sx={{
+          maxHeight: 360, // adjust to taste — this is roughly 6-7 rows visible before scrolling
+          overflowY: "auto",
+        }}
+      >
         <Table
           sx={{
             width: "100%",
@@ -215,8 +222,17 @@ const AcquisitionTable = ({ clients }: { clients: AcquisitionClient[] }) => {
 
                       borderRadius: "12px",
 
-                      backgroundColor: "#FFF3D6",
-                      color: "#9A6700",
+                      backgroundColor:
+                        client.status === "Eligible" ||
+                        client.status === "Qualified"
+                          ? "#EAF3DE"
+                          : "#FFF3D6",
+
+                      color:
+                        client.status === "Eligible" ||
+                        client.status === "Qualified"
+                          ? "#27500A"
+                          : "#9A6700",
 
                       fontSize: "10px",
                       fontWeight: 500,

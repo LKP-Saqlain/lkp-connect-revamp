@@ -8,6 +8,7 @@ import { Q4_CLIENT_REVENUE } from "./data/q4.data";
 import type { IncentivePeriod } from "../../types/incentive.types";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchClientwiseRevenue } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
+import { getQuarterName } from "../../constants/overall";
 
 interface Props {
   period: IncentivePeriod;
@@ -16,32 +17,23 @@ interface Props {
 const ClientRevenue = ({ period }: Props) => {
   const dispatch = useAppDispatch();
 
-  const { clientwiseRevenue, clientwiseDetailRevenue } = useAppSelector(
+  const { clientwiseRevenue } = useAppSelector(
     (state) => state.incentivePeriod,
   );
 
+  const quarterName = getQuarterName(period); // null for "fy", "Q1"/"Q2"/"Q3"/"Q4" otherwise
+
   useEffect(() => {
-    if (period !== "q2") {
-      return;
-    }
+    if (!quarterName) return; // skip FY — no quarter API for full year
 
     dispatch(
       fetchClientwiseRevenue({
         empCode: "0238",
         financialYear: "2026-27",
-        quarterName: "Q2",
+        quarterName,
       }),
     );
-  }, [dispatch, period]);
-
-  useEffect(() => {
-    console.log(
-      "clientwiseRevenueResponse",
-      clientwiseRevenue,
-      "clientwiseRevenueDetailResponse",
-      clientwiseDetailRevenue,
-    );
-  }, [clientwiseRevenue]);
+  }, [dispatch, quarterName]);
 
   const staticData =
     period === "q1"
@@ -54,11 +46,11 @@ const ClientRevenue = ({ period }: Props) => {
             ? Q4_CLIENT_REVENUE
             : FY_CLIENT_REVENUE;
 
+  // Use API data for any quarter that has returned a response
   const apiData = clientwiseRevenue?.data;
-  if (period === "q2" && apiData?.total && apiData?.clientDetails) {
-    // const apiData = clientwiseRevenue.data;
 
-    const q2Summary = [
+  if (quarterName && apiData?.total && apiData?.clientDetails) {
+    const apiSummary = [
       {
         id: "total",
         title: "Total revenue",
@@ -73,33 +65,26 @@ const ClientRevenue = ({ period }: Props) => {
         id: "broking",
         title: "Broking Revenue Credit",
         value: `₹${apiData.total.totalBrokingRevenue.toLocaleString("en-IN")}`,
-        subtitle: `30% of ₹${apiData.total.brokingCredits.toLocaleString(
-          "en-IN",
-        )}`,
+        subtitle: `30% of ₹${apiData.total.brokingCredits.toLocaleString("en-IN")}`,
         color: "#2F80ED",
       },
       {
         id: "non-broking",
         title: "Non-Broking Revenue Credit",
         value: `₹${apiData.total.nonBrokingCredits.toLocaleString("en-IN")}`,
-        subtitle: `70% of ₹${apiData.total.totalNonBrokingRevenue.toLocaleString(
-          "en-IN",
-        )}`,
+        subtitle: `70% of ₹${apiData.total.totalNonBrokingRevenue.toLocaleString("en-IN")}`,
         color: "#27AE60",
       },
     ];
 
-    const q2Rows = apiData.clientDetails.map((client, index) => ({
+    const apiRows = apiData.clientDetails.map((client, index) => ({
       id: index + 1,
       client: client.clientName,
       clientCode: client.clientCode,
       broking: `₹${client.brokingCredits.toLocaleString("en-IN")}`,
       brokingCredit: `₹${client.totalBrokingRevenue.toLocaleString("en-IN")}`,
-
       nonBroking: `₹${client.nonBrokingCredits.toLocaleString("en-IN")}`,
-      nonBrokingCredit: `₹${client.totalNonBrokingRevenue.toLocaleString(
-        "en-IN",
-      )}`,
+      nonBrokingCredit: `₹${client.totalNonBrokingRevenue.toLocaleString("en-IN")}`,
       totalRevenue: `₹${client.totalRevenue.toLocaleString("en-IN")}`,
       totalCredit: `₹${(
         client.totalBrokingRevenue + client.totalNonBrokingRevenue
@@ -108,38 +93,31 @@ const ClientRevenue = ({ period }: Props) => {
       isCap: client.revenuePercentage >= 25,
     }));
 
-    const q2Total = {
-      brokingCredits: `₹${apiData.total.brokingCredits.toLocaleString(
-        "en-IN",
-      )}`,
-      brokingCredit: `₹${apiData.total.totalBrokingRevenue.toLocaleString(
-        "en-IN",
-      )}`,
-      nonBrokingRevenue: `₹${apiData.total.nonBrokingCredits.toLocaleString(
-        "en-IN",
-      )}`,
-      nonBrokingCredit: `₹${apiData.total.totalNonBrokingRevenue.toLocaleString(
-        "en-IN",
-      )}`,
+    const apiTotal = {
+      brokingCredits: `₹${apiData.total.brokingCredits.toLocaleString("en-IN")}`,
+      brokingCredit: `₹${apiData.total.totalBrokingRevenue.toLocaleString("en-IN")}`,
+      nonBrokingRevenue: `₹${apiData.total.nonBrokingCredits.toLocaleString("en-IN")}`,
+      nonBrokingCredit: `₹${apiData.total.totalNonBrokingRevenue.toLocaleString("en-IN")}`,
       totalRevenue: `₹${apiData.total.totalRevenue.toLocaleString("en-IN")}`,
       totalCredit: `₹${(
         apiData.total.totalBrokingRevenue + apiData.total.totalNonBrokingRevenue
       ).toLocaleString("en-IN")}`,
       totalClients: apiData.total.totalCount,
-      brokingItems: Q2_CLIENT_REVENUE.total.brokingItems,
-      nonBrokingItems: Q2_CLIENT_REVENUE.total.nonBrokingItems,
+      brokingItems: staticData.total.brokingItems,
+      nonBrokingItems: staticData.total.nonBrokingItems,
     };
 
     return (
       <ClientRevenueLayout
         period={period}
-        summary={q2Summary}
-        rows={q2Rows}
-        total={q2Total}
+        summary={apiSummary}
+        rows={apiRows}
+        total={apiTotal}
       />
     );
   }
 
+  // Fallback: static data (FY, or while API is loading)
   return (
     <ClientRevenueLayout
       period={period}

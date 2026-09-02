@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import SidebarLogo from "./SidebarLogo";
 import SidebarMenu from "./SidebarMenu";
-import SidebarFooter from "./SidebarFooter";
+// import SidebarFooter from "./SidebarFooter";
 import { sidebarStyles } from "./sidebar.styles";
 import type { SidebarProps } from "@/types";
 import { useEffect } from "react";
@@ -19,9 +19,9 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
         <SidebarMenu />
       </Box>
 
-      <Box sx={sidebarStyles.footer}>
+      {/* <Box sx={sidebarStyles.footer}>
         <SidebarFooter />
-      </Box>
+      </Box> */}
     </Box>
   );
 };

@@ -29,3 +29,9 @@ export const INCENTIVE_ACTION_TABS: TabItem[] = [
     label: "Annual Target",
   },
 ];
+
+export const TEAM_SUMMARY_TAB: TabItem = {
+  id: "team-summary",
+  label: "Team summary",
+  hasSeparator: true,
+};

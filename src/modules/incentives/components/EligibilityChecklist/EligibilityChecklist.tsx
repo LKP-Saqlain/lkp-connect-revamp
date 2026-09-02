@@ -9,6 +9,7 @@ import SuccessBanner from "./SuccessBanner";
 import AlertBanner from "../AlertBanner";
 
 import type { EligibilityChecklistData } from "../../types/incentive.types";
+import { useEffect } from "react";
 
 interface Props {
   data: EligibilityChecklistData;
@@ -25,9 +26,16 @@ const EligibilityChecklist = ({ data }: Props) => {
     })),
   ];
 
+  const isEligible = qualificationItems.every(
+    (item) => item.status === "completed",
+  );
+
+  useEffect(() => {
+    console.log("Test1111", qualificationItems, data);
+  }, [qualificationItems, data]);
+
   return (
     <Box sx={styles.card}>
-      {/* Header */}
       <Box sx={styles.titleRow}>
         <AssignmentOutlinedIcon
           sx={{
@@ -38,21 +46,17 @@ const EligibilityChecklist = ({ data }: Props) => {
 
         <Typography sx={styles.title}>{data.title}</Typography>
       </Box>
-
-      {/* Banner */}
-      {data.banner.type === "success" ? (
+      {isEligible ? (
         <SuccessBanner
-          title={data.banner.title}
-          description={data.banner.description}
+          title="Eligible for incentive"
+          description={`Revenue multiple ${data.currentSlab} meets all required conditions.`}
         />
       ) : (
         <AlertBanner
-          title={data.banner.title}
-          description={data.banner.description}
+          title="Not eligible for incentive"
+          description="One or more eligibility conditions are not fulfilled."
         />
       )}
-
-      {/* Current Slab */}
       <Typography sx={styles.slab}>
         Current slab:
         <Box
@@ -108,7 +112,6 @@ const QualificationItem = ({
         ...(isSecondRow ? styles.qualificationItemSecondRow : {}),
       }}
     >
-      {/* Status + title */}
       <Box sx={styles.qualificationHeader}>
         <Box
           sx={{
