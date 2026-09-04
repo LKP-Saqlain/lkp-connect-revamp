@@ -11,7 +11,7 @@ interface Props {
   teamMemberDetails?: any;
   employeeIncentive?: any;
   employeeType?: string;
-  empCode?: string;
+  empCode?: any;
 }
 
 const Overview = ({

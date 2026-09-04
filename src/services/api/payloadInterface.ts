@@ -1,9 +1,9 @@
 import type { EmployeeIncentiveData } from "@/modules/incentives/types/incentive.types";
 
 export interface CalculateEmployeeIncentivePayload {
-  empCode: string;
-  financialYear: string;
-  quarterName: string;
+  empCode: any;
+  financialYear: any;
+  quarterName: any;
 }
 
 export interface CalculateEmployeeIncentiveResponse {
@@ -13,7 +13,7 @@ export interface CalculateEmployeeIncentiveResponse {
 }
 
 export interface GetIncentiveSlabsPayload {
-  empCode: string;
+  empCode: string | any;
   financialYear: string;
 }
 
@@ -23,9 +23,9 @@ export interface GetclientwiseRevenuePayload {
   quarterName: string;
 }
 export interface GetclientwiseDetailRevenuePayload {
-  clientcode: string;
-  financialYear: string;
-  quarterName: string;
+  clientcode: string | any;
+  financialYear: string | any;
+  quarterName: string | any;
 }
 
 export interface GetEmpwiseDetailsRevenuePayload {
@@ -41,7 +41,7 @@ export interface GetClientAcquisitionPayload {
 }
 
 export interface GetRevenueEmployeeTypePayload {
-  empcode: string;
+  empcode: string | any;
 }
 
 // export interface GetclientwiseDetailsRevenue {

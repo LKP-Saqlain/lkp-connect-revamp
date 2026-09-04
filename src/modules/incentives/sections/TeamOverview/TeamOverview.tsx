@@ -19,7 +19,7 @@ import MemberDashboard from "./MemberDashboard/MemberDashboard";
 import type { TeamDistDetail } from "../../types/teamDistribution.types";
 
 interface Props {
-  empCode: string;
+  empCode: any;
 }
 
 const TeamOverview = ({ empCode }: Props) => {

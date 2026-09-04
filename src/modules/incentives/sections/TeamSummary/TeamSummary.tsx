@@ -8,12 +8,12 @@ import type { IncentivePeriod } from "../../types/incentive.types";
 
 import TeamSummaryCards from "./TeamSummaryCards";
 import TeamMemberSummaryTable from "./TeamMemberSummaryTable";
-import RoleSummary from "../ClientAcquisition/components/RoleSummary";
+// import RoleSummary from "../ClientAcquisition/components/RoleSummary";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 
 interface Props {
   period: IncentivePeriod;
-  empCode: string;
+  empCode: string | any;
 }
 
 const TeamSummary = ({ period, empCode }: Props) => {

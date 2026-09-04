@@ -104,8 +104,8 @@ const OverviewQ2 = ({ employeeType, period, empCode }: OverviewQ2Props) => {
   const employeeData = employeeIncentive?.data;
 
   useEffect(() => {
-    console.log("employeeIncentive123123", employeeIncentive);
-  }, [employeeIncentive]);
+    console.log("employeeIncentive123123", employeeIncentive, period);
+  }, [employeeIncentive, period]);
 
   useEffect(() => {
     if (!employeeData?.empCode || isTeamRole) return;

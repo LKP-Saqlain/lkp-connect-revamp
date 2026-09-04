@@ -27,7 +27,7 @@ import {
   buildQ3TLTeamCriteria,
   buildQ3TLEligibility,
   buildQ3TLPayout,
-  Q3_TL_ROLE,
+  // Q3_TL_ROLE,
 } from "../../constants/q3OverviewTL.data";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
