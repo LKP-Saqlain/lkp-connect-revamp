@@ -12,6 +12,7 @@ import type { RevenueBreakdownData } from "./types/revenueBreakdown.types";
 
 interface Props {
   period: "fy" | "q1" | "q2" | "q3" | "q4";
+  empCode?: any;
 }
 
 const formatIndianCurrency = (value: number) => {
@@ -35,7 +36,7 @@ const MONTH_ORDER: Record<string, number> = {
   December: 12,
 };
 
-const RevenueBreakdown = ({ period }: Props) => {
+const RevenueBreakdown = ({ period, empCode }: Props) => {
   const dispatch = useAppDispatch();
 
   const { empwiseDetailsRevenue } = useAppSelector(
@@ -53,7 +54,7 @@ const RevenueBreakdown = ({ period }: Props) => {
 
     dispatch(
       fetchEmpwiseDetailsRevenue({
-        empCode: "0238",
+        empCode: empCode,
         financialYear: "2026-27",
         quarterName,
       }),

@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-
 import ClientAcquisitionLayout from "./ClientAcquisitionLayout";
 import ClientAcquisitionTL from "./ClientAcquisitionTL";
 import { CLIENT_ACQUISITION_DATA } from "./data/clientAcquisition.data";
@@ -9,15 +8,17 @@ import {
   fetchGetClientAcquisitionReportingHead,
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 import type { IncentivePeriod } from "../../types/incentive.types";
+import { getQuarterName } from "../../constants/overall";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
 
 interface Props {
   period: IncentivePeriod;
   employeeType?: string;
+  empCode?: any;
 }
 
-const ClientAcquisition = ({ period, employeeType }: Props) => {
+const ClientAcquisition = ({ period, employeeType, empCode }: Props) => {
   const dispatch = useAppDispatch();
 
   const isTeamRole = employeeType
@@ -27,27 +28,29 @@ const ClientAcquisition = ({ period, employeeType }: Props) => {
   const { GetClientAcquisition, GetClientAcquisitionReportingHead } =
     useAppSelector((state) => state.incentivePeriod);
 
+  const quarterName = getQuarterName(period); // null for "fy", "Q1"/"Q2"/"Q3"/"Q4" otherwise
+
   useEffect(() => {
-    if (period !== "q2") return;
+    if (!quarterName) return; // skip FY — no quarter API for full year
 
     if (isTeamRole) {
       dispatch(
         fetchGetClientAcquisitionReportingHead({
-          empCode: "0238",
+          empCode: empCode,
           financialYear: "2026-27",
-          quarterName: "Q2",
+          quarterName,
         }),
       );
     } else {
       dispatch(
         fetchGetClientAcquisition({
-          empCode: "0238",
+          empCode: empCode,
           financialYear: "2026-27",
-          quarterName: "Q2",
+          quarterName,
         }),
       );
     }
-  }, [dispatch, period, isTeamRole]);
+  }, [dispatch, quarterName, isTeamRole]);
 
   if (isTeamRole) {
     return (
@@ -59,9 +62,7 @@ const ClientAcquisition = ({ period, employeeType }: Props) => {
   }
 
   // ---- everything below is your existing RM / BDM / Dealer code, unchanged ----
-
   const counts = GetClientAcquisition?.data?.clientAcqCounts;
-
   const summary = counts
     ? [
         {

@@ -121,18 +121,23 @@ const IncentivePage = () => {
             period={period}
             employeeIncentive={employeeIncentive}
             employeeType={employeeType}
+            empCode={EMP_CODE}
           />
         );
 
       case "client-revenue":
-        return <ClientRevenue period={period} />;
+        return <ClientRevenue period={period} empCode={EMP_CODE} />;
 
       case "revenue-breakdown":
-        return <RevenueBreakdown period={period} />;
+        return <RevenueBreakdown period={period} empCode={EMP_CODE} />;
 
       case "client-acquisition":
         return (
-          <ClientAcquisition period={period} employeeType={employeeType} />
+          <ClientAcquisition
+            period={period}
+            employeeType={employeeType}
+            empCode={EMP_CODE}
+          />
         );
 
       case "team-summary":

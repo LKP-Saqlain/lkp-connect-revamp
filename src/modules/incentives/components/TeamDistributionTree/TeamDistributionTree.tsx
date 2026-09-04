@@ -10,11 +10,14 @@ import {
   ROLE_CHIP_COLORS,
   ROOT_ROLE_LABELS,
 } from "../../constants/teamDistribution.helpers";
-import type { TeamDistributionData } from "../../types/teamDistribution.types";
+import type {
+  TeamDistDetail,
+  TeamDistributionData,
+} from "../../types/teamDistribution.types";
 
 interface Props {
   data?: TeamDistributionData | null;
-  onSelectMember?: (empCode: string) => void;
+  onSelectMember?: (member: TeamDistDetail) => void;
 }
 
 const TeamDistributionTree = ({ data, onSelectMember }: Props) => {
@@ -149,7 +152,7 @@ const TeamDistributionTree = ({ data, onSelectMember }: Props) => {
                     <Box
                       key={member.empCode}
                       sx={styles.memberRow}
-                      onClick={() => onSelectMember?.(member.empCode)}
+                      onClick={() => onSelectMember?.(member)}
                     >
                       <Typography sx={{ fontSize: 12.5, fontWeight: 500 }}>
                         {member.empName}

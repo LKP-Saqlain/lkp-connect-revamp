@@ -12,9 +12,10 @@ import { getQuarterName } from "../../constants/overall";
 
 interface Props {
   period: IncentivePeriod;
+  empCode?: any;
 }
 
-const ClientRevenue = ({ period }: Props) => {
+const ClientRevenue = ({ period, empCode }: Props) => {
   const dispatch = useAppDispatch();
 
   const { clientwiseRevenue } = useAppSelector(
@@ -28,7 +29,7 @@ const ClientRevenue = ({ period }: Props) => {
 
     dispatch(
       fetchClientwiseRevenue({
-        empCode: "0238",
+        empCode: empCode,
         financialYear: "2026-27",
         quarterName,
       }),
@@ -64,8 +65,8 @@ const ClientRevenue = ({ period }: Props) => {
       {
         id: "broking",
         title: "Broking Revenue Credit",
-        value: `₹${apiData.total.totalBrokingRevenue.toLocaleString("en-IN")}`,
-        subtitle: `30% of ₹${apiData.total.brokingCredits.toLocaleString("en-IN")}`,
+        value: `₹${apiData.total.brokingCredits.toLocaleString("en-IN")}`,
+        subtitle: `30% of ₹${apiData.total.totalBrokingRevenue.toLocaleString("en-IN")}`,
         color: "#2F80ED",
       },
       {

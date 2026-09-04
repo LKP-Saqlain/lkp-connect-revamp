@@ -5,12 +5,12 @@ import AuthBridge from "@/auth/AuthBridge";
 
 const App = () => {
   return (
-    // <AuthBridge>
-    <AppProviders>
-      <GlobalApiLoader />
-      <AppRoutes />
-    </AppProviders>
-    // </AuthBridge>
+    <AuthBridge>
+      <AppProviders>
+        <GlobalApiLoader />
+        <AppRoutes />
+      </AppProviders>
+    </AuthBridge>
   );
 };
 

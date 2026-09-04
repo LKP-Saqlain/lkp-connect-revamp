@@ -25,14 +25,14 @@ import { useEffect } from "react";
 import { fetchIncentiveSlabs } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 
 import {
-  buildQ2TLSummary,
-  buildQ2TLSelfMetrics,
-  buildQ2TLSelfCriteria,
-  buildQ2TLTeamMetrics,
-  buildQ2TLTeamCriteria,
-  buildQ2TLEligibility,
+  buildTLSummary,
+  buildTLSelfMetrics,
+  buildTLSelfCriteria,
+  buildTLTeamMetrics,
+  buildTLTeamCriteria,
+  buildTLEligibility,
   Q2_TL_ROLE,
-  buildQ2TLPayout,
+  buildTLPayout,
 } from "../../constants/q2OverviewTL.data";
 import PayoutBreakdown from "../../components/PayoutBreakdown";
 
@@ -86,9 +86,11 @@ const SectionHeader = ({
 
 interface OverviewQ2Props {
   employeeType?: string;
+  period?: string;
+  empCode?: string;
 }
 
-const OverviewQ2 = ({ employeeType }: OverviewQ2Props) => {
+const OverviewQ2 = ({ employeeType, period, empCode }: OverviewQ2Props) => {
   const isTeamRole = employeeType
     ? TEAM_ROLE_TYPES.includes(employeeType)
     : false;
@@ -110,20 +112,20 @@ const OverviewQ2 = ({ employeeType }: OverviewQ2Props) => {
 
     dispatch(
       fetchIncentiveSlabs({
-        empCode: "0238",
+        empCode: employeeData?.empCode ? employeeData?.empCode : empCode,
         financialYear: "2026-27",
       }),
     );
   }, [dispatch, employeeData?.empCode, isTeamRole]);
 
   if (isTeamRole) {
-    const q2TLSummary = buildQ2TLSummary(employeeData);
-    const q2TLSelfMetrics = buildQ2TLSelfMetrics(employeeData);
-    const q2TLSelfCriteria = buildQ2TLSelfCriteria(employeeData);
-    const q2TLTeamMetrics = buildQ2TLTeamMetrics(employeeData);
-    const q2TLTeamCriteria = buildQ2TLTeamCriteria(employeeData);
-    const q2TLEligibility = buildQ2TLEligibility(employeeData);
-    const q2TLPayout = buildQ2TLPayout(employeeData);
+    const q2TLSummary = buildTLSummary(employeeData);
+    const q2TLSelfMetrics = buildTLSelfMetrics(employeeData);
+    const q2TLSelfCriteria = buildTLSelfCriteria(employeeData);
+    const q2TLTeamMetrics = buildTLTeamMetrics(employeeData);
+    const q2TLTeamCriteria = buildTLTeamCriteria(employeeData);
+    const q2TLEligibility = buildTLEligibility(employeeData);
+    const q2TLPayout = buildTLPayout(employeeData);
 
     return (
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 3 }}>
@@ -362,7 +364,7 @@ const OverviewQ2 = ({ employeeType }: OverviewQ2Props) => {
       {
         title: "Min Revenue",
         actual:
-          employeeData != null
+          employeeData?.totalRevenue != null
             ? `${employeeData.revenueMultiple}x (₹${employeeData.totalRevenue.toLocaleString("en-IN")})`
             : Q2_ELIGIBILITY.qualifications[0].actual,
         required: Q2_ELIGIBILITY.qualifications[0].required,

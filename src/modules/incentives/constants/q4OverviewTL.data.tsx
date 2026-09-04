@@ -2,8 +2,8 @@ import type {
   MetricCardData,
   TeamEligibilityChecklistData,
   TeamRoleData,
-  EmployeeIncentiveData,
   PayoutBreakdownData,
+  EmployeeIncentiveData,
 } from "../types/incentive.types";
 
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -15,10 +15,26 @@ import BankImg from "@/assets/images/building-bank.svg";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 // -----------------------------------------
-// 1) Top summary strip — NOW API-DRIVEN
+// Carry-forward banner text
 // -----------------------------------------
 
-export const buildTLSummary = (
+export const buildQ4TLCarryForward = (data?: EmployeeIncentiveData | null) => ({
+  title: "Q4 · Shortfall carry-forward active",
+  description: `Q3 shortfall of ${data?.carryForwardMultiple ?? 0}x carried forward. Required: ${
+    data?.reqTeamRevMultiple ?? 3
+  }.0x current + ${data?.carryForwardMultiple ?? 0}x shortfall = ${
+    data?.reqTeamRevMultipleWithCarry ?? "—"
+  }x total. Achieved: ${data?.teamRevMultiple ?? 0}x.`,
+  q4Minimum: `${data?.reqTeamRevMultiple ?? 3}.0x`,
+  q3Shortfall: `${data?.carryForwardMultiple ?? 0}x`,
+  required: `${data?.reqTeamRevMultipleWithCarry ?? "—"}x`,
+});
+
+// -----------------------------------------
+// Top summary strip
+// -----------------------------------------
+
+export const buildQ4TLSummary = (
   data?: EmployeeIncentiveData | null,
 ): MetricCardData[] => {
   const selfMet =
@@ -27,8 +43,8 @@ export const buildTLSummary = (
       : null;
 
   const teamMet =
-    data?.teamRevMultiple != null && data?.reqTeamRevMultiple != null
-      ? data.teamRevMultiple >= data.reqTeamRevMultiple
+    data?.teamRevMultiple != null && data?.reqTeamRevMultipleWithCarry != null
+      ? data.teamRevMultiple >= data.reqTeamRevMultipleWithCarry
       : null;
 
   return [
@@ -55,8 +71,10 @@ export const buildTLSummary = (
       title: "Team revenue multiple",
       value: data?.teamRevMultiple != null ? `${data.teamRevMultiple}x` : "—",
       subtitle:
-        data?.reqTeamRevMultiple != null
-          ? `Min ${data.reqTeamRevMultiple}.0x team CTC required`
+        data?.reqTeamRevMultipleWithCarry != null
+          ? `Min ${data.reqTeamRevMultipleWithCarry}x team CTC required (incl. ${
+              data?.carryForwardMultiple ?? 0
+            }x carried)`
           : "Min team CTC required",
       icon: <GroupsOutlinedIcon sx={{ fontSize: 16, color: "#98A2B3" }} />,
       color:
@@ -101,10 +119,10 @@ export const buildTLSummary = (
 };
 
 // -----------------------------------------
-// 2) My performance (self book) — structure ready, static for now
+// My performance (self book)
 // -----------------------------------------
 
-export const buildTLSelfMetrics = (
+export const buildQ4TLSelfMetrics = (
   data?: EmployeeIncentiveData | null,
 ): MetricCardData[] => {
   return [
@@ -113,15 +131,15 @@ export const buildTLSelfMetrics = (
       title: "Broking Revenue Credit",
       value:
         data?.brokingCredits != null
-          ? `₹${data.brokingCredits.toLocaleString("en-IN", {
-              maximumFractionDigits: 0,
-            })}`
+          ? `₹${data.brokingCredits.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
           : "₹0",
       subtitle:
         data?.brokingPercent != null && data?.totalBrokingRevenue != null
           ? `${data.brokingPercent}% of ₹${data.totalBrokingRevenue.toLocaleString(
               "en-IN",
-              { maximumFractionDigits: 0 },
+              {
+                maximumFractionDigits: 0,
+              },
             )}`
           : undefined,
       icon: TrendingUp,
@@ -131,9 +149,7 @@ export const buildTLSelfMetrics = (
       title: "Non Broking Revenue Credit",
       value:
         data?.nonBrokingCredits != null
-          ? `₹${data.nonBrokingCredits.toLocaleString("en-IN", {
-              maximumFractionDigits: 0,
-            })}`
+          ? `₹${data.nonBrokingCredits.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
           : "₹0",
       subtitle:
         data?.nonBrokingPercent != null && data?.totalNonBrokingRevenue != null
@@ -149,17 +165,16 @@ export const buildTLSelfMetrics = (
       title: "Total revenue credit",
       value:
         data?.totalRevenue != null
-          ? `₹${data.totalRevenue.toLocaleString("en-IN", {
-              maximumFractionDigits: 0,
-            })}`
+          ? `₹${data.totalRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
           : "₹0",
       icon: <InfoOutlinedIcon sx={{ fontSize: 16, color: "#98A2B3" }} />,
     },
   ];
 };
-export const buildTLSelfCriteria = (data?: EmployeeIncentiveData | null) => ({
+
+export const buildQ4TLSelfCriteria = (data?: EmployeeIncentiveData | null) => ({
   title: "My performance (self book)",
-  actual: data?.selfMultiple != null ? `${data.selfMultiple}x` : "0.9x",
+  actual: data?.selfMultiple != null ? `${data.selfMultiple}x` : "—",
   required:
     data?.reqSelfMultiple != null
       ? `${data.reqSelfMultiple}.0x of total CTC`
@@ -167,10 +182,10 @@ export const buildTLSelfCriteria = (data?: EmployeeIncentiveData | null) => ({
 });
 
 // -----------------------------------------
-// 3) Team performance (excl. self) — structure ready, static for now
+// Team performance (excl. self)
 // -----------------------------------------
 
-export const buildTLTeamMetrics = (
+export const buildQ4TLTeamMetrics = (
   data?: EmployeeIncentiveData | null,
 ): MetricCardData[] => {
   return [
@@ -179,15 +194,15 @@ export const buildTLTeamMetrics = (
       title: "Broking Revenue Credit",
       value:
         data?.teamBrokingCredits != null
-          ? `₹${data.teamBrokingCredits.toLocaleString("en-IN", {
-              maximumFractionDigits: 0,
-            })}`
+          ? `₹${data.teamBrokingCredits.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
           : "₹0",
       subtitle:
         data?.brokingPercent != null && data?.teamBrokingRevenue != null
           ? `${data.brokingPercent}% of ₹${data.teamBrokingRevenue.toLocaleString(
               "en-IN",
-              { maximumFractionDigits: 0 },
+              {
+                maximumFractionDigits: 0,
+              },
             )}`
           : undefined,
       icon: TrendingUp,
@@ -197,9 +212,7 @@ export const buildTLTeamMetrics = (
       title: "Non Broking Revenue Credit",
       value:
         data?.teamNonBrokingCredits != null
-          ? `₹${data.teamNonBrokingCredits.toLocaleString("en-IN", {
-              maximumFractionDigits: 0,
-            })}`
+          ? `₹${data.teamNonBrokingCredits.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
           : "₹0",
       subtitle:
         data?.nonBrokingPercent != null && data?.teamNonBrokingRevenue != null
@@ -215,29 +228,27 @@ export const buildTLTeamMetrics = (
       title: "Total revenue credit",
       value:
         data?.teamRevenueCredits != null
-          ? `₹${data.teamRevenueCredits.toLocaleString("en-IN", {
-              maximumFractionDigits: 0,
-            })}`
+          ? `₹${data.teamRevenueCredits.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
           : "₹0",
       icon: <InfoOutlinedIcon sx={{ fontSize: 16, color: "#98A2B3" }} />,
     },
   ];
 };
 
-export const buildTLTeamCriteria = (data?: EmployeeIncentiveData | null) => ({
+export const buildQ4TLTeamCriteria = (data?: EmployeeIncentiveData | null) => ({
   title: `Team performance (excl. self · ${data?.teamMembers ?? "—"} members)`,
-  actual: data?.teamRevMultiple != null ? `${data.teamRevMultiple}x` : "2.4x",
+  actual: data?.teamRevMultiple != null ? `${data.teamRevMultiple}x` : "—",
   required:
-    data?.reqTeamRevMultiple != null
-      ? `${data.reqTeamRevMultiple}.0x of total CTC`
+    data?.reqTeamRevMultipleWithCarry != null
+      ? `${data.reqTeamRevMultipleWithCarry}x of total CTC (incl. carry-forward)`
       : "3.0x of total CTC",
 });
 
 // -----------------------------------------
-// 4) Eligibility checklist — structure ready, static for now
+// Eligibility checklist
 // -----------------------------------------
 
-export const buildTLEligibility = (
+export const buildQ4TLEligibility = (
   data?: EmployeeIncentiveData | null,
 ): TeamEligibilityChecklistData => {
   const items: TeamEligibilityChecklistData["items"] = [
@@ -254,11 +265,14 @@ export const buildTLEligibility = (
     },
     {
       id: "2",
-      label: `Team min ${data?.reqTeamRevMultiple ?? 3}.0x CTC`,
+      label: `Team min ${data?.reqTeamRevMultipleWithCarry ?? 3}x CTC (${
+        data?.reqTeamRevMultiple ?? 3
+      }x + ${data?.carryForwardMultiple ?? 0}x carried)`,
       value: data?.teamRevMultiple != null ? `${data.teamRevMultiple}x` : "—",
       status:
-        data?.teamRevMultiple != null && data?.reqTeamRevMultiple != null
-          ? data.teamRevMultiple >= data.reqTeamRevMultiple
+        data?.teamRevMultiple != null &&
+        data?.reqTeamRevMultipleWithCarry != null
+          ? data.teamRevMultiple >= data.reqTeamRevMultipleWithCarry
             ? "completed"
             : "pending"
           : "pending",
@@ -363,39 +377,16 @@ export const buildTLEligibility = (
     },
   ];
 
-  return {
-    title: "Eligibility checklist",
-    items,
-  };
+  return { title: "Eligibility checklist", items };
 };
 
 // -----------------------------------------
-// 5) Role card — static, unlikely to be API-driven
+// Payout breakdown (on team revenue) — same pattern as Q2
 // -----------------------------------------
 
-export const Q2_TL_ROLE: TeamRoleData = {
-  title: "Team Leader",
-  description:
-    "Self min 1x CTC (mandatory) · Team min 3x CTC (excl. TL) · Slab on team revenue · Booster if all members qualify · Min 5 team members · NISM VII, VIII & XVI",
-};
-
-// -----------------------------------------
-// 6) Payout breakdown (on team revenue)
-// -----------------------------------------
-
-export const buildTLPayout = (
+export const buildQ4TLPayout = (
   data?: EmployeeIncentiveData | null,
 ): PayoutBreakdownData => {
-  const selfAdditionalAmount =
-    data?.eligibleAccounts != null && data?.selfNewAccountRate != null
-      ? data.eligibleAccounts * data.selfNewAccountRate
-      : 0;
-
-  const teamAdditionalAmount =
-    data?.teamEligibleNewAccounts != null && data?.teamNewAccountRate != null
-      ? data.teamEligibleNewAccounts * data.teamNewAccountRate
-      : 0;
-
   return {
     title: "Payout breakdown (on team revenue)",
     rows: [
@@ -403,16 +394,12 @@ export const buildTLPayout = (
         component: "Team broking incentive",
         basis:
           data?.teamBrokingCredits != null
-            ? `₹${data.teamBrokingCredits.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}`
+            ? `₹${data.teamBrokingCredits.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
             : "—",
         rate: data?.brokIncPercent != null ? `${data.brokIncPercent}%` : "—",
         amount:
           data?.brokingIncentive != null
-            ? `₹${data.brokingIncentive.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}`
+            ? `₹${data.brokingIncentive.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
             : "₹0",
         amountColor: "#378ADD",
       },
@@ -420,17 +407,13 @@ export const buildTLPayout = (
         component: "Team non-broking incentive",
         basis:
           data?.teamNonBrokingCredits != null
-            ? `₹${data.teamNonBrokingCredits.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}`
+            ? `₹${data.teamNonBrokingCredits.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
             : "—",
         rate:
           data?.nonBrokIncPercent != null ? `${data.nonBrokIncPercent}%` : "—",
         amount:
           data?.nonBrokingIncentive != null
-            ? `₹${data.nonBrokingIncentive.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}`
+            ? `₹${data.nonBrokingIncentive.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
             : "₹0",
         amountColor: "#16A34A",
       },
@@ -444,9 +427,14 @@ export const buildTLPayout = (
           data?.selfNewAccountRate != null
             ? `₹${data.selfNewAccountRate}/account`
             : "—",
-        amount: `₹${selfAdditionalAmount.toLocaleString("en-IN", {
-          maximumFractionDigits: 0,
-        })}`,
+        amount:
+          data?.eligibleAccounts != null && data?.selfNewAccountRate != null
+            ? `₹${(
+                data.eligibleAccounts * data.selfNewAccountRate
+              ).toLocaleString("en-IN", {
+                maximumFractionDigits: 0,
+              })}`
+            : "₹0",
         amountColor: "#D97706",
       },
       {
@@ -459,9 +447,13 @@ export const buildTLPayout = (
           data?.teamNewAccountRate != null
             ? `₹${data.teamNewAccountRate}/account`
             : "—",
-        amount: `₹${teamAdditionalAmount.toLocaleString("en-IN", {
-          maximumFractionDigits: 0,
-        })}`,
+        amount:
+          data?.teamEligibleNewAccounts != null &&
+          data?.teamNewAccountRate != null
+            ? `₹${(
+                data.teamEligibleNewAccounts * data.teamNewAccountRate
+              ).toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
+            : "₹0",
         amountColor: "#D97706",
       },
       {
@@ -470,25 +462,17 @@ export const buildTLPayout = (
         rate: "",
         amount:
           data?.finalIncentive != null
-            ? `₹${data.finalIncentive.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}`
+            ? `₹${data.finalIncentive.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
             : "₹0",
         amountColor: "#5F7F38",
         highlight: true,
       },
-      {
-        component: "Upfront (80%)",
-        basis: "2nd month of next quarter",
-        rate: "",
-        amount: "₹3,74,064",
-      },
-      {
-        component: "Deferred (20%)",
-        basis: "May/Jun subject to annual MPC",
-        rate: "",
-        amount: "₹93,516",
-      },
     ],
   };
+};
+
+export const Q4_TL_ROLE: TeamRoleData = {
+  title: "Team Leader",
+  description:
+    "Self min 1x CTC (mandatory) · Team min 3x CTC (excl. TL) · Slab on team revenue · Booster if all members qualify · Min 5 team members · NISM VII, VIII & XVI",
 };

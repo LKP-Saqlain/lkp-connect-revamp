@@ -252,17 +252,15 @@ export interface EmployeeIncentiveData {
   reqRevenueMultiple: number;
   brokRevMultiple: number;
   reqBrokRevMultiple: number | null;
-
   nonBrokRevMultiple: number;
   reqNonBrokRevMultiple: number | null;
-
   cadEligibleAccounts: number;
   totalNewAccounts: number;
   requiredAccounts: number;
   eligibleAccounts: number;
-
+  carryForwardMultiple?: number;
+  reqTeamRevMultipleWithCarry?: number;
   accountStatus?: boolean;
-
   actualMarginCount?: number;
   reqMarginCount?: number;
   marginStatus?: boolean;

@@ -1,55 +1,56 @@
-export const carryForwardStyles = {
+import type { Theme, SxProps } from "@mui/material/styles";
+
+export const carryForwardTLStyles = {
   card: {
-    background: "#FFF8E8",
-    border: "1px solid #F6DCA8",
+    background: "#FFF9EB",
+    border: "1px solid #FBD988",
     borderRadius: "12px",
-    p: 2,
-    mt: 3,
+    p: 2.5,
   },
-
-  header: {
+  headerRow: {
     display: "flex",
-    alignItems: "flex-start",
-    gap: 1.5,
-  },
-
-  iconWrapper: {
-    width: 24,
-    height: 24,
-    display: "flex",
-    justifyContent: "center",
     alignItems: "center",
-    flexShrink: 0,
-    mt: "2px",
-  },
-
-  icon: {
-    color: "#9A6700",
-    fontSize: 18,
-  },
-
-  content: {
-    flex: 1,
-  },
-
-  title: {
-    fontSize: 14,
-    fontWeight: 600,
-    color: "#694100",
-  },
-
-  description: {
-    mt: 0.5,
-    fontSize: 13,
-    color: "#694100",
-    lineHeight: 1.6,
-    whiteSpace: "pre-line",
-  },
-
-  summaryGrid: {
-    mt: 2,
-    display: "grid",
-    gridTemplateColumns: "repeat(3,1fr)",
     gap: 1,
+    mb: 0.5,
   },
-};
+  title: {
+    fontSize: 13.5,
+    fontWeight: 700,
+    color: "#9A6700",
+  },
+  description: {
+    fontSize: 12,
+    color: "#8A6D3B",
+    mb: 2,
+  },
+  boxRow: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: 2,
+  },
+  box: {
+    border: "1px solid #FBD988",
+    borderRadius: "10px",
+    backgroundColor: "#FFFFFF",
+    py: 1.5,
+    px: 2,
+    textAlign: "center",
+  },
+  boxHighlight: {
+    backgroundColor: "#EAF3DE",
+    borderColor: "#C3DDA1",
+  },
+  boxLabel: {
+    fontSize: 11,
+    color: "#8A6D3B",
+    mb: 0.5,
+  },
+  boxValue: {
+    fontSize: 16,
+    fontWeight: 700,
+    color: "#101828",
+  },
+  boxValuePositive: {
+    color: "#3B6D11",
+  },
+} satisfies Record<string, SxProps<Theme>>;

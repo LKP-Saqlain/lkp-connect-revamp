@@ -15,6 +15,8 @@ import {
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 import TeamMultipleSummaryTable from "../../components/TeamMultipleSummaryTable/TeamMultipleSummaryTable";
 import TeamIncentiveSummaryTable from "../../components/TeamMultipleSummaryTable/TeamIncentiveSummaryTable";
+import MemberDashboard from "./MemberDashboard/MemberDashboard";
+import type { TeamDistDetail } from "../../types/teamDistribution.types";
 
 interface Props {
   empCode: string;
@@ -22,6 +24,9 @@ interface Props {
 
 const TeamOverview = ({ empCode }: Props) => {
   const [tab, setTab] = useState<TeamOverviewTab>("team-distribution");
+  const [selectedMember, setSelectedMember] = useState<TeamDistDetail | null>(
+    null,
+  );
 
   const dispatch = useAppDispatch();
 
@@ -29,7 +34,7 @@ const TeamOverview = ({ empCode }: Props) => {
     useAppSelector((state) => state.incentivePeriod);
 
   useEffect(() => {
-    if (!empCode) return;
+    if (!empCode || selectedMember) return;
 
     if (tab === "team-distribution") {
       dispatch(fetchGetTeamDistribution({ empCode, financialYear: "2026-27" }));
@@ -42,12 +47,20 @@ const TeamOverview = ({ empCode }: Props) => {
         fetchTeamIncentiveSummary({ empCode, financialYear: "2026-27" }),
       );
     }
-  }, [dispatch, empCode, tab]);
+  }, [dispatch, empCode, tab, selectedMember]);
+
+  if (selectedMember) {
+    return (
+      <MemberDashboard
+        member={selectedMember}
+        onBack={() => setSelectedMember(null)}
+      />
+    );
+  }
 
   return (
     <Box
       sx={{
-        // mt: 3,
         mb: 2,
         backgroundColor: "#FFFFFF",
         border: "1px solid #E4E7EC",
@@ -70,7 +83,10 @@ const TeamOverview = ({ empCode }: Props) => {
       <TeamOverviewTabs value={tab} onChange={setTab} />
 
       {tab === "team-distribution" && (
-        <TeamDistributionTree data={GetTeamDistribution?.data} />
+        <TeamDistributionTree
+          data={GetTeamDistribution?.data}
+          onSelectMember={setSelectedMember}
+        />
       )}
 
       {tab === "multiple-summary" && (

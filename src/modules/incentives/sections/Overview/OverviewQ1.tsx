@@ -19,13 +19,13 @@ import {
 import { OVERVIEW_DATA } from "../../constants/overview.data";
 
 import {
-  Q1_TL_SUMMARY,
-  Q1_TL_SELF_METRICS,
-  Q1_TL_SELF_CRITERIA,
-  Q1_TL_TEAM_METRICS,
-  Q1_TL_TEAM_CRITERIA,
-  Q1_TL_ELIGIBILITY,
-  Q1_TL_PAYOUT,
+  // Q1_TL_SUMMARY,
+  // Q1_TL_SELF_METRICS,
+  // Q1_TL_SELF_CRITERIA,
+  // Q1_TL_TEAM_METRICS,
+  // Q1_TL_TEAM_CRITERIA,
+  // Q1_TL_ELIGIBILITY,
+  // Q1_TL_PAYOUT,
   Q1_TL_PAYOUT_NOTE,
   Q1_TL_ROLE,
 } from "../../constants/q1OverviewTL.data";
@@ -36,6 +36,15 @@ import type {
   RevenueProgressData,
 } from "../../types/incentive.types";
 import { fetchIncentiveSlabs } from "@/redux/slices";
+import {
+  buildTLSummary,
+  buildTLSelfMetrics,
+  buildTLSelfCriteria,
+  buildTLTeamMetrics,
+  buildTLTeamCriteria,
+  buildTLEligibility,
+  buildTLPayout,
+} from "../../constants/q2OverviewTL.data";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
 
@@ -268,7 +277,7 @@ const OverviewQ1 = ({ period, employeeType }: any) => {
       {
         title: "Min Revenue",
         actual:
-          employeeData != null
+          employeeData?.totalRevenue != null
             ? `${employeeData.revenueMultiple}x (₹${employeeData.totalRevenue.toLocaleString("en-IN")})`
             : Q1_ELIGIBILITY.qualifications[0].actual,
         required: Q1_ELIGIBILITY.qualifications[0].required,
@@ -327,34 +336,39 @@ const OverviewQ1 = ({ period, employeeType }: any) => {
   }, [period, employeeType, employeeData]);
 
   if (isTeamRole) {
+    const q1TLSummary = buildTLSummary(employeeData);
+    const q1TLSelfMetrics = buildTLSelfMetrics(employeeData);
+    const q1TLSelfCriteria = buildTLSelfCriteria(employeeData);
+    const q1TLTeamMetrics = buildTLTeamMetrics(employeeData);
+    const q1TLTeamCriteria = buildTLTeamCriteria(employeeData);
+    const q1TLEligibility = buildTLEligibility(employeeData);
+    const q1TLPayout = buildTLPayout(employeeData);
+
     return (
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        <MetricGrid metrics={Q1_TL_SUMMARY} period={period} />
+        <MetricGrid metrics={q1TLSummary} period={"q1"} />
 
         <Box sx={performanceCardSx}>
           <SectionHeader
-            title={Q1_TL_SELF_CRITERIA.title}
-            actual={Q1_TL_SELF_CRITERIA.actual}
-            required={Q1_TL_SELF_CRITERIA.required}
+            title={q1TLSelfCriteria.title}
+            actual={q1TLSelfCriteria.actual}
+            required={q1TLSelfCriteria.required}
           />
-          <MetricGrid metrics={Q1_TL_SELF_METRICS} />
+          <MetricGrid metrics={q1TLSelfMetrics} />
         </Box>
 
         <Box sx={performanceCardSx}>
           <SectionHeader
-            title={Q1_TL_TEAM_CRITERIA.title}
-            actual={Q1_TL_TEAM_CRITERIA.actual}
-            required={Q1_TL_TEAM_CRITERIA.required}
+            title={q1TLTeamCriteria.title}
+            actual={q1TLTeamCriteria.actual}
+            required={q1TLTeamCriteria.required}
           />
-          <MetricGrid metrics={Q1_TL_TEAM_METRICS} />
+          <MetricGrid metrics={q1TLTeamMetrics} />
         </Box>
 
-        <TeamEligibilityChecklist data={Q1_TL_ELIGIBILITY} />
-
-        <PayoutBreakdown data={Q1_TL_PAYOUT} />
-
+        <TeamEligibilityChecklist data={q1TLEligibility} />
+        <PayoutBreakdown data={q1TLPayout} />
         <InfoNote text={Q1_TL_PAYOUT_NOTE} />
-
         <TeamRoleCard data={Q1_TL_ROLE} />
       </Box>
     );
