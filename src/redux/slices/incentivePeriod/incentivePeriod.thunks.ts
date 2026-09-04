@@ -42,7 +42,7 @@ import type {
 
 export const fetchEmployeeIncentive = createAsyncThunk<
   CalculateEmployeeIncentiveResponse,
-  any,
+  CalculateEmployeeIncentivePayload,
   { rejectValue: string }
 >(
   "incentivePeriod/fetchEmployeeIncentive",
