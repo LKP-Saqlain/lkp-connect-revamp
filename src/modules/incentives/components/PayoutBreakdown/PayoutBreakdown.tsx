@@ -23,15 +23,10 @@ const PayoutBreakdown = ({ data }: Props) => {
       </Box>
 
       <Box sx={styles.tableHeader}>
-        <Typography sx={{ fontSize: "13px" }}>Component</Typography>
-
-        <Typography sx={{ fontSize: "13px" }}>Basis</Typography>
-
-        <Typography sx={{ fontSize: "13px" }}>Rate</Typography>
-
-        <Typography sx={{ textAlign: "right", fontSize: "13px" }}>
-          Amount
-        </Typography>
+        <Typography>Component</Typography>
+        <Typography>{data.basisLabel ?? "Basis"}</Typography>
+        <Typography>Rate</Typography>
+        <Typography sx={{ textAlign: "right" }}>Amount</Typography>
       </Box>
 
       {data.rows.map((row: any) => (

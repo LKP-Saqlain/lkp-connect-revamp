@@ -52,7 +52,7 @@ const MEMBER_TABS: { value: IncentiveTab; label: string }[] = [
 ];
 
 const MemberDashboard = ({ member, onBack }: Props) => {
-  const [period, setPeriod] = useState<IncentivePeriod>("fy");
+  const [period, setPeriod] = useState<IncentivePeriod>("q1");
   const [tab, setTab] = useState<IncentiveTab>("overview");
 
   const dispatch = useAppDispatch();
@@ -62,7 +62,7 @@ const MemberDashboard = ({ member, onBack }: Props) => {
 
   // Reset local UI + cached data whenever a different member is opened
   useEffect(() => {
-    setPeriod("fy");
+    setPeriod("q1");
     setTab("overview");
     // dispatch(clearTeamMemberIncentive());
   }, [dispatch, member.empCode]);

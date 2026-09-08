@@ -1,5 +1,6 @@
 // import { Box, Typography } from "@mui/material";
 import type { IncentivePeriod } from "../../types/incentive.types";
+import OverviewCAD from "./OverviewCAD";
 import OverviewFY from "./OverviewFY";
 import OverviewQ1 from "./OverviewQ1";
 import OverviewQ2 from "./OverviewQ2";
@@ -29,6 +30,9 @@ const Overview = ({
   //     </Box>
   //   );
   // }
+  if (employeeType === "CAD") {
+    return <OverviewCAD employeeIncentive={employeeIncentive} />;
+  }
   switch (period) {
     case "q1":
       return (

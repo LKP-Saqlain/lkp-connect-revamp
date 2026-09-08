@@ -58,7 +58,7 @@ const performanceCardSx = {
   p: 2,
 } as const;
 
-const OverviewQ1 = ({ period, employeeType }: any) => {
+const OverviewQ1 = ({ period, employeeType, empCode }: any) => {
   const isTeamRole = employeeType
     ? TEAM_ROLE_TYPES.includes(employeeType)
     : false;
@@ -325,7 +325,7 @@ const OverviewQ1 = ({ period, employeeType }: any) => {
 
     dispatch(
       fetchIncentiveSlabs({
-        empCode: "0238",
+        empCode: empCode,
         financialYear: "2026-27",
       }),
     );

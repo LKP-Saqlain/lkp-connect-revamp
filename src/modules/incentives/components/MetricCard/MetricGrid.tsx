@@ -5,7 +5,6 @@ import type { MetricCardData } from "../../types/incentive.types";
 interface MetricGridProps {
   metrics: MetricCardData[];
   period?: any;
-
 }
 
 const MetricGrid = ({ metrics, period }: MetricGridProps) => {
@@ -13,7 +12,14 @@ const MetricGrid = ({ metrics, period }: MetricGridProps) => {
     <Box
       sx={{
         ...metricStyles.grid,
-        mt: period === "q1" || period === "fy" || period === "q4" ? 3 : 0,
+        mt:
+          period === "q1" ||
+          period === "fy" ||
+          period === "q2" ||
+          period === "q3" ||
+          period === "q4"
+            ? 3
+            : 0,
         display: "grid",
         gridTemplateColumns: {
           xs: "1fr",

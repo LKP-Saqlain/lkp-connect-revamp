@@ -115,7 +115,15 @@ const ClientRevenueHeader = ({
         />
 
         {showPercentage && (
-          <Typography sx={styles.headerCell}>% of Total</Typography>
+          <Typography
+            sx={{
+              ...styles.headerCell,
+              textAlign: "right",
+              marginRight: "2.5rem",
+            }}
+          >
+            % of Total
+          </Typography>
         )}
 
         <Typography

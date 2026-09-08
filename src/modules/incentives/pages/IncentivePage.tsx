@@ -28,7 +28,7 @@ import {
   fetchEmployeeIncentive,
   fetchGetRevenueEmployeeType,
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
-import { useAuth } from "@/auth/AuthContext";
+// import { useAuth } from "@/auth/AuthContext";
 import TeamSummary from "../sections/TeamSummary/TeamSummary";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
@@ -48,8 +48,8 @@ const IncentivePage = () => {
   const quarterName = getQuarterName(period);
   const isQuarterPeriod = quarterName !== null;
 
-  const { userId } = useAuth();
-  const EMP_CODE = userId;
+  // const { userId } = useAuth();
+  const EMP_CODE = "5579";
 
   const employeeType = GetRevenueEmployeeType?.data?.employeeType;
   const isTeamRole = employeeType

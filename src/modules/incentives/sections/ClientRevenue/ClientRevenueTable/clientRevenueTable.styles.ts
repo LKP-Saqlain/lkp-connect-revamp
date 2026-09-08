@@ -64,10 +64,11 @@ export const clientRevenueTableStyles = {
   },
 
   headerCell: {
-    textAlign: "center",
+    textAlign: "left",
     fontSize: "13px",
     fontWeight: 600,
     color: "#667085",
+    // border: "1px solid black",
   },
 
   rows: {

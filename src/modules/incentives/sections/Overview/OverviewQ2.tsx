@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
-import AlertBanner from "../../components/AlertBanner";
+// import AlertBanner from "../../components/AlertBanner";
 import {
-  Q2_ALERT,
+  // Q2_ALERT,
   Q2_ELIGIBILITY,
   Q2_METRICS,
   Q2_NO_INCENTIVE,
@@ -415,7 +415,7 @@ const OverviewQ2 = ({ employeeType, period, empCode }: OverviewQ2Props) => {
         gap: 3,
       }}
     >
-      <AlertBanner title={Q2_ALERT.title} description={Q2_ALERT.description} />
+      {/* <AlertBanner title={Q2_ALERT.title} description={Q2_ALERT.description} /> */}
       <MetricGrid metrics={q2Metrics} period="q2" />
       <RevenueProgress data={q2RevenueProgress} />
       <EligibilityChecklist data={q2Eligibility} />

@@ -334,6 +334,8 @@ export interface EmployeeIncentiveData {
 
   selfNewAccountRate?: number;
   teamNewAccountRate?: number;
+
+  cadEligibleAccountRate?: number;
 }
 export interface GetclientwiseRevenuePayload {
   empCode: string;
@@ -543,4 +545,18 @@ export interface TeamEligibilityChecklistData {
 export interface TeamRoleData {
   title: string;
   description: string;
+}
+
+export interface CADSlab {
+  id: string;
+  range: string;
+  rate: number;
+  active: boolean;
+}
+
+// Backward-compatible: optional field, existing PayoutBreakdownData callers unaffected
+export interface PayoutBreakdownData {
+  title: string;
+  basisLabel?: string;
+  rows: PayoutRow[];
 }

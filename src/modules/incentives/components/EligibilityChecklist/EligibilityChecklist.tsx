@@ -2,11 +2,10 @@ import { Box, Typography } from "@mui/material";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-
 import { eligibilityStyles as styles } from "./eligibility.styles";
 
-import SuccessBanner from "./SuccessBanner";
-import AlertBanner from "../AlertBanner";
+// import SuccessBanner from "./SuccessBanner";
+// import AlertBanner from "../AlertBanner";
 
 import type { EligibilityChecklistData } from "../../types/incentive.types";
 import { useEffect } from "react";
@@ -26,9 +25,9 @@ const EligibilityChecklist = ({ data }: Props) => {
     })),
   ];
 
-  const isEligible = qualificationItems.every(
-    (item) => item.status === "completed",
-  );
+  // const isEligible = qualificationItems.every(
+  //   (item) => item.status === "completed",
+  // );
 
   useEffect(() => {
     console.log("Test1111", qualificationItems, data);
@@ -46,7 +45,7 @@ const EligibilityChecklist = ({ data }: Props) => {
 
         <Typography sx={styles.title}>{data.title}</Typography>
       </Box>
-      {isEligible ? (
+      {/* {isEligible ? (
         <SuccessBanner
           title="Eligible for incentive"
           description={`Revenue multiple ${data.currentSlab} meets all required conditions.`}
@@ -56,7 +55,7 @@ const EligibilityChecklist = ({ data }: Props) => {
           title="Not eligible for incentive"
           description="One or more eligibility conditions are not fulfilled."
         />
-      )}
+      )} */}
       <Typography sx={styles.slab}>
         Current slab:
         <Box
