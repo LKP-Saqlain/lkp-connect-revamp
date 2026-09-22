@@ -12,7 +12,7 @@ import {
 } from "@/modules/incentives/constants/annualTarget.helpers";
 
 interface Props {
-  empCode: string;
+  empCode: any;
 }
 
 const AnnualTarget = ({ empCode }: Props) => {

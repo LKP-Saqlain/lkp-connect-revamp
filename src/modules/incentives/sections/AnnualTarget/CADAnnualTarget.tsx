@@ -14,7 +14,7 @@ import {
 import RoleSummary from "@/modules/incentives/sections/ClientAcquisition/components/RoleSummary";
 
 interface Props {
-  empCode: string;
+  empCode: any;
 }
 
 const CADAnnualTarget = ({ empCode }: Props) => {

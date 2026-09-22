@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchNewClientBusiness } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 
 interface Props {
-  empCode: string;
+  empCode: any;
 }
 
 const formatINR = (value: number) =>

@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 
 import ClientRevenueHeader from "./ClientRevenueHeader";
@@ -44,6 +44,10 @@ const ClientRevenueTable = ({ rows, period, isFY, empCode }: Props) => {
   const { clientwiseDetailRevenue, yearlyClientwiseDetailRevenue } =
     useAppSelector((state) => state.incentivePeriod);
   const quarterName = getQuarterName(period);
+
+  useEffect(() => {
+    console.log(empCode);
+  }, [empCode]);
 
   const filteredRows = useMemo(() => {
     const query = search.trim().toLowerCase();
