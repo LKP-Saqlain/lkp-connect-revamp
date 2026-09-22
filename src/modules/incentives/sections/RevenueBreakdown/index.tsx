@@ -2,8 +2,6 @@ import { useEffect, useMemo } from "react";
 
 import RevenueBreakdownLayout from "./RevenueBreakdownLayout";
 
-import { FY_REVENUE_BREAKDOWN } from "./data/fy.data";
-
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchEmpwiseDetailsRevenue,
@@ -42,20 +40,21 @@ const MONTH_ORDER: Record<string, number> = {
 const RevenueBreakdown = ({ period, empCode }: Props) => {
   const dispatch = useAppDispatch();
 
-  const { empwiseDetailsRevenue } = useAppSelector(
+  const { empwiseDetailsRevenue, yearlyEmpwiseDetailsRevenue } = useAppSelector(
     (state) => state.incentivePeriod,
   );
 
   const quarterName = getQuarterName(period); // null for "fy", "Q1"/"Q2"/"Q3"/"Q4" otherwise
+  const isFY = period === "fy";
 
   // -----------------------------------------
-  // API call — now dynamic for any quarter
+  // API call — dynamic for any quarter or FY
   // -----------------------------------------
 
   useEffect(() => {
     if (!empCode) return;
 
-    if (period === "fy") {
+    if (isFY) {
       dispatch(
         fetchYearlyEmpwiseDetailsRevenue({ empCode, financialYear: "2026-27" }),
       );
@@ -70,19 +69,27 @@ const RevenueBreakdown = ({ period, empCode }: Props) => {
         quarterName,
       }),
     );
-  }, [dispatch, quarterName, period, empCode]);
+  }, [dispatch, quarterName, isFY, empCode]);
+
+  // -----------------------------------------
+  // Pick the right response depending on FY vs quarter
+  // -----------------------------------------
+
+  const responseData = isFY
+    ? yearlyEmpwiseDetailsRevenue?.data
+    : empwiseDetailsRevenue?.data;
 
   // -----------------------------------------
   // API data -> RevenueBreakdownData
   // -----------------------------------------
 
-  const apiData = useMemo(() => {
-    if (!empwiseDetailsRevenue?.data) {
+  const apiData = useMemo((): RevenueBreakdownData | null => {
+    if (!responseData) {
       return null;
     }
 
     const { brokRevenueDetails, nonBrokRevenueDetails, monthWiseRevenues } =
-      empwiseDetailsRevenue.data;
+      responseData;
 
     const totalBrokingRevenue = brokRevenueDetails?.totalBrokingRevenue ?? 0;
     const totalNonBrokingRevenue =
@@ -140,16 +147,6 @@ const RevenueBreakdown = ({ period, empCode }: Props) => {
       },
     ];
 
-    // Derive "Top product" across both broking + non-broking items
-    // const allItems = [
-    //   ...brokingItems.map((i) => ({ ...i, source: "Broking" })),
-    //   ...nonBrokingItems.map((i) => ({ ...i, source: "Non-broking" })),
-    // ];
-    // const topProduct = allItems.reduce(
-    //   (max, item) => (item.raw > max.raw ? item : max),
-    //   allItems[0],
-    // );
-
     const summary: RevenueBreakdownData["summary"] = [
       {
         id: "totalRevenue",
@@ -172,15 +169,6 @@ const RevenueBreakdown = ({ period, empCode }: Props) => {
         subtitle: `${nonBrokRevenueDetails?.nonBrokingSharePercentage ?? 0}% of total`,
         color: "#27AE60",
       },
-      // {
-      //   id: "topProduct",
-      //   title: "Top product",
-      //   value: topProduct?.name ?? "—",
-      //   subtitle: topProduct
-      //     ? `${formatIndianCurrency(topProduct.raw)} • ${topProduct.source}`
-      //     : "—",
-      //   color: "#101828",
-      // },
     ];
 
     const broking = {
@@ -229,14 +217,49 @@ const RevenueBreakdown = ({ period, empCode }: Props) => {
     };
 
     return { summary, table: { broking, nonBroking }, chart };
-  }, [empwiseDetailsRevenue]);
+  }, [responseData]);
 
   // -----------------------------------------
-  // Select data — API data for any quarter that has it, static FY fallback
+  // No static fallback — empty shape while loading / no data
   // -----------------------------------------
 
-  const data: RevenueBreakdownData =
-    quarterName && apiData ? apiData : FY_REVENUE_BREAKDOWN;
+  const emptyData: RevenueBreakdownData = {
+    summary: [
+      {
+        id: "totalRevenue",
+        title: "Total revenue",
+        value: "₹0",
+        subtitle: "Across 0 products",
+        color: "#101828",
+      },
+      {
+        id: "broking",
+        title: "Broking revenue",
+        value: "₹0",
+        subtitle: "0% of total",
+        color: "#2F80ED",
+      },
+      {
+        id: "nonBroking",
+        title: "Non-broking revenue",
+        value: "₹0",
+        subtitle: "0% of total",
+        color: "#27AE60",
+      },
+    ],
+    table: {
+      broking: { title: "Broking", total: "₹0", color: "#2F80ED", items: [] },
+      nonBroking: {
+        title: "Non-broking",
+        total: "₹0",
+        color: "#27AE60",
+        items: [],
+      },
+    },
+    chart: { categories: [], series: [] },
+  };
+
+  const data: RevenueBreakdownData = apiData ?? emptyData;
 
   return (
     <RevenueBreakdownLayout
