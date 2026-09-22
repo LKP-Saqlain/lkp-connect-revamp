@@ -2,10 +2,10 @@ import { Box } from "@mui/material";
 // import AlertBanner from "../../components/AlertBanner";
 import {
   // Q2_ALERT,
-  Q2_ELIGIBILITY,
-  Q2_METRICS,
+  // Q2_ELIGIBILITY,
+  // Q2_METRICS,
   Q2_NO_INCENTIVE,
-  Q2_REVENUE_PROGRESS,
+  // Q2_REVENUE_PROGRESS,
 } from "../../constants/q2Overview.data";
 import PolicyCard from "../../components/PolicyCard";
 import { OVERVIEW_DATA } from "../../constants/overview.data";
@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import type {
   EligibilityChecklistData,
   EmployeeIncentiveData,
+  MetricCardData,
   RevenueProgressData,
 } from "../../types/incentive.types";
 import { useEffect } from "react";
@@ -170,20 +171,15 @@ const OverviewQ2 = ({ employeeType, period, empCode }: OverviewQ2Props) => {
   }));
 
   const q2RevenueProgress: RevenueProgressData = {
-    ...Q2_REVENUE_PROGRESS,
-
     multiplier:
       employeeData?.revenueMultiple != null
         ? `${employeeData.revenueMultiple}x`
-        : Q2_REVENUE_PROGRESS.multiplier,
-
+        : "0x",
     mpc:
       employeeData?.reqRevenueMultiple != null
         ? `${employeeData.reqRevenueMultiple}x`
-        : Q2_REVENUE_PROGRESS.mpc,
-
-    barMax: employeeData?.reqRevenueMultiple ?? Q2_REVENUE_PROGRESS.barMax,
-
+        : "0x",
+    barMax: employeeData?.reqRevenueMultiple ?? 0,
     progressPercent:
       employeeData?.revenueMultiple != null && employeeData?.reqRevenueMultiple
         ? Math.min(
@@ -191,84 +187,47 @@ const OverviewQ2 = ({ employeeType, period, empCode }: OverviewQ2Props) => {
               100,
             100,
           )
-        : Q2_REVENUE_PROGRESS.progressPercent,
-
+        : 0,
     target: {
       label:
         employeeData?.reqRevenueMultiple != null
           ? `${employeeData.reqRevenueMultiple}x CTC`
-          : Q2_REVENUE_PROGRESS.target.label,
-
+          : "—",
       value:
         employeeData?.empQuarterCTC != null &&
         employeeData?.reqRevenueMultiple != null
-          ? `₹${(
-              employeeData.empQuarterCTC * employeeData.reqRevenueMultiple
-            ).toLocaleString("en-IN")}`
-          : Q2_REVENUE_PROGRESS.target.value,
+          ? `₹${(employeeData.empQuarterCTC * employeeData.reqRevenueMultiple).toLocaleString("en-IN")}`
+          : "₹0",
     },
-
     broking: {
-      ...Q2_REVENUE_PROGRESS.broking,
-
-      label: `Broking credit (${employeeData?.brokingPercent}%)`,
-
+      label: `Broking credit (${employeeData?.brokingPercent ?? 0}%)`,
       amount:
         employeeData?.brokingCredits != null
-          ? `₹${employeeData.brokingCredits.toLocaleString("en-IN", {
-              maximumFractionDigits: 2,
-            })}`
-          : Q2_REVENUE_PROGRESS.broking.amount,
-
+          ? `₹${employeeData.brokingCredits.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
+          : "₹0",
       percent:
-        employeeData?.brokingPercent != null
-          ? `${(
-              (employeeData.brokingCredits / employeeData?.empCTC) *
-              100
-            ).toLocaleString("en-IN", {
-              maximumFractionDigits: 2,
-            })}%`
-          : Q2_REVENUE_PROGRESS.broking.percent,
+        employeeData?.brokingCredits != null && employeeData?.empCTC
+          ? `${((employeeData.brokingCredits / employeeData.empCTC) * 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}%`
+          : "0%",
     },
-
     nonBroking: {
-      ...Q2_REVENUE_PROGRESS.nonBroking,
-
-      label: `Non-Broking credit (${employeeData?.nonBrokingPercent}%)`,
-
+      label: `Non-Broking credit (${employeeData?.nonBrokingPercent ?? 0}%)`,
       amount:
         employeeData?.nonBrokingCredits != null
-          ? `₹${employeeData.nonBrokingCredits.toLocaleString("en-IN", {
-              maximumFractionDigits: 2,
-            })}`
-          : Q2_REVENUE_PROGRESS.nonBroking.amount,
-
+          ? `₹${employeeData.nonBrokingCredits.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
+          : "₹0",
       percent:
-        employeeData?.nonBrokingPercent != null
-          ? `${(
-              (employeeData.nonBrokingCredits / employeeData?.empCTC) *
-              100
-            ).toLocaleString("en-IN", {
-              maximumFractionDigits: 2,
-            })}%`
-          : Q2_REVENUE_PROGRESS.nonBroking.percent,
+        employeeData?.nonBrokingCredits != null && employeeData?.empCTC
+          ? `${((employeeData.nonBrokingCredits / employeeData.empCTC) * 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}%`
+          : "0%",
     },
-
     netCredit: {
-      ...Q2_REVENUE_PROGRESS.netCredit,
-
       label: "Net credit",
-
       amount:
         employeeData?.brokingCredits != null &&
         employeeData?.nonBrokingCredits != null
-          ? `₹${(
-              employeeData.brokingCredits + employeeData.nonBrokingCredits
-            ).toLocaleString("en-IN", {
-              maximumFractionDigits: 2,
-            })}`
-          : Q2_REVENUE_PROGRESS.netCredit.amount,
-
+          ? `₹${(employeeData.brokingCredits + employeeData.nonBrokingCredits).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
+          : "₹0",
       percent:
         employeeData?.brokingCredits != null &&
         employeeData?.nonBrokingCredits != null &&
@@ -276,121 +235,118 @@ const OverviewQ2 = ({ employeeType, period, empCode }: OverviewQ2Props) => {
           ? `${(
               (employeeData.brokingCredits / employeeData.empCTC) * 100 +
               (employeeData.nonBrokingCredits / employeeData.empCTC) * 100
-            ).toLocaleString("en-IN", {
-              maximumFractionDigits: 2,
-            })}%`
-          : Q2_REVENUE_PROGRESS.netCredit.percent,
+            ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}%`
+          : "0%",
     },
-
     slabLabel:
       employeeData?.revenueMultiple != null &&
       employeeData?.reqRevenueMultiple != null
         ? employeeData.revenueMultiple >= employeeData.reqRevenueMultiple
           ? "Eligible"
           : "Below minimum"
-        : Q2_REVENUE_PROGRESS.slabLabel,
-
-    slabs: q2Slabs && q2Slabs.length > 0 ? q2Slabs : Q2_REVENUE_PROGRESS.slabs,
+        : undefined,
+    slabs: q2Slabs ?? [],
   };
 
-  const q2Metrics = Q2_METRICS.map((metric) => {
-    switch (metric.id) {
-      case "revenue-multiple":
-        return {
-          ...metric,
-          value:
-            employeeData?.brokRevMultiple != null
-              ? `${employeeData.brokRevMultiple}x`
-              : metric.value,
-        };
-
-      case "broking-credit":
-        return {
-          ...metric,
-          value:
-            employeeData?.brokingCredits != null
-              ? `₹${employeeData.brokingCredits.toLocaleString("en-IN")}`
-              : metric.value,
-
-          subtitle:
-            employeeData?.brokingPercent != null &&
-            employeeData?.totalBrokingRevenue != null
-              ? `${employeeData.brokingPercent}% of ₹${employeeData.totalBrokingRevenue.toLocaleString(
-                  "en-IN",
-                  {
-                    maximumFractionDigits: 2,
-                  },
-                )}`
-              : metric.subtitle,
-        };
-
-      case "non-broking-credit":
-        return {
-          ...metric,
-          value:
-            employeeData?.nonBrokingCredits != null
-              ? `₹${employeeData.nonBrokingCredits.toLocaleString("en-IN")}`
-              : metric.value,
-
-          subtitle:
-            employeeData?.nonBrokingPercent != null &&
-            employeeData?.totalNonBrokingRevenue != null
-              ? `${employeeData.nonBrokingPercent}% of ₹${employeeData.totalNonBrokingRevenue.toLocaleString(
-                  "en-IN",
-                  {
-                    maximumFractionDigits: 2,
-                  },
-                )}`
-              : metric.subtitle,
-        };
-
-      case "estimated-incentive":
-        return {
-          ...metric,
-          value:
-            employeeData?.finalIncentive != null
-              ? `₹${employeeData.finalIncentive.toLocaleString("en-IN")}`
-              : metric.value,
-        };
-
-      default:
-        return metric;
-    }
-  });
+  const q2Metrics: MetricCardData[] = [
+    {
+      id: "revenue-multiple",
+      title: "Revenue multiple",
+      value:
+        employeeData?.brokRevMultiple != null
+          ? `${employeeData.brokRevMultiple}x`
+          : "—",
+    },
+    {
+      id: "broking-credit",
+      title: "Broking Revenue Credit",
+      value:
+        employeeData?.brokingCredits != null
+          ? `₹${employeeData.brokingCredits.toLocaleString("en-IN")}`
+          : "₹0",
+      subtitle:
+        employeeData?.brokingPercent != null &&
+        employeeData?.totalBrokingRevenue != null
+          ? `${employeeData.brokingPercent}% of ₹${employeeData.totalBrokingRevenue.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
+          : undefined,
+    },
+    {
+      id: "non-broking-credit",
+      title: "Non-Broking Revenue Credit",
+      value:
+        employeeData?.nonBrokingCredits != null
+          ? `₹${employeeData.nonBrokingCredits.toLocaleString("en-IN")}`
+          : "₹0",
+      subtitle:
+        employeeData?.nonBrokingPercent != null &&
+        employeeData?.totalNonBrokingRevenue != null
+          ? `${employeeData.nonBrokingPercent}% of ₹${employeeData.totalNonBrokingRevenue.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
+          : undefined,
+    },
+    {
+      id: "estimated-incentive",
+      title: "Est. incentive",
+      value:
+        employeeData?.finalIncentive != null
+          ? `₹${employeeData.finalIncentive.toLocaleString("en-IN")}`
+          : "₹0",
+    },
+  ];
 
   const q2Eligibility: EligibilityChecklistData = {
-    ...Q2_ELIGIBILITY,
+    title: "Eligibility checklist",
+    banner: {
+      type:
+        employeeData?.revenueMultiple != null &&
+        employeeData.revenueMultiple >= 3
+          ? "success"
+          : "error",
+      title:
+        employeeData?.revenueMultiple != null &&
+        employeeData.revenueMultiple >= 3
+          ? "Eligible for incentive"
+          : "Not eligible yet",
+      description:
+        employeeData?.revenueMultiple != null
+          ? `Revenue multiple ${employeeData.revenueMultiple}x ${
+              employeeData.revenueMultiple >= 3 ? "meets" : "is below"
+            } the 3x minimum.`
+          : "No revenue data available for this quarter.",
+    },
+    currentSlab:
+      employeeData?.revenueMultiple != null
+        ? `${employeeData.revenueMultiple}x`
+        : "—",
     qualifications: [
       {
         title: "Min Revenue",
         actual:
           employeeData?.totalRevenue != null
             ? `${employeeData.revenueMultiple}x (₹${employeeData.totalRevenue.toLocaleString("en-IN")})`
-            : Q2_ELIGIBILITY.qualifications[0].actual,
-        required: Q2_ELIGIBILITY.qualifications[0].required,
+            : "—",
+        required: "3x",
         status:
           employeeData?.revenueMultiple != null
             ? employeeData.revenueMultiple >= 3
               ? "completed"
               : "failed"
-            : Q2_ELIGIBILITY.qualifications[0].status,
+            : "failed",
       },
       {
         title: "Non-broking revenue",
         actual:
-          employeeData != null
+          employeeData?.nonBrokRevMultiple != null
             ? `${employeeData.nonBrokRevMultiple}x`
-            : Q2_ELIGIBILITY.qualifications[1].actual,
-        required: Q2_ELIGIBILITY.qualifications[1].required,
+            : "—",
+        required: "1x",
         status:
           employeeData?.nonBrokRevMultiple != null
             ? employeeData.nonBrokRevMultiple >= 1
               ? "completed"
               : "failed"
-            : Q2_ELIGIBILITY.qualifications[1].status,
+            : "failed",
       },
     ],
-
     accounts: [
       {
         label: "New accounts opened",
