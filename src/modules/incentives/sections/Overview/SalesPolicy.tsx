@@ -7,17 +7,17 @@ import IncentiveCalculator from "./IncentiveCalculator";
 
 import { POLICY_TABS } from "../../constants/policyTabs.data";
 
-const SalesPolicy = () => {
+const SalesPolicy = ({ employeeType }: any) => {
   const [policyTab, setPolicyTab] = useState("policy-summary");
 
-  const renderContent = () => {
+  const renderContent = ({ employeeType }: any) => {
     switch (policyTab) {
       case "incentive-calculator":
-        return <IncentiveCalculator />;
+        return <IncentiveCalculator employeeType={employeeType} />;
 
       case "policy-summary":
       default:
-        return <PolicySummary />;
+        return <PolicySummary employeeType={employeeType} />;
     }
   };
 
@@ -42,7 +42,7 @@ const SalesPolicy = () => {
           onChange={setPolicyTab}
         />
       </Box>
-      {renderContent()}
+      {renderContent({ employeeType })}
     </Box>
   );
 };

@@ -9,9 +9,18 @@ interface Props {
   rows: any;
   total: any;
   period: IncentivePeriod;
+  isFY?: boolean;
+  empCode?: any;
 }
 
-const ClientRevenueLayout = ({ summary, rows, total, period }: Props) => {
+const ClientRevenueLayout = ({
+  summary,
+  rows,
+  total,
+  period,
+  isFY,
+  empCode,
+}: Props) => {
   return (
     <Box
       sx={{
@@ -24,7 +33,13 @@ const ClientRevenueLayout = ({ summary, rows, total, period }: Props) => {
     >
       <SummaryCards summary={summary} columns={3} />
 
-      <ClientRevenueTable rows={rows} total={total} period={period} />
+      <ClientRevenueTable
+        rows={rows}
+        total={total}
+        period={period}
+        isFY={isFY}
+        empCode={empCode}
+      />
     </Box>
   );
 };

@@ -1,36 +1,46 @@
 import Chart from "react-apexcharts";
 import type { ApexOptions } from "apexcharts";
 import { Box, Typography } from "@mui/material";
-import {
-  MONTHLY_REVENUE,
-  REVENUE_CHART,
-} from "../../../../constants/annualTarget.data";
 import BarChartIcon from "@mui/icons-material/BarChart";
+
 import ChartLegend from "./ChartLegend";
 import { revenueChartStyles as styles } from "./revenueChart.styles";
+import {
+  sortMonthlyRevenue,
+  getMonthShort,
+} from "@/modules/incentives/constants/annualTarget.helpers";
+import type { AnnualRevenueMonth } from "@/modules/incentives/types/annualTarget.types";
 
-const RevenueChart = () => {
+interface Props {
+  monthlyRevenue: AnnualRevenueMonth[];
+}
+
+const CHART_LEGEND = [
+  { label: "Broking", color: "#185FA5" },
+  { label: "Non Broking", color: "#6A8E3A" },
+];
+
+const RevenueChart = ({ monthlyRevenue }: Props) => {
+  const sorted = sortMonthlyRevenue(monthlyRevenue);
+
+  const brokingSeries = sorted.map((item) => item.brokingCredits);
+  const nonBrokingSeries = sorted.map((item) => item.nonBrokingCredits);
+  const totals = sorted.map(
+    (item) => item.brokingCredits + item.nonBrokingCredits,
+  );
+  const categories = sorted.map((item) => getMonthShort(item.monthName));
+
   const series = [
-    {
-      name: "Broking",
-      data: MONTHLY_REVENUE.map((item) => item.broking),
-    },
-    {
-      name: "Non-broking",
-      data: MONTHLY_REVENUE.map((item) => item.nonBroking),
-    },
+    { name: "Broking", data: brokingSeries },
+    { name: "Non-broking", data: nonBrokingSeries },
   ];
 
   const options: ApexOptions = {
     chart: {
       type: "bar",
       stacked: true,
-      toolbar: {
-        show: false,
-      },
-      zoom: {
-        enabled: false,
-      },
+      toolbar: { show: false },
+      zoom: { enabled: false },
       fontFamily: "Lato, sans-serif",
     },
 
@@ -42,68 +52,46 @@ const RevenueChart = () => {
         borderRadius: 6,
         borderRadiusApplication: "end",
         columnWidth: "48%",
-        dataLabels: {
-          position: "top",
-        },
+        dataLabels: { position: "top" },
       },
     },
 
-    stroke: {
-      show: false,
-    },
+    stroke: { show: false },
 
     dataLabels: {
       enabled: true,
-
       offsetY: -18,
-
       style: {
         fontSize: "11px",
         fontWeight: "600",
         colors: ["#475467"],
       },
-
       formatter(_, opts: any) {
-        const total = MONTHLY_REVENUE[opts.dataPointIndex].total;
-
+        const total = totals[opts.dataPointIndex] ?? 0;
         return `₹${(total / 100000).toFixed(1)}L`;
       },
     },
 
-    legend: {
-      show: false,
-    },
+    legend: { show: false },
 
     xaxis: {
-      categories: MONTHLY_REVENUE.map((item) => item.month),
-
+      categories,
       labels: {
         style: {
           colors: "#667085",
           fontSize: "12px",
         },
       },
-
-      axisBorder: {
-        show: false,
-      },
-
-      axisTicks: {
-        show: false,
-      },
+      axisBorder: { show: false },
+      axisTicks: { show: false },
     },
 
-    yaxis: {
-      show: false,
-    },
+    yaxis: { show: false },
 
     grid: {
       borderColor: "#EAECF0",
       strokeDashArray: 4,
-      padding: {
-        left: 0,
-        right: 0,
-      },
+      padding: { left: 0, right: 0 },
     },
 
     tooltip: {
@@ -126,16 +114,10 @@ const RevenueChart = () => {
             gap: 0.5,
           }}
         >
-          {/* <Box
-            component="img"
-            src={<BarChartIcon />}
-            alt="title-icon"
-            sx={{ width: 18, height: 18 }}
-          /> */}
           <BarChartIcon sx={{ width: 18, height: 18 }} />
-          {REVENUE_CHART.title}
+          Month-wise revenue credit
         </Typography>
-        <ChartLegend items={REVENUE_CHART.legend} />
+        <ChartLegend items={CHART_LEGEND} />
       </Box>
 
       <Box sx={styles.chartWrapper}>

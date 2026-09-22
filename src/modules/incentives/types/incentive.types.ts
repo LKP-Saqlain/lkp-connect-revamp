@@ -7,6 +7,7 @@ export type IncentiveTab =
   | "client-revenue"
   | "revenue-breakdown"
   | "client-acquisition"
+  | "new-client-business"
   | "team-summary";
 
 export type PolicyTab = "policy-summary" | "incentive-calculator";
@@ -175,14 +176,14 @@ export interface QualificationItem {
   title: string;
   actual: string;
   required: string;
-  status: "completed" | "failed";
+  status: "completed" | "failed" | any;
 }
 
 export interface EligibilityChecklistData {
   title: string;
 
   banner: {
-    type: "success" | "error";
+    type: any;
     title: string;
     description: string;
   };

@@ -74,14 +74,13 @@ export const calculatorStyles = {
     background: "#F9FAFB",
     border: "1px solid #EAECF0",
     borderRadius: "12px",
-    p: 3,
+    p: 2.5,
   },
 
   summaryGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(3,1fr)",
-    gap: 3,
-    mb: 3,
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: 2,
   },
 
   summaryItem: {
@@ -89,41 +88,37 @@ export const calculatorStyles = {
   },
 
   summaryLabel: {
-    fontSize: "13px",
+    fontSize: "12px",
     color: "#667085",
-    mb: 1,
+    mb: 0.5,
   },
 
   multiplier: {
-    fontSize: "32px",
+    fontSize: "24px",
     fontWeight: 700,
     color: "#185FA5",
-    lineHeight: 1,
+    lineHeight: 1.2,
   },
 
   slab: {
-    fontSize: "32px",
+    fontSize: "18px",
     fontWeight: 700,
     color: "#5F7F38",
-    lineHeight: 1,
+    lineHeight: 1.4,
   },
 
   payout: {
-    fontSize: "32px",
+    fontSize: "18px",
     fontWeight: 700,
-    color: "#5F7F38",
-    lineHeight: 1,
+    color: "#101828",
+    lineHeight: 1.4,
   },
-
-  /* ===========================
-      Chips
-  =========================== */
 
   chipsContainer: {
     display: "flex",
-    gap: 1.5,
-    flexWrap: "nowrap",
-    width: "100%",
+    gap: 1,
+    mt: 1.5,
+    flexWrap: "wrap",
   },
 
   chip: {

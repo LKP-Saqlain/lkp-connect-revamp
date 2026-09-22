@@ -6,6 +6,8 @@ export const mpcRoleCardStyles = {
     border: "1px solid #EAECF0",
     borderRadius: "12px",
     overflow: "hidden",
+    // border: "1px solid black",
+    height: "24.5rem",
   },
 
   header: {

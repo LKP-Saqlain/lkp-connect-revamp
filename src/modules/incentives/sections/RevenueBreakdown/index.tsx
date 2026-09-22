@@ -5,7 +5,10 @@ import RevenueBreakdownLayout from "./RevenueBreakdownLayout";
 import { FY_REVENUE_BREAKDOWN } from "./data/fy.data";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchEmpwiseDetailsRevenue } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
+import {
+  fetchEmpwiseDetailsRevenue,
+  fetchYearlyEmpwiseDetailsRevenue,
+} from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 import { getQuarterName } from "../../constants/overall";
 
 import type { RevenueBreakdownData } from "./types/revenueBreakdown.types";
@@ -50,16 +53,24 @@ const RevenueBreakdown = ({ period, empCode }: Props) => {
   // -----------------------------------------
 
   useEffect(() => {
-    if (!quarterName) return; // skip FY
+    if (!empCode) return;
 
+    if (period === "fy") {
+      dispatch(
+        fetchYearlyEmpwiseDetailsRevenue({ empCode, financialYear: "2026-27" }),
+      );
+      return;
+    }
+
+    if (!quarterName) return;
     dispatch(
       fetchEmpwiseDetailsRevenue({
-        empCode: empCode,
+        empCode,
         financialYear: "2026-27",
         quarterName,
       }),
     );
-  }, [dispatch, quarterName]);
+  }, [dispatch, quarterName, period, empCode]);
 
   // -----------------------------------------
   // API data -> RevenueBreakdownData

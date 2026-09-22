@@ -35,3 +35,17 @@ export const TEAM_SUMMARY_TAB: TabItem = {
   label: "Team summary",
   hasSeparator: true,
 };
+
+export const NEW_CLIENT_BUSINESS_TAB: TabItem = {
+  id: "new-client-business",
+  label: "New Client Business",
+};
+
+export const getIncentiveTabs = (isFY: boolean): TabItem[] => {
+  if (isFY) {
+    return INCENTIVE_TABS.map((tab) =>
+      tab.id === "client-acquisition" ? NEW_CLIENT_BUSINESS_TAB : tab,
+    );
+  }
+  return INCENTIVE_TABS;
+};

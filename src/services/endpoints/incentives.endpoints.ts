@@ -10,4 +10,13 @@ export const incentivesEndpoints = {
   GetTeamDistribution: "MIS/GetTeamDistribution",
   GetTeamMultipleAndIncentiveSummary: "MIS/GetTeamMultipleandIncentiveSummary",
   GetTeamSummary: "MIS/GetTeamSummary",
+  IncentiveCalculator: "MIS/IncentiveCalculator",
+  GetSalesSummary: "MIS/GetSalesSummary",
+  GetAnnualTargetDetails: "MIS/GetAnnualTargetDetails",
+  GetCADAnnualTargetDetails: "MIS/GetCADAnnualTargetDetails",
+  GetYearlyOverview: "MIS/GetYearlyOverview",
+  GetYearlyClientwiseRevenue: "MIS/GetYearlyClientwiseRevenue",
+  GetYearlyClientwiseDetailsRevenue: "MIS/GetYearlyClientwiseDetailsRevenue",
+  GetYearlyEmpwiseDetailsRevenue: "MIS/GetYearlyEmpwiseDetailsRevenue",
+  GetNewClientBusiness: "MIS/GetNewClientBusiness",
 } as const;

@@ -9,12 +9,12 @@ import TeamEligibilityChecklist from "../../components/TeamEligibilityChecklist"
 import PayoutBreakdown from "../../components/PayoutBreakdown";
 import PolicyCard from "../../components/PolicyCard";
 
-import {
-  Q3_METRICS,
-  Q3_REVENUE_PROGRESS,
-  Q3_ELIGIBILITY,
-  Q3_PAYOUT,
-} from "../../constants/q3Overview.data";
+// import {
+//   Q3_METRICS,
+//   Q3_REVENUE_PROGRESS,
+//   Q3_ELIGIBILITY,
+//   Q3_PAYOUT,
+// } from "../../constants/q3Overview.data";
 
 import { OVERVIEW_DATA } from "../../constants/overview.data";
 
@@ -29,6 +29,7 @@ import {
   buildQ3TLPayout,
   // Q3_TL_ROLE,
 } from "../../constants/q3OverviewTL.data";
+import { buildQ3Data } from "./q3Overview.data";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
 
@@ -107,6 +108,7 @@ const OverviewQ3 = ({
 
   const employeeData = employeeIncentive?.data;
 
+  const q3Data = buildQ3Data(employeeData);
   // -----------------------------------------
   // TL / BM / AH
   // -----------------------------------------
@@ -184,13 +186,13 @@ const OverviewQ3 = ({
         gap: 3,
       }}
     >
-      <MetricGrid metrics={Q3_METRICS} period={period} />
+      <MetricGrid metrics={q3Data.metrics} period={period} />
 
-      <RevenueProgress data={Q3_REVENUE_PROGRESS} />
+      <RevenueProgress data={q3Data.revenueProgress} />
 
-      <EligibilityChecklist data={Q3_ELIGIBILITY} />
+      <EligibilityChecklist data={q3Data.eligibility} />
 
-      <PayoutBreakdown data={Q3_PAYOUT} />
+      <PayoutBreakdown data={q3Data.payout} />
 
       <PolicyCard data={OVERVIEW_DATA.policy} />
     </Box>

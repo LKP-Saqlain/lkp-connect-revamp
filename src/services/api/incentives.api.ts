@@ -28,6 +28,29 @@ import type {
   GetTeamSummaryPayload,
   GetTeamSummaryResponse,
 } from "@/modules/incentives/types/teamSummary.types";
+import type {
+  IncentiveCalculatorPayload,
+  IncentiveCalculatorResponse,
+} from "@/modules/incentives/types/incentiveCalculator.types";
+import type {
+  GetSalesSummaryPayload,
+  GetSalesSummaryResponse,
+} from "@/modules/incentives/types/salesSummary.types";
+import type {
+  GetAnnualTargetDetailsPayload,
+  GetAnnualTargetDetailsResponse,
+  GetCADAnnualTargetDetailsPayload,
+  GetCADAnnualTargetDetailsResponse,
+} from "@/modules/incentives/types/annualTarget.types";
+import type {
+  GetNewClientBusinessPayload,
+  GetYearlyClientwiseDetailsRevenuePayload,
+  GetYearlyClientwiseRevenuePayload,
+  GetYearlyEmpwiseDetailsRevenuePayload,
+  GetYearlyOverviewPayload,
+  GetYearlyOverviewResponse,
+} from "@/modules/incentives/types/yearlyOverview.types";
+import type { GetNewClientBusinessResponse } from "@/modules/incentives/types/newClientBusiness.types";
 
 export const calculateEmployeeIncentive = async (
   payload: CalculateEmployeeIncentivePayload,
@@ -144,6 +167,96 @@ export const GetTeamSummary = async (
 ): Promise<GetTeamSummaryResponse> => {
   const response = await baseInstance.post<GetTeamSummaryResponse>(
     incentivesEndpoints.GetTeamSummary,
+    payload,
+  );
+  return response.data;
+};
+
+export const CalculateIncentivePreview = async (
+  payload: IncentiveCalculatorPayload,
+): Promise<IncentiveCalculatorResponse> => {
+  const response = await baseInstance.post<IncentiveCalculatorResponse>(
+    incentivesEndpoints.IncentiveCalculator,
+    payload,
+  );
+  return response.data;
+};
+
+export const GetSalesSummary = async (
+  payload: GetSalesSummaryPayload,
+): Promise<GetSalesSummaryResponse> => {
+  const response = await baseInstance.post<GetSalesSummaryResponse>(
+    incentivesEndpoints.GetSalesSummary,
+    payload,
+  );
+  return response.data;
+};
+
+export const GetAnnualTargetDetails = async (
+  payload: GetAnnualTargetDetailsPayload,
+): Promise<GetAnnualTargetDetailsResponse> => {
+  const response = await baseInstance.post<GetAnnualTargetDetailsResponse>(
+    incentivesEndpoints.GetAnnualTargetDetails,
+    payload,
+  );
+  return response.data;
+};
+
+export const GetCADAnnualTargetDetails = async (
+  payload: GetCADAnnualTargetDetailsPayload,
+): Promise<GetCADAnnualTargetDetailsResponse> => {
+  const response = await baseInstance.post<GetCADAnnualTargetDetailsResponse>(
+    incentivesEndpoints.GetCADAnnualTargetDetails,
+    payload,
+  );
+  return response.data;
+};
+
+export const GetYearlyOverview = async (
+  payload: GetYearlyOverviewPayload,
+): Promise<GetYearlyOverviewResponse> => {
+  const response = await baseInstance.post<GetYearlyOverviewResponse>(
+    incentivesEndpoints.GetYearlyOverview,
+    payload,
+  );
+  return response.data;
+};
+
+export const GetYearlyClientwiseRevenue = async (
+  payload: GetYearlyClientwiseRevenuePayload,
+): Promise<ClientRevenueApiResponse> => {
+  const response = await baseInstance.post<ClientRevenueApiResponse>(
+    incentivesEndpoints.GetYearlyClientwiseRevenue,
+    payload,
+  );
+  return response.data;
+};
+
+export const GetYearlyClientwiseDetailsRevenue = async (
+  payload: GetYearlyClientwiseDetailsRevenuePayload,
+): Promise<ClientwiseDetailRevenueResponse> => {
+  const response = await baseInstance.post<ClientwiseDetailRevenueResponse>(
+    incentivesEndpoints.GetYearlyClientwiseDetailsRevenue,
+    payload,
+  );
+  return response.data;
+};
+
+export const GetYearlyEmpwiseDetailsRevenue = async (
+  payload: GetYearlyEmpwiseDetailsRevenuePayload,
+): Promise<EmpwiseDetailsRevenueResponse> => {
+  const response = await baseInstance.post<EmpwiseDetailsRevenueResponse>(
+    incentivesEndpoints.GetYearlyEmpwiseDetailsRevenue,
+    payload,
+  );
+  return response.data;
+};
+
+export const GetNewClientBusiness = async (
+  payload: GetNewClientBusinessPayload,
+): Promise<GetNewClientBusinessResponse> => {
+  const response = await baseInstance.post<GetNewClientBusinessResponse>(
+    incentivesEndpoints.GetNewClientBusiness,
     payload,
   );
   return response.data;

@@ -1,13 +1,11 @@
 import { useEffect } from "react";
 import ClientRevenueLayout from "./ClientRevenueLayout";
-import { FY_CLIENT_REVENUE } from "./data/fy.data";
-import { Q1_CLIENT_REVENUE } from "./data/q1.data";
-import { Q2_CLIENT_REVENUE } from "./data/q2.data";
-import { Q3_CLIENT_REVENUE } from "./data/q3.data";
-import { Q4_CLIENT_REVENUE } from "./data/q4.data";
 import type { IncentivePeriod } from "../../types/incentive.types";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchClientwiseRevenue } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
+import {
+  fetchClientwiseRevenue,
+  fetchYearlyClientwiseRevenue,
+} from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 import { getQuarterName } from "../../constants/overall";
 
 interface Props {
@@ -18,39 +16,39 @@ interface Props {
 const ClientRevenue = ({ period, empCode }: Props) => {
   const dispatch = useAppDispatch();
 
-  const { clientwiseRevenue } = useAppSelector(
+  const { clientwiseRevenue, yearlyClientwiseRevenue } = useAppSelector(
     (state) => state.incentivePeriod,
   );
 
-  const quarterName = getQuarterName(period); // null for "fy", "Q1"/"Q2"/"Q3"/"Q4" otherwise
+  const quarterName = getQuarterName(period);
+  const isFY = period === "fy";
 
   useEffect(() => {
-    if (!quarterName) return; // skip FY — no quarter API for full year
+    if (!empCode) return;
+
+    if (isFY) {
+      dispatch(
+        fetchYearlyClientwiseRevenue({ empCode, financialYear: "2026-27" }),
+      );
+      return;
+    }
+
+    if (!quarterName) return;
 
     dispatch(
       fetchClientwiseRevenue({
-        empCode: empCode,
+        empCode,
         financialYear: "2026-27",
         quarterName,
       }),
     );
-  }, [dispatch, quarterName]);
+  }, [dispatch, quarterName, isFY, empCode]);
 
-  const staticData =
-    period === "q1"
-      ? Q1_CLIENT_REVENUE
-      : period === "q2"
-        ? Q2_CLIENT_REVENUE
-        : period === "q3"
-          ? Q3_CLIENT_REVENUE
-          : period === "q4"
-            ? Q4_CLIENT_REVENUE
-            : FY_CLIENT_REVENUE;
+  const apiData = isFY
+    ? yearlyClientwiseRevenue?.data
+    : clientwiseRevenue?.data;
 
-  // Use API data for any quarter that has returned a response
-  const apiData = clientwiseRevenue?.data;
-
-  if (quarterName && apiData?.total && apiData?.clientDetails) {
+  if (apiData?.total && apiData?.clientDetails) {
     const apiSummary = [
       {
         id: "total",
@@ -87,9 +85,7 @@ const ClientRevenue = ({ period, empCode }: Props) => {
       nonBroking: `₹${client.nonBrokingCredits.toLocaleString("en-IN")}`,
       nonBrokingCredit: `₹${client.totalNonBrokingRevenue.toLocaleString("en-IN")}`,
       totalRevenue: `₹${client.totalRevenue.toLocaleString("en-IN")}`,
-      totalCredit: `₹${(
-        client.totalBrokingRevenue + client.totalNonBrokingRevenue
-      ).toLocaleString("en-IN")}`,
+      totalCredit: `₹${(client.totalBrokingRevenue + client.totalNonBrokingRevenue).toLocaleString("en-IN")}`,
       percentage: `${client.revenuePercentage}%`,
       isCap: client.revenuePercentage >= 25,
     }));
@@ -100,12 +96,10 @@ const ClientRevenue = ({ period, empCode }: Props) => {
       nonBrokingRevenue: `₹${apiData.total.nonBrokingCredits.toLocaleString("en-IN")}`,
       nonBrokingCredit: `₹${apiData.total.totalNonBrokingRevenue.toLocaleString("en-IN")}`,
       totalRevenue: `₹${apiData.total.totalRevenue.toLocaleString("en-IN")}`,
-      totalCredit: `₹${(
-        apiData.total.totalBrokingRevenue + apiData.total.totalNonBrokingRevenue
-      ).toLocaleString("en-IN")}`,
+      totalCredit: `₹${(apiData.total.totalBrokingRevenue + apiData.total.totalNonBrokingRevenue).toLocaleString("en-IN")}`,
       totalClients: apiData.total.totalCount,
-      brokingItems: staticData.total.brokingItems,
-      nonBrokingItems: staticData.total.nonBrokingItems,
+      brokingItems: [],
+      nonBrokingItems: [],
     };
 
     return (
@@ -114,17 +108,29 @@ const ClientRevenue = ({ period, empCode }: Props) => {
         summary={apiSummary}
         rows={apiRows}
         total={apiTotal}
+        isFY={isFY}
+        empCode={empCode}
       />
     );
   }
 
-  // Fallback: static data (FY, or while API is loading)
+  // Loading / no-data state (no static fallback anymore, per your earlier request)
   return (
     <ClientRevenueLayout
       period={period}
-      summary={staticData.summary}
-      rows={staticData.rows}
-      total={staticData.total}
+      summary={[]}
+      rows={[]}
+      total={{
+        brokingCredits: "₹0",
+        brokingCredit: "₹0",
+        nonBrokingRevenue: "₹0",
+        nonBrokingCredit: "₹0",
+        totalRevenue: "₹0",
+        totalCredit: "₹0",
+        totalClients: 0,
+        brokingItems: [],
+        nonBrokingItems: [],
+      }}
     />
   );
 };

@@ -1,4 +1,5 @@
 import type { TabItem } from "../types/incentive.types";
+import type { SummaryModule } from "../types/salesSummary.types";
 
 export const POLICY_TABS: TabItem[] = [
   {
@@ -158,4 +159,37 @@ export const SHORTFALL = {
 
     "Shortfall resets at financial year end.",
   ],
+};
+
+export const ROLE_LABELS: Record<string, string> = {
+  RM: "Relationship Manager",
+  Dealer: "Advisor – Dealing",
+  BDM: "Business Development Manager",
+  TL: "Team Leader",
+  BM: "Branch Manager",
+  AH: "Area Head",
+  CAD: "CAD / Advisory Desk",
+};
+
+export const getRoleLabel = (employeeType: string) =>
+  ROLE_LABELS[employeeType] ?? employeeType;
+
+export const getModuleItems = (module?: SummaryModule): string[] => {
+  if (!module) return [];
+  return [module.p1, module.p2, module.p3, module.p4, module.p5].filter(
+    (item) => item && item.trim() !== "",
+  );
+};
+
+export const formatMPCThreshold = (criteriaValue?: string): string => {
+  if (!criteriaValue) return "—";
+
+  if (criteriaValue.includes(",")) {
+    const [teamValue, selfValue] = criteriaValue
+      .split(",")
+      .map((v) => v.trim());
+    return `${teamValue}x of Team + ${selfValue}x of Self`;
+  }
+
+  return `${criteriaValue}x CTC`;
 };

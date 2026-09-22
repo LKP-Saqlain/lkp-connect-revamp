@@ -28,15 +28,15 @@ const ClientAcquisition = ({ period, employeeType, empCode }: Props) => {
   const { GetClientAcquisition, GetClientAcquisitionReportingHead } =
     useAppSelector((state) => state.incentivePeriod);
 
-  const quarterName = getQuarterName(period); // null for "fy", "Q1"/"Q2"/"Q3"/"Q4" otherwise
+  const quarterName = getQuarterName(period);
 
   useEffect(() => {
-    if (!quarterName) return; // skip FY — no quarter API for full year
+    if (!empCode || !quarterName) return; // FY handled by NewClientBusiness tab now
 
     if (isTeamRole) {
       dispatch(
         fetchGetClientAcquisitionReportingHead({
-          empCode: empCode,
+          empCode,
           financialYear: "2026-27",
           quarterName,
         }),
@@ -44,13 +44,13 @@ const ClientAcquisition = ({ period, employeeType, empCode }: Props) => {
     } else {
       dispatch(
         fetchGetClientAcquisition({
-          empCode: empCode,
+          empCode,
           financialYear: "2026-27",
           quarterName,
         }),
       );
     }
-  }, [dispatch, quarterName, isTeamRole]);
+  }, [dispatch, quarterName, isTeamRole, empCode]);
 
   if (isTeamRole) {
     return (
@@ -61,8 +61,8 @@ const ClientAcquisition = ({ period, employeeType, empCode }: Props) => {
     );
   }
 
-  // ---- everything below is your existing RM / BDM / Dealer code, unchanged ----
   const counts = GetClientAcquisition?.data?.clientAcqCounts;
+
   const summary = counts
     ? [
         {
@@ -104,7 +104,7 @@ const ClientAcquisition = ({ period, employeeType, empCode }: Props) => {
   return (
     <ClientAcquisitionLayout
       summary={summary}
-      clients={clients ? clients : []}
+      clients={clients}
       rules={CLIENT_ACQUISITION_DATA.rules}
       role={CLIENT_ACQUISITION_DATA.role}
     />

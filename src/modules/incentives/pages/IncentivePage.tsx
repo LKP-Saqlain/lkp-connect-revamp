@@ -12,9 +12,10 @@ import RevenueBreakdown from "../sections/RevenueBreakdown";
 import ClientAcquisition from "../sections/ClientAcquisition";
 import TeamOverview from "../sections/TeamOverview/TeamOverview";
 import {
-  INCENTIVE_TABS,
+  // INCENTIVE_TABS,
   INCENTIVE_ACTION_TABS,
   TEAM_SUMMARY_TAB,
+  getIncentiveTabs,
 } from "../constants/tab.data";
 import SalesPolicy from "../sections/Overview/SalesPolicy";
 import { getQuarterName } from "../constants/overall";
@@ -30,6 +31,8 @@ import {
 } from "@/redux/slices/incentivePeriod/incentivePeriod.thunks";
 import { useAuth } from "@/auth/AuthContext";
 import TeamSummary from "../sections/TeamSummary/TeamSummary";
+import CADAnnualTarget from "../sections/AnnualTarget/CADAnnualTarget";
+import NewClientBusiness from "../sections/NewClientBusiness/NewClientBusiness";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
 
@@ -50,6 +53,9 @@ const IncentivePage = () => {
 
   const { userId } = useAuth();
   const EMP_CODE = userId;
+  // const EMP_CODE = "5293";
+
+  const isFY = period === "fy";
 
   const employeeType = GetRevenueEmployeeType?.data?.employeeType;
   const isTeamRole = employeeType
@@ -57,8 +63,8 @@ const IncentivePage = () => {
     : false;
 
   const activeTabs = isTeamRole
-    ? [...INCENTIVE_TABS, TEAM_SUMMARY_TAB]
-    : INCENTIVE_TABS;
+    ? [...getIncentiveTabs(isFY), TEAM_SUMMARY_TAB]
+    : getIncentiveTabs(isFY);
 
   useEffect(() => {
     dispatch(fetchGetRevenueEmployeeType({ empcode: EMP_CODE }));
@@ -78,12 +84,21 @@ const IncentivePage = () => {
     dispatch(fetchEmployeeIncentive(payload));
   }, [dispatch, quarterName, isQuarterPeriod]);
 
+  // in handlePeriodChange, reset tab if it's now invalid for the new period:
   const handlePeriodChange = (value: IncentivePeriod) => {
     setShowTeamOverview(false);
     setActionTab(null);
+
+    const willBeFY = value === "fy";
+    // if switching to/from FY and current tab is the acquisition/new-client-business one, normalize it
+    if (tab === "client-acquisition" && willBeFY) {
+      setTab("new-client-business");
+    } else if (tab === "new-client-business" && !willBeFY) {
+      setTab("client-acquisition");
+    }
+
     setPeriod(value);
   };
-
   const handleTeamOverviewClick = () => {
     setActionTab(null);
     setShowTeamOverview(true);
@@ -107,11 +122,15 @@ const IncentivePage = () => {
     }
 
     if (actionTab === "sales-policy") {
-      return <SalesPolicy />;
+      return <SalesPolicy employeeType={employeeType} />;
     }
 
     if (actionTab === "annual-target") {
-      return <AnnualTarget />;
+      return employeeType === "CAD" ? (
+        <CADAnnualTarget empCode={EMP_CODE} />
+      ) : (
+        <AnnualTarget empCode={EMP_CODE} />
+      );
     }
 
     switch (tab) {
@@ -139,6 +158,9 @@ const IncentivePage = () => {
             empCode={EMP_CODE}
           />
         );
+
+      case "new-client-business":
+        return <NewClientBusiness empCode={EMP_CODE} />;
 
       case "team-summary":
         return <TeamSummary period={period} empCode={EMP_CODE} />;

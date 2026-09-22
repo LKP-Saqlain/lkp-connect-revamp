@@ -136,7 +136,7 @@ const ClientRevenueRow = ({
             whiteSpace: "nowrap",
           }}
         >
-          {broking}
+          {brokingCredit}
         </Typography>
 
         <Typography
@@ -148,7 +148,7 @@ const ClientRevenueRow = ({
             whiteSpace: "nowrap",
           }}
         >
-          ({brokingCredit})
+          ({broking})
         </Typography>
       </Box>
 

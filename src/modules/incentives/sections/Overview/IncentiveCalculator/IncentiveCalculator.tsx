@@ -1,7 +1,11 @@
 import CalculatorLayout from "./CalculatorLayout";
 
-const IncentiveCalculator = () => {
-  return <CalculatorLayout />;
+interface Props {
+  employeeType: string;
+}
+
+const IncentiveCalculator = ({ employeeType }: Props) => {
+  return <CalculatorLayout employeeType={employeeType} />;
 };
 
 export default IncentiveCalculator;

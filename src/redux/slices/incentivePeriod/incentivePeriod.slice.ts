@@ -18,6 +18,15 @@ import {
   fetchTeamMultipleSummary,
   fetchTeamIncentiveSummary,
   fetchTeamSummary,
+  fetchIncentiveCalculatorPreview,
+  fetchSalesSummary,
+  fetchAnnualTargetDetails,
+  fetchCADAnnualTargetDetails,
+  fetchYearlyOverview,
+  fetchYearlyClientwiseRevenue,
+  fetchYearlyClientwiseDetailsRevenue,
+  fetchYearlyEmpwiseDetailsRevenue,
+  fetchNewClientBusiness,
 } from "./incentivePeriod.thunks";
 import type {
   ClientRevenueApiResponse,
@@ -32,6 +41,14 @@ import type {
   GetTeamMultipleAndIncentiveSummaryResponse,
   GetTeamSummaryResponse,
 } from "@/modules/incentives/types/teamSummary.types";
+import type { IncentiveCalculatorResponse } from "@/modules/incentives/types/incentiveCalculator.types";
+import type { GetSalesSummaryResponse } from "@/modules/incentives/types/salesSummary.types";
+import type {
+  GetAnnualTargetDetailsResponse,
+  GetCADAnnualTargetDetailsResponse,
+} from "@/modules/incentives/types/annualTarget.types";
+import type { GetYearlyOverviewResponse } from "@/modules/incentives/types/yearlyOverview.types";
+import type { GetNewClientBusinessResponse } from "@/modules/incentives/types/newClientBusiness.types";
 
 // -----------------------------------------
 // State
@@ -64,6 +81,15 @@ export interface IncentivePeriodState {
   teamMultipleSummary: GetTeamMultipleAndIncentiveSummaryResponse | null;
   teamIncentiveSummary: GetTeamMultipleAndIncentiveSummaryResponse | null;
   teamSummary: GetTeamSummaryResponse | null;
+  incentiveCalculatorResult: IncentiveCalculatorResponse | null;
+  salesSummary: GetSalesSummaryResponse | null;
+  annualTargetDetails: GetAnnualTargetDetailsResponse | null;
+  cadAnnualTargetDetails: GetCADAnnualTargetDetailsResponse | null;
+  yearlyOverview: GetYearlyOverviewResponse | null;
+  yearlyClientwiseRevenue: ClientRevenueApiResponse | null;
+  yearlyClientwiseDetailRevenue: ClientwiseDetailRevenueResponse | null;
+  yearlyEmpwiseDetailsRevenue: EmpwiseDetailsRevenueResponse | null;
+  newClientBusiness: GetNewClientBusinessResponse | null;
 }
 
 // -----------------------------------------
@@ -88,6 +114,15 @@ const initialState: IncentivePeriodState = {
   teamMultipleSummary: null,
   teamIncentiveSummary: null,
   teamSummary: null,
+  incentiveCalculatorResult: null,
+  salesSummary: null,
+  annualTargetDetails: null,
+  cadAnnualTargetDetails: null,
+  yearlyOverview: null,
+  yearlyClientwiseRevenue: null,
+  yearlyClientwiseDetailRevenue: null,
+  yearlyEmpwiseDetailsRevenue: null,
+  newClientBusiness: null,
 };
 
 // -----------------------------------------
@@ -227,7 +262,46 @@ const incentivePeriodSlice = createSlice({
       .addCase(fetchTeamSummary.fulfilled, (state, action) => {
         state.teamSummary = action.payload;
       })
-      .addCase(fetchTeamSummary.rejected, () => {});
+      .addCase(fetchTeamSummary.rejected, () => {})
+      .addCase(fetchIncentiveCalculatorPreview.fulfilled, (state, action) => {
+        state.incentiveCalculatorResult = action.payload;
+      })
+      .addCase(fetchIncentiveCalculatorPreview.rejected, () => {})
+      .addCase(fetchSalesSummary.fulfilled, (state, action) => {
+        state.salesSummary = action.payload;
+      })
+      .addCase(fetchSalesSummary.rejected, () => {})
+      .addCase(fetchAnnualTargetDetails.fulfilled, (state, action) => {
+        state.annualTargetDetails = action.payload;
+      })
+      .addCase(fetchAnnualTargetDetails.rejected, () => {})
+      .addCase(fetchCADAnnualTargetDetails.fulfilled, (state, action) => {
+        state.cadAnnualTargetDetails = action.payload;
+      })
+      .addCase(fetchCADAnnualTargetDetails.rejected, () => {})
+      .addCase(fetchYearlyOverview.fulfilled, (state, action) => {
+        state.yearlyOverview = action.payload;
+      })
+      .addCase(fetchYearlyOverview.rejected, () => {})
+      .addCase(fetchYearlyClientwiseRevenue.fulfilled, (state, action) => {
+        state.yearlyClientwiseRevenue = action.payload;
+      })
+      .addCase(fetchYearlyClientwiseRevenue.rejected, () => {})
+      .addCase(
+        fetchYearlyClientwiseDetailsRevenue.fulfilled,
+        (state, action) => {
+          state.yearlyClientwiseDetailRevenue = action.payload;
+        },
+      )
+      .addCase(fetchYearlyClientwiseDetailsRevenue.rejected, () => {})
+      .addCase(fetchYearlyEmpwiseDetailsRevenue.fulfilled, (state, action) => {
+        state.yearlyEmpwiseDetailsRevenue = action.payload;
+      })
+      .addCase(fetchYearlyEmpwiseDetailsRevenue.rejected, () => {})
+      .addCase(fetchNewClientBusiness.fulfilled, (state, action) => {
+        state.newClientBusiness = action.payload;
+      })
+      .addCase(fetchNewClientBusiness.rejected, () => {});
   },
 });
 

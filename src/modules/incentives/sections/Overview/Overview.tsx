@@ -71,7 +71,14 @@ const Overview = ({
       );
 
     default:
-      return <OverviewFY period={period} employeeType={employeeType} />;
+      return (
+        <OverviewFY
+          period={period}
+          employeeType={employeeType}
+          employeeIncentive={employeeIncentive}
+          empCode={empCode}
+        />
+      );
   }
 };
 

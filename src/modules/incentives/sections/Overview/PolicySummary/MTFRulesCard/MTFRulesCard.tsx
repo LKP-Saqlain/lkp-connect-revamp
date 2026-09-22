@@ -1,29 +1,33 @@
 import { Box, Divider, Typography } from "@mui/material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { complianceStyles as styles } from "../ComplianceCard/compliance.styles";
+import type { SummaryModule } from "@/modules/incentives/types/salesSummary.types";
+import { getModuleItems } from "@/modules/incentives/constants/policyTabs.data";
 
-import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
+interface Props {
+  mtfModule?: SummaryModule;
+}
 
-import { mtfStyles as styles } from "./mtf.styles";
+const MTFRulesCard = ({ mtfModule }: Props) => {
+  const items = getModuleItems(mtfModule);
 
-import { MTF_RULES_CARD } from "@/modules/incentives/constants/policyTabs.data";
-
-const MTFRulesCard = () => {
   return (
     <Box sx={styles.card}>
       <Box sx={styles.header}>
         <Box sx={styles.iconWrapper}>
-          <AccountBalanceOutlinedIcon sx={styles.icon} />
+          <InfoOutlinedIcon sx={styles.icon} />
         </Box>
-
-        <Typography sx={styles.title}>{MTF_RULES_CARD.title}</Typography>
+        <Typography sx={styles.title}>
+          {mtfModule?.moduleHeader ?? "MTF income rules"}
+        </Typography>
       </Box>
 
       <Divider sx={styles.divider} />
 
       <Box sx={styles.body}>
-        {MTF_RULES_CARD.items.map((item) => (
-          <Box key={item} sx={styles.row}>
+        {items.map((item) => (
+          <Box key={item} sx={styles.bulletRow}>
             <Box sx={styles.bullet} />
-
             <Typography sx={styles.text}>{item}</Typography>
           </Box>
         ))}

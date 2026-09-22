@@ -3,26 +3,22 @@ import { Box } from "@mui/material";
 import CalculatorForm from "./CalculatorForm";
 import SlabReference from "./SlabReference";
 
-const CalculatorLayout = () => {
+interface Props {
+  employeeType: string;
+}
+
+const CalculatorLayout = ({ employeeType }: Props) => {
   return (
     <Box
       sx={{
         mt: 3,
-
         display: "grid",
-
-        gridTemplateColumns: {
-          xs: "1fr",
-          lg: "540px 1fr",
-        },
-
+        gridTemplateColumns: { xs: "1fr", lg: "540px 1fr" },
         gap: 3,
-
         alignItems: "start",
       }}
     >
-      <CalculatorForm />
-
+      <CalculatorForm employeeType={employeeType} />
       <SlabReference />
     </Box>
   );

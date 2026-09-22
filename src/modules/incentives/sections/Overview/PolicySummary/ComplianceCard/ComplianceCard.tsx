@@ -1,26 +1,33 @@
 import { Box, Divider, Typography } from "@mui/material";
 import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
 import { complianceStyles as styles } from "./compliance.styles";
-import { COMPLIANCE_CARD } from "@/modules/incentives/constants/policyTabs.data";
+import type { SummaryModule } from "@/modules/incentives/types/salesSummary.types";
+import { getModuleItems } from "@/modules/incentives/constants/policyTabs.data";
 
-const ComplianceCard = () => {
+interface Props {
+  complianceModule?: SummaryModule;
+}
+
+const ComplianceCard = ({ complianceModule }: Props) => {
+  const items = getModuleItems(complianceModule);
+
   return (
     <Box sx={styles.card}>
       <Box sx={styles.header}>
         <Box sx={styles.iconWrapper}>
           <ShieldOutlinedIcon sx={styles.icon} />
         </Box>
-
-        <Typography sx={styles.title}>{COMPLIANCE_CARD.title}</Typography>
+        <Typography sx={styles.title}>
+          {complianceModule?.moduleHeader ?? "Compliance & deductions"}
+        </Typography>
       </Box>
 
       <Divider sx={styles.divider} />
 
       <Box sx={styles.body}>
-        {COMPLIANCE_CARD.items.map((item) => (
+        {items.map((item) => (
           <Box key={item} sx={styles.bulletRow}>
             <Box sx={styles.bullet} />
-
             <Typography sx={styles.text}>{item}</Typography>
           </Box>
         ))}

@@ -10,12 +10,12 @@ import PolicyCard from "../../components/PolicyCard";
 import TeamRoleCard from "../../components/TeamRoleCard/TeamRoleCard";
 import CarryForwardBannerTL from "../../components/CarryForwardBanner";
 
-import {
-  Q4_METRICS,
-  Q4_REVENUE_PROGRESS,
-  Q4_ELIGIBILITY,
-  Q4_PAYOUT,
-} from "../../constants/q4Overview.data";
+// import {
+//   Q4_METRICS,
+//   Q4_REVENUE_PROGRESS,
+//   Q4_ELIGIBILITY,
+//   Q4_PAYOUT,
+// } from "../../constants/q4Overview.data";
 import { OVERVIEW_DATA } from "../../constants/overview.data";
 
 import {
@@ -29,6 +29,7 @@ import {
   buildQ4TLPayout,
   Q4_TL_ROLE,
 } from "../../constants/q4OverviewTL.data";
+import { buildQ3Data } from "./q3Overview.data";
 
 const TEAM_ROLE_TYPES = ["TL", "BM", "AH"];
 
@@ -87,7 +88,7 @@ const OverviewQ4 = ({
     ? TEAM_ROLE_TYPES.includes(employeeType)
     : false;
   const employeeData = employeeIncentive?.data;
-
+  const q4Data = buildQ3Data(employeeData);
   if (isTeamRole) {
     const carryForward = buildQ4TLCarryForward(employeeData);
     const q4TLSummary = buildQ4TLSummary(employeeData);
@@ -140,11 +141,11 @@ const OverviewQ4 = ({
   // ---- everything below is your existing RM / BDM / Dealer code, unchanged ----
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      <MetricGrid metrics={Q4_METRICS} period={period} />
-      <RevenueProgress data={Q4_REVENUE_PROGRESS} />
-      <EligibilityChecklist data={Q4_ELIGIBILITY} />
-      <PayoutBreakdown data={Q4_PAYOUT} />
-      <PolicyCard data={OVERVIEW_DATA.policy} />
+      <MetricGrid metrics={q4Data?.metrics} period={period} />
+      <RevenueProgress data={q4Data?.revenueProgress} />
+      <EligibilityChecklist data={q4Data?.eligibility} />
+      <PayoutBreakdown data={q4Data?.payout} />
+      <PolicyCard data={OVERVIEW_DATA?.policy} />
     </Box>
   );
 };

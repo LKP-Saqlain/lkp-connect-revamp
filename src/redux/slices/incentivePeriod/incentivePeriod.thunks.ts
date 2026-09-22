@@ -24,6 +24,15 @@ import {
   type TeamSummaryBasePayload,
   GetTeamMultipleAndIncentiveSummary,
   GetTeamSummary,
+  CalculateIncentivePreview,
+  GetSalesSummary,
+  GetAnnualTargetDetails,
+  GetCADAnnualTargetDetails,
+  GetYearlyOverview,
+  GetYearlyClientwiseRevenue,
+  GetYearlyClientwiseDetailsRevenue,
+  GetYearlyEmpwiseDetailsRevenue,
+  GetNewClientBusiness,
 } from "@/services/api";
 import type {
   ClientRevenueApiResponse,
@@ -39,6 +48,29 @@ import type {
   GetTeamSummaryPayload,
   GetTeamSummaryResponse,
 } from "@/modules/incentives/types/teamSummary.types";
+import type {
+  IncentiveCalculatorPayload,
+  IncentiveCalculatorResponse,
+} from "@/modules/incentives/types/incentiveCalculator.types";
+import type {
+  GetSalesSummaryPayload,
+  GetSalesSummaryResponse,
+} from "@/modules/incentives/types/salesSummary.types";
+import type {
+  GetAnnualTargetDetailsPayload,
+  GetAnnualTargetDetailsResponse,
+  GetCADAnnualTargetDetailsPayload,
+  GetCADAnnualTargetDetailsResponse,
+} from "@/modules/incentives/types/annualTarget.types";
+import type {
+  GetNewClientBusinessPayload,
+  GetYearlyClientwiseDetailsRevenuePayload,
+  GetYearlyClientwiseRevenuePayload,
+  GetYearlyEmpwiseDetailsRevenuePayload,
+  GetYearlyOverviewPayload,
+  GetYearlyOverviewResponse,
+} from "@/modules/incentives/types/yearlyOverview.types";
+import type { GetNewClientBusinessResponse } from "@/modules/incentives/types/newClientBusiness.types";
 
 export const fetchEmployeeIncentive = createAsyncThunk<
   CalculateEmployeeIncentiveResponse,
@@ -362,3 +394,200 @@ export const fetchTeamSummary = createAsyncThunk<
     );
   }
 });
+
+export const fetchIncentiveCalculatorPreview = createAsyncThunk<
+  IncentiveCalculatorResponse,
+  IncentiveCalculatorPayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchIncentiveCalculatorPreview",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await CalculateIncentivePreview(payload);
+      if (!response.isSuccess) {
+        return rejectWithValue(
+          response.errorMessages || "Failed to calculate incentive",
+        );
+      }
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to calculate incentive",
+      );
+    }
+  },
+);
+
+export const fetchSalesSummary = createAsyncThunk<
+  GetSalesSummaryResponse,
+  GetSalesSummaryPayload,
+  { rejectValue: string }
+>("incentivePeriod/fetchSalesSummary", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await GetSalesSummary(payload);
+    if (!response.isSuccess) {
+      return rejectWithValue(
+        response.errorMessages || "Failed to fetch sales summary",
+      );
+    }
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(
+      error?.response?.data?.message ||
+        error?.message ||
+        "Failed to fetch sales summary",
+    );
+  }
+});
+
+export const fetchAnnualTargetDetails = createAsyncThunk<
+  GetAnnualTargetDetailsResponse,
+  GetAnnualTargetDetailsPayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchAnnualTargetDetails",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetAnnualTargetDetails(payload);
+      if (!response.isSuccess) {
+        return rejectWithValue(
+          response.errorMessages || "Failed to fetch annual target",
+        );
+      }
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to fetch annual target",
+      );
+    }
+  },
+);
+
+export const fetchCADAnnualTargetDetails = createAsyncThunk<
+  GetCADAnnualTargetDetailsResponse,
+  GetCADAnnualTargetDetailsPayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchCADAnnualTargetDetails",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetCADAnnualTargetDetails(payload);
+      if (!response.isSuccess) {
+        return rejectWithValue(
+          response.errorMessages || "Failed to fetch CAD annual target",
+        );
+      }
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to fetch CAD annual target",
+      );
+    }
+  },
+);
+
+export const fetchYearlyOverview = createAsyncThunk<
+  GetYearlyOverviewResponse,
+  GetYearlyOverviewPayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchYearlyOverview",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetYearlyOverview(payload);
+      if (!response.isSuccess)
+        return rejectWithValue(response.errorMessages || "Failed");
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.message || "Failed",
+      );
+    }
+  },
+);
+
+export const fetchYearlyClientwiseRevenue = createAsyncThunk<
+  ClientRevenueApiResponse,
+  GetYearlyClientwiseRevenuePayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchYearlyClientwiseRevenue",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetYearlyClientwiseRevenue(payload);
+      if (!response.isSuccess)
+        return rejectWithValue(response.errorMessages || "Failed");
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.message || "Failed",
+      );
+    }
+  },
+);
+
+export const fetchYearlyClientwiseDetailsRevenue = createAsyncThunk<
+  ClientwiseDetailRevenueResponse,
+  GetYearlyClientwiseDetailsRevenuePayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchYearlyClientwiseDetailsRevenue",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetYearlyClientwiseDetailsRevenue(payload);
+      if (!response.isSuccess)
+        return rejectWithValue(response.errorMessages || "Failed");
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.message || "Failed",
+      );
+    }
+  },
+);
+
+export const fetchYearlyEmpwiseDetailsRevenue = createAsyncThunk<
+  EmpwiseDetailsRevenueResponse,
+  GetYearlyEmpwiseDetailsRevenuePayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchYearlyEmpwiseDetailsRevenue",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetYearlyEmpwiseDetailsRevenue(payload);
+      if (!response.isSuccess)
+        return rejectWithValue(response.errorMessages || "Failed");
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.message || "Failed",
+      );
+    }
+  },
+);
+
+export const fetchNewClientBusiness = createAsyncThunk<
+  GetNewClientBusinessResponse,
+  GetNewClientBusinessPayload,
+  { rejectValue: string }
+>(
+  "incentivePeriod/fetchNewClientBusiness",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await GetNewClientBusiness(payload);
+      if (!response.isSuccess)
+        return rejectWithValue(response.errorMessages || "Failed");
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.message || "Failed",
+      );
+    }
+  },
+);
