@@ -113,4 +113,20 @@ export const periodStyles = {
     mx: 0.5,
     mt: 0.7,
   },
+
+  disabledChip: {
+    backgroundColor: "#fff",
+    borderColor: "#E4E7EC",
+    cursor: "not-allowed",
+    opacity: 0.55,
+    // border: "1px solid black",
+    "&:hover": {
+      backgroundColor: "#F2F4F7",
+      borderColor: "#E4E7EC",
+    },
+
+    "& .MuiTypography-root": {
+      color: "#98A2B3",
+    },
+  },
 } satisfies Record<string, SxProps<Theme>>;

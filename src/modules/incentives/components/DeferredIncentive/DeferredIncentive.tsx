@@ -44,7 +44,7 @@ const DeferredIncentive = ({
           <DeferredRow key={row.id} row={row} centerAmount={centerAmount} />
         ))}
 
-        {data.total && (
+        {/* {data.total && (
           <Box sx={styles.totalRow}>
             <Typography sx={styles.totalLabel}>{data.total.label}</Typography>
             <Typography
@@ -57,7 +57,7 @@ const DeferredIncentive = ({
               {data.total.amount}
             </Typography>
           </Box>
-        )}
+        )} */}
       </Box>
     </Box>
   );

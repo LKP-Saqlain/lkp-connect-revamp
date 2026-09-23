@@ -40,6 +40,7 @@ export const memberDashboardStyles = {
     py: 0.6,
   },
   periodRow: { display: "flex", gap: 1, mb: 2 },
+
   periodPill: {
     px: 1.6,
     py: 0.6,
@@ -65,4 +66,25 @@ export const memberDashboardStyles = {
     borderBottom: "2px solid transparent",
   },
   tabItemActive: { color: "#185FA5", borderBottom: "2px solid #185FA5" },
+
+  periodPillDisabled: {
+    backgroundColor: "#F2F4F7",
+    borderColor: "#E4E7EC",
+    color: "#98A2B3",
+    cursor: "not-allowed",
+    opacity: 0.6,
+
+    "&:hover": {
+      backgroundColor: "#F2F4F7",
+      borderColor: "#E4E7EC",
+    },
+  },
+
+  currentQuarterDot: {
+    width: 7,
+    height: 7,
+    borderRadius: "50%",
+    backgroundColor: "#FF4D4F",
+    ml: 0.5,
+  },
 } satisfies Record<string, SxProps<Theme>>;

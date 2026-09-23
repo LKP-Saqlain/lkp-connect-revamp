@@ -17,6 +17,7 @@ import type {
 } from "../../../types/incentive.types";
 import { memberDashboardStyles as styles } from "./memberDashboard.styles";
 import { fetchEmployeeIncentive } from "@/redux/slices";
+import { getCurrentQuarter } from "@/utils/helper";
 
 interface Props {
   member: TeamDistDetail;
@@ -59,6 +60,23 @@ const MemberDashboard = ({ member, onBack }: Props) => {
   const { employeeIncentive } = useAppSelector(
     (state) => state.incentivePeriod,
   );
+
+  const QUARTER_ORDER: Record<string, number> = {
+    q1: 1,
+    q2: 2,
+    q3: 3,
+    q4: 4,
+  };
+
+  const currentQuarter = getCurrentQuarter();
+
+  const isFutureQuarter = (periodValue: IncentivePeriod) => {
+    if (periodValue === "fy") {
+      return false;
+    }
+
+    return QUARTER_ORDER[periodValue] > QUARTER_ORDER[currentQuarter];
+  };
 
   // Reset local UI + cached data whenever a different member is opened
   useEffect(() => {
@@ -137,18 +155,30 @@ const MemberDashboard = ({ member, onBack }: Props) => {
       </Box>
 
       <Box sx={styles.periodRow}>
-        {PERIOD_TABS.map((p) => (
-          <Box
-            key={p.value}
-            onClick={() => setPeriod(p.value)}
-            sx={{
-              ...styles.periodPill,
-              ...(period === p.value ? styles.periodPillActive : {}),
-            }}
-          >
-            {p.label}
-          </Box>
-        ))}
+        {PERIOD_TABS.map((p) => {
+          const disabled = isFutureQuarter(p.value);
+          // const isCurrentQuarter = p.value === currentQuarter;
+
+          return (
+            <Box
+              key={p.value}
+              onClick={() => {
+                if (!disabled) {
+                  setPeriod(p.value);
+                }
+              }}
+              sx={{
+                ...styles.periodPill,
+                ...(period === p.value ? styles.periodPillActive : {}),
+                ...(disabled ? styles.periodPillDisabled : {}),
+              }}
+            >
+              {p.label}
+
+              {/* {isCurrentQuarter && <Box sx={styles.currentQuarterDot} />} */}
+            </Box>
+          );
+        })}
       </Box>
 
       <Box sx={styles.tabsRow}>

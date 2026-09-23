@@ -12,12 +12,10 @@ export const PERIODS: PeriodItem[] = [
   {
     id: "q2",
     label: "Q2 · Jul–Sep",
-    notification: true,
   },
   {
     id: "q3",
     label: "Q3 · Oct–Dec",
-    notification: true,
   },
   {
     id: "q4",

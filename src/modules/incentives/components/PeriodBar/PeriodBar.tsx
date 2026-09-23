@@ -7,6 +7,7 @@ import { periodStyles } from "./period.styles";
 
 import { PERIODS } from "@/modules/incentives/constants/period.data";
 import type { IncentivePeriod } from "@/modules/incentives/types/incentive.types";
+import { getCurrentQuarter } from "@/utils/helper";
 
 interface PeriodBarProps {
   value: IncentivePeriod;
@@ -25,20 +26,43 @@ const PeriodBar = ({
   teamOverviewActive = false,
   onTeamOverviewClick,
 }: PeriodBarProps) => {
+  const currentQuarter = getCurrentQuarter();
+
+  const currentQuarterIndex = PERIODS.findIndex(
+    (period) => period.id === currentQuarter,
+  );
+
+  const isFutureQuarter = (period: IncentivePeriod) => {
+    if (period === "fy") {
+      return false;
+    }
+
+    const periodIndex = PERIODS.findIndex((item) => item.id === period);
+
+    return periodIndex > currentQuarterIndex;
+  };
+
   return (
     <Box sx={periodStyles.root}>
       <Box sx={periodStyles.left}>
         <Typography sx={periodStyles.label}>Period :</Typography>
 
         <Box sx={periodStyles.chipContainer}>
-          {PERIODS.map((period) => (
-            <PeriodChip
-              key={period.id}
-              item={period}
-              active={!teamOverviewActive && period.id === value}
-              onClick={onChange}
-            />
-          ))}
+          {PERIODS.map((period) => {
+            const disabled = isFutureQuarter(period.id);
+            const isCurrentQuarter = period.id === currentQuarter;
+
+            return (
+              <PeriodChip
+                key={period.id}
+                item={period}
+                active={!teamOverviewActive && period.id === value}
+                disabled={disabled}
+                showNotification={isCurrentQuarter}
+                onClick={onChange}
+              />
+            );
+          })}
 
           {showTeamOverview && (
             <>
