@@ -54,10 +54,7 @@ const ClientRevenue = ({ period, empCode }: Props) => {
         id: "total",
         title: "Total revenue",
         value: `₹${apiData.total.totalRevenue.toLocaleString("en-IN")}`,
-        subtitle: `Credit: ₹${(
-          apiData.total.totalBrokingRevenue +
-          apiData.total.totalNonBrokingRevenue
-        ).toLocaleString("en-IN")}`,
+        subtitle: `Credit: ₹${(apiData?.total?.totalCredits).toLocaleString("en-IN")}`,
         color: "#101828",
       },
       {
