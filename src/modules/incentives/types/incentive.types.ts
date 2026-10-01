@@ -370,7 +370,7 @@ export interface ClientRevenueApiTotal {
   totalNonBrokingCredits?: number;
   totalNonBrokingRevenue: number;
   totalRevenue: number;
-  totalCredits?: number;
+  totalCredits?: number | any;
 }
 
 export interface ClientRevenueApiData {
